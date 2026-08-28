@@ -17,7 +17,7 @@ const ServicePackagesSectionComponent: React.FC<ServicePackagesSectionProps> = (
   return (
     <section
       id="packages"
-      className="cv-800 py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center"
+      className="py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center"
     >
       <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-purple-900/20 rounded-full blur-[130px] pointer-events-none"></div>
 

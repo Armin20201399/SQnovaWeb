@@ -12,7 +12,7 @@ const ClientAppsDownloadComponent = () => {
   });
 
   return (
-    <section id="apps" className="cv-800 py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center">
+    <section id="apps" className="py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center">
       <AmbientGlow position="top-1/2 left-10" color="bg-purple-900/20" size="w-96 h-96" blur="blur-[120px]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

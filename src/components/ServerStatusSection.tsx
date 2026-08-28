@@ -27,7 +27,7 @@ const SERVER_NODES: ServerNodeStatus[] = [
 
 const ServerStatusSection = () => {
   return (
-    <section id="status" className="cv-900 py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center">
+    <section id="status" className="py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center">
       <AmbientGlow position="top-1/4 right-1/4" color="bg-sky-900/20" size="w-96 h-96" blur="blur-[140px]" />
       <AmbientGlow position="bottom-1/4 left-1/4" color="bg-emerald-900/20" size="w-96 h-96" blur="blur-[140px]" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

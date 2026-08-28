@@ -92,7 +92,7 @@ const FaqSectionComponent = ({ onScrollToSection }: FaqSectionProps) => {
   ];
 
   return (
-    <section id="faq" className="cv-900 pt-20 pb-16 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center scroll-mt-20">
+    <section id="faq" className="pt-20 pb-16 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center scroll-mt-20">
       <AmbientGlow position="top-1/3 left-1/3" color="bg-pink-900/20" size="w-96 h-96" blur="blur-[140px]" />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">

@@ -21,7 +21,7 @@ const ProtocolDeepDive = ({ onScrollToSection }: ProtocolDeepDiveProps) => {
   ];
 
   return (
-    <section id="protocols" className="cv-800 py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10">
+    <section id="protocols" className="py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10">
       <AmbientGlow position="top-1/2 right-10" color="bg-purple-900/20" size="w-96 h-96" blur="blur-[120px]" />
       <AmbientGlow position="bottom-10 left-10" color="bg-pink-900/20" size="w-96 h-96" blur="blur-[120px]" />
 
