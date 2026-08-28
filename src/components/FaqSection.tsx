@@ -144,10 +144,11 @@ const FaqSectionComponent: React.FC<FaqSectionProps> = ({ onScrollToSection }) =
             return (
               <div
                 key={faq.id}
-                className={`rounded-3xl border transition-all duration-300 backdrop-blur-2xl overflow-hidden ${
+                // ---- ۲.۳: حذف backdrop-blur از کارت‌های سوالات ----
+                className={`rounded-3xl border transition-all duration-300 overflow-hidden ${
                   isOpen 
                     ? 'bg-slate-900/80 border-pink-500/40 shadow-[0_10px_35px_rgba(236,72,153,0.12)]' 
-                    : 'bg-slate-900/50 border-white/10 hover:border-white/20 hover:bg-slate-900/60'
+                    : 'bg-slate-900/80 border-white/10 hover:border-white/20'
                 }`}
               >
                 <button
@@ -193,7 +194,8 @@ const FaqSectionComponent: React.FC<FaqSectionProps> = ({ onScrollToSection }) =
           })}
         </div>
 
-        <div className="p-6 rounded-3xl bg-slate-900/60 border border-white/10 backdrop-blur-2xl flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-right shine-effect">
+        {/* ---- ۲.۳: حذف backdrop-blur از کارت پایین ---- */}
+        <div className="p-6 rounded-3xl bg-slate-900/80 border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-right shine-effect">
           <div className="space-y-1 text-center sm:text-right">
             <h3 className="font-bold text-white text-sm sm:text-base">
               <BinaryText binaryClassName="text-white/20" leftBinary="01" rightBinary="10">

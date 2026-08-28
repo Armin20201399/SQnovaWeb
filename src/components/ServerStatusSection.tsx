@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 import { 
-  Server, 
-  Activity, 
-  ShieldCheck, 
-  Radio, 
   CheckCircle2, 
-  Zap, 
-  Globe2,
-  RefreshCw,
   Info
 } from 'lucide-react';
 import { BinaryText } from './BinaryText';
@@ -111,9 +104,7 @@ const SERVER_NODES: ServerNodeStatus[] = [
   }
 ];
 
-const ServerStatusSection: React.FC<ServerStatusSectionProps> = ({
-  onScrollToSection
-}) => {
+const ServerStatusSection: React.FC<ServerStatusSectionProps> = () => {
   const [lastChecked] = useState('هم‌اکنون (لحظه‌ای)');
 
   return (
@@ -155,13 +146,11 @@ const ServerStatusSection: React.FC<ServerStatusSectionProps> = ({
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {SERVER_NODES.map((node) => {
-            const isOnline = node.status === 'online';
-            const isWarning = node.status === 'warning';
-
             return (
               <div
                 key={node.id}
-                className="relative rounded-3xl p-6 bg-slate-900/60 border border-white/10 backdrop-blur-2xl transition-all duration-300 hover:border-emerald-500/40 hover:-translate-y-1 hover:shadow-[0_10px_35px_rgba(16,185,129,0.15)] flex flex-col justify-between text-right group shine-effect"
+                // ---- ۲.۳: حذف backdrop-blur از کارت‌های سرور ----
+                className="relative rounded-3xl p-6 bg-slate-900/80 border border-white/10 transition-all duration-300 hover:border-emerald-500/40 hover:-translate-y-1 hover:shadow-[0_10px_35px_rgba(16,185,129,0.15)] flex flex-col justify-between text-right group shine-effect"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-4">
@@ -230,7 +219,7 @@ const ServerStatusSection: React.FC<ServerStatusSectionProps> = ({
           })}
         </div>
 
-        <div className="p-4 sm:p-5 rounded-2xl bg-slate-900/40 border border-white/10 backdrop-blur-md max-w-3xl mx-auto flex items-center justify-center gap-3 text-xs text-slate-400 text-center">
+        <div className="p-4 sm:p-5 rounded-2xl bg-slate-900/80 border border-white/10 max-w-3xl mx-auto flex items-center justify-center gap-3 text-xs text-slate-400 text-center">
           <Info className="w-4 h-4 text-sky-400 flex-shrink-0" />
           <span>
             کلیه نودها مجهز به مانیتورینگ خودکار پکت‌لاس هستند و در صورت افت کیفیت هر مسیر، ترافیک مشترکین در کمتر از 0.5 ثانیه به نود پشتیبان هدایت می‌شود.

@@ -1,15 +1,9 @@
 import React, { memo } from 'react';
 import { SERVICE_PACKAGES } from '../data/vpnData';
 import {
-  Layers,
   CheckCircle2,
   Send,
-  Flame,
-  Sparkles,
-  ShieldCheck,
-  Zap,
-  Headphones,
-  Globe2
+  Sparkles
 } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 
@@ -42,10 +36,11 @@ const ServicePackagesSectionComponent: React.FC<ServicePackagesSectionProps> = (
             return (
               <div
                 key={pkg.id}
-                className={`rounded-3xl p-6 transition-all duration-300 flex flex-col items-center space-y-5 backdrop-blur-2xl relative group text-center shine-effect ${
+                // ---- ۲.۳: حذف backdrop-blur از کارت‌های پکیج ----
+                className={`rounded-3xl p-6 transition-all duration-300 flex flex-col items-center space-y-5 relative group text-center shine-effect ${
                   isPopular
-                    ? 'bg-gradient-to-b from-purple-950/50 via-slate-900/90 to-slate-900/90 border-2 border-pink-500 shadow-[0_0_35px_rgba(236,72,153,0.35)] -translate-y-2'
-                    : 'bg-slate-900/40 border border-white/10 hover:border-white/25 hover:-translate-y-1 shadow-xl'
+                    ? 'bg-slate-900/90 border-2 border-pink-500 shadow-[0_0_35px_rgba(236,72,153,0.35)] -translate-y-2'
+                    : 'bg-slate-900/80 border border-white/10 hover:border-white/25 hover:-translate-y-1 shadow-xl'
                 }`}
               >
                 {isPopular && (
@@ -102,7 +97,8 @@ const ServicePackagesSectionComponent: React.FC<ServicePackagesSectionProps> = (
         </div>
 
         {onScrollToSection && (
-          <div className="p-6 rounded-3xl bg-slate-900/60 border border-amber-500/30 backdrop-blur-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          // ---- ۲.۳: حذف backdrop-blur از کارت پایین ----
+          <div className="p-6 rounded-3xl bg-slate-900/80 border border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-center sm:text-right">
               <div className="flex items-center justify-center sm:justify-start gap-2 text-amber-300 font-bold text-sm">
                 <Sparkles className="w-4 h-4 text-amber-400" />

@@ -6,6 +6,10 @@ const BinaryBackgroundComponent: React.FC = () => {
   const isVisibleRef = useRef(true);
 
   useEffect(() => {
+    // ---- ۲.۱: احترام به prefers-reduced-motion ----
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -20,6 +24,10 @@ const BinaryBackgroundComponent: React.FC = () => {
     const fps = 24;
     const interval = 1000 / fps;
 
+    // ---- ۲.۱: متغیرهای کنترل اسکرول ----
+    let isScrolling = false;
+    let scrollTimeoutId: number;
+
     const fontSize = 14;
     const chars = ['0', '1'];
 
@@ -32,7 +40,17 @@ const BinaryBackgroundComponent: React.FC = () => {
       drops = new Array(columns).fill(1);
     };
 
+    // ---- ۲.۱: هندلر اسکرول ----
+    const handleScroll = () => {
+      isScrolling = true;
+      window.clearTimeout(scrollTimeoutId);
+      scrollTimeoutId = window.setTimeout(() => {
+        isScrolling = false;
+      }, 200);
+    };
+
     window.addEventListener('resize', resize);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     resize();
 
     const colors = [
@@ -44,7 +62,8 @@ const BinaryBackgroundComponent: React.FC = () => {
     ];
 
     const draw = (currentTime: number) => {
-      if (!isVisibleRef.current) {
+      // ---- ۲.۱: توقف انیمیشن حین اسکرول ----
+      if (!isVisibleRef.current || isScrolling) {
         animationFrameIdRef.current = requestAnimationFrame(draw);
         return;
       }
@@ -103,6 +122,8 @@ const BinaryBackgroundComponent: React.FC = () => {
 
     return () => {
       window.removeEventListener('resize', resize);
+      window.removeEventListener('scroll', handleScroll);
+      window.clearTimeout(scrollTimeoutId);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       if (animationFrameIdRef.current) {
         cancelAnimationFrame(animationFrameIdRef.current);
@@ -115,6 +136,7 @@ const BinaryBackgroundComponent: React.FC = () => {
       ref={canvasRef}
       className="fixed inset-0 w-full h-full -z-50 pointer-events-none opacity-25"
       style={{ background: '#020617' }}
+      aria-hidden="true"
     />
   );
 };

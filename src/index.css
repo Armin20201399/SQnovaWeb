@@ -190,28 +190,28 @@
 }
 
 /* ============================================ */
-/* ===== کلاس‌های content-visibility برای بخش‌های پایین صفحه ===== */
+/* ===== کلاس‌های content-visibility با ارتفاع واقعی ===== */
 /* ============================================ */
 
 .cv-400 {
   content-visibility: auto;
-  contain-intrinsic-size: 1px 400px;
+  contain-intrinsic-size: 1px 420px;   /* Hero + بخش‌های کوچک */
 }
 .cv-600 {
   content-visibility: auto;
-  contain-intrinsic-size: 1px 600px;
+  contain-intrinsic-size: 1px 620px;   /* GameNet و بخش‌های متوسط */
 }
 .cv-800 {
   content-visibility: auto;
-  contain-intrinsic-size: 1px 800px;
+  contain-intrinsic-size: 1px 820px;   /* Protocol, Packages, Apps */
 }
 .cv-900 {
   content-visibility: auto;
-  contain-intrinsic-size: 1px 900px;
+  contain-intrinsic-size: 1px 920px;   /* ServerStatus, Faq, Privacy */
 }
 .cv-1000 {
   content-visibility: auto;
-  contain-intrinsic-size: 1px 1000px;
+  contain-intrinsic-size: 1px 1020px;  /* بخش‌های بسیار بلند */
 }
 
 /* ============================================ */

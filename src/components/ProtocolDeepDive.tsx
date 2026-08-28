@@ -7,13 +7,7 @@ import {
   Zap, 
   CheckCircle2, 
   Layers, 
-  Sparkles, 
-  Cpu, 
-  SlidersHorizontal,
-  ArrowLeft,
-  Radio,
-  Activity,
-  Server
+  Sparkles
 } from 'lucide-react';
 import { ProtocolType } from '../types';
 import { BinaryText } from './BinaryText';
@@ -28,21 +22,6 @@ const ProtocolDeepDive: React.FC<ProtocolDeepDiveProps> = ({
   const [selectedProtocolId, setSelectedProtocolId] = useState<ProtocolType>('hysteria2');
 
   const selectedProtocol = PROTOCOLS_DATA.find((p) => p.id === selectedProtocolId) || PROTOCOLS_DATA[0];
-
-  const getIcon = (iconName: string, className = "w-5 h-5") => {
-    switch (iconName) {
-      case 'Flame':
-        return <Flame className={`${className} text-orange-400`} />;
-      case 'ShieldCheck':
-        return <ShieldCheck className={`${className} text-pink-400`} />;
-      case 'Sparkles':
-        return <Sparkles className={`${className} text-amber-400`} />;
-      case 'Zap':
-        return <Zap className={`${className} text-purple-400`} />;
-      default:
-        return <Flame className={`${className} text-orange-400`} />;
-    }
-  };
 
   const protocolTabInfo = [
     { id: 'hysteria2' as ProtocolType, label: 'Hysteria 2 Turbo', sublabel: 'UDP / Brisk', icon: Flame, color: 'from-orange-500 to-pink-600' },
@@ -119,7 +98,8 @@ const ProtocolDeepDive: React.FC<ProtocolDeepDiveProps> = ({
           </div>
         </div>
 
-        <div className="rounded-3xl bg-slate-900/60 border border-white/10 p-6 sm:p-10 shadow-2xl backdrop-blur-2xl relative overflow-hidden text-center transition-all duration-300">
+        {/* ---- ۲.۳: حذف backdrop-blur از کارت اصلی ---- */}
+        <div className="rounded-3xl bg-slate-900/80 border border-white/10 p-6 sm:p-10 shadow-2xl relative overflow-hidden text-center transition-all duration-300">
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
