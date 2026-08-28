@@ -1,15 +1,10 @@
-import React, { useEffect, lazy, Suspense } from 'react';
-import "@fontsource-variable/vazirmatn";
-
-// ===== کامپوننت‌های سبک (بارگذاری عادی) - با named export =====
+import { useEffect, lazy, Suspense } from 'react';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { Footer } from './components/Footer';
-
-// ===== BinaryBackground - با default export =====
 import BinaryBackground from './components/BinaryBackground';
+import { SectionFallback } from './components/SectionFallback';
 
-// ===== کامپوننت‌های سنگین با Lazy (حالا با default export) =====
 const ProtocolDeepDive = lazy(() => import('./components/ProtocolDeepDive'));
 const LiveGamingPingSimulator = lazy(() => import('./components/LiveGamingPingSimulator'));
 const ServerStatusSection = lazy(() => import('./components/ServerStatusSection'));
@@ -20,28 +15,30 @@ const ClientAppsDownload = lazy(() => import('./components/ClientAppsDownload'))
 const FaqSection = lazy(() => import('./components/FaqSection'));
 const PrivacyAndTermsSection = lazy(() => import('./components/PrivacyAndTermsSection'));
 
+const scrollToWhenReady = (id: string, attempts = 20) => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+  if (attempts > 0) {
+    setTimeout(() => scrollToWhenReady(id, attempts - 1), 100);
+  }
+};
+
 export default function App() {
   const handleScrollToSection = (sectionId: string) => {
     const cleanId = sectionId.replace('#', '').replace('/', '');
-    const el = document.getElementById(cleanId);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-      window.history.replaceState(null, '', `#${cleanId}`);
-    }
+    scrollToWhenReady(cleanId);
+    window.history.replaceState(null, '', `#${cleanId}`);
   };
 
   useEffect(() => {
     const hash = window.location.hash.replace('#', '');
     const pathname = window.location.pathname.replace('/', '');
     const target = hash || pathname;
-
     if (target) {
-      setTimeout(() => {
-        const el = document.getElementById(target);
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 300);
+      scrollToWhenReady(target);
     }
   }, []);
 
@@ -52,40 +49,32 @@ export default function App() {
       <main>
         <HeroSection onScrollToSection={handleScrollToSection} />
 
-        <Suspense fallback={<div className="text-center py-20 text-slate-500">در حال بارگذاری...</div>}>
+        <Suspense fallback={<SectionFallback />}>
           <ProtocolDeepDive onScrollToSection={handleScrollToSection} />
         </Suspense>
-
-        <Suspense fallback={<div className="text-center py-20 text-slate-500">در حال بارگذاری...</div>}>
-          <LiveGamingPingSimulator onScrollToSection={handleScrollToSection} />
+        <Suspense fallback={<SectionFallback />}>
+          <LiveGamingPingSimulator />
         </Suspense>
-
-        <Suspense fallback={<div className="text-center py-20 text-slate-500">در حال بارگذاری...</div>}>
-          <ServerStatusSection onScrollToSection={handleScrollToSection} />
+        <Suspense fallback={<SectionFallback />}>
+          <ServerStatusSection />
         </Suspense>
-
-        <Suspense fallback={<div className="text-center py-20 text-slate-500">در حال بارگذاری...</div>}>
+        <Suspense fallback={<SectionFallback />}>
           <GameNetPartnershipSection />
         </Suspense>
-
-        <Suspense fallback={<div className="text-center py-20 text-slate-500">در حال بارگذاری...</div>}>
+        <Suspense fallback={<SectionFallback />}>
           <FreeTrialDedicatedSection onScrollToSection={handleScrollToSection} />
         </Suspense>
-
-        <Suspense fallback={<div className="text-center py-20 text-slate-500">در حال بارگذاری...</div>}>
+        <Suspense fallback={<SectionFallback />}>
           <ServicePackagesSection onScrollToSection={handleScrollToSection} />
         </Suspense>
-
-        <Suspense fallback={<div className="text-center py-20 text-slate-500">در حال بارگذاری...</div>}>
+        <Suspense fallback={<SectionFallback />}>
           <ClientAppsDownload />
         </Suspense>
-
-        <Suspense fallback={<div className="text-center py-20 text-slate-500">در حال بارگذاری...</div>}>
+        <Suspense fallback={<SectionFallback />}>
           <FaqSection onScrollToSection={handleScrollToSection} />
         </Suspense>
-
-        <Suspense fallback={<div className="text-center py-20 text-slate-500">در حال بارگذاری...</div>}>
-          <PrivacyAndTermsSection onScrollToSection={handleScrollToSection} />
+        <Suspense fallback={<SectionFallback />}>
+          <PrivacyAndTermsSection />
         </Suspense>
       </main>
       <Footer onScrollToSection={handleScrollToSection} />

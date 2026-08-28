@@ -1,21 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react';
-import {
-  Flame,
-  Sparkles,
-  Gamepad2,
-  ShieldCheck,
-  Zap,
-  CheckCircle2,
-  ArrowLeft,
-  Radio,
-  Globe2,
-  Server,
-  Layers,
-  Network,
-  Cpu,
-  Activity
-} from 'lucide-react';
-import { FlameLogo } from './FlameLogo';
+import { ArrowLeft, Layers } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 
 interface HeroSectionProps {
@@ -44,7 +28,7 @@ const IRAN_SERVERS_INIT = [
   { id: 'hayweb', name: 'های وب', ping: 19 },
 ];
 
-// ===== مپ رنگ‌ها با اضافه شدن hoverBorder =====
+// ===== مپ رنگ‌ها =====
 const COLOR_MAP = {
   emerald: {
     text: 'text-emerald-400',
@@ -82,12 +66,12 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
   }, []);
 
-  // ===== شروع مجدد تایمرها (با clearTimeout قبلی) =====
+  // ===== شروع مجدد تایمرها =====
   const resumeTimers = useCallback(() => {
     if (!isVisible) return;
 
     if (intervalRef.current) clearInterval(intervalRef.current);
-    if (timeoutRef.current) clearTimeout(timeoutRef.current); // ← رفع باگ ۲
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
     intervalRef.current = setInterval(() => {
       setEuServers(prev => prev.map(r => {
@@ -137,7 +121,8 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [pauseTimers, resumeTimers]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // pauseTimers و resumeTimers با useCallback تعریف شده‌اند و تغییری نمی‌کنند
 
   // ===== مدیریت IntersectionObserver =====
   useEffect(() => {
@@ -158,7 +143,8 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
     );
     observer.observe(section);
     return () => observer.disconnect();
-  }, [pauseTimers, resumeTimers]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // pauseTimers و resumeTimers با useCallback تعریف شده‌اند و تغییری نمی‌کنند
 
   // ===== Effect اولیه =====
   useEffect(() => {
@@ -166,23 +152,19 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
     return () => {
       pauseTimers();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleViewPlans = useCallback(() => {
     onScrollToSection('packages');
   }, [onScrollToSection]);
 
-  const minEuPing = useMemo(() => {
-    return Math.min(...euServers.map(x => x.ping));
-  }, [euServers]);
-
-  const minIranPing = useMemo(() => {
-    return Math.min(...iranServers.map(x => x.ping));
-  }, [iranServers]);
+  const minEuPing = useMemo(() => Math.min(...euServers.map(x => x.ping)), [euServers]);
+  const minIranPing = useMemo(() => Math.min(...iranServers.map(x => x.ping)), [iranServers]);
 
   const heroLinesContent = useMemo(() => {
     return HERO_LINES.map((line, idx) => {
-      let content = line.text;
+      let content: React.ReactNode = line.text;
       if (idx === 0) {
         content = <>پکت‌لاس نزدیک به <span className="font-mono text-sky-300 drop-shadow-[0_0_12px_rgba(56,189,248,0.9)] text-[1.2em] inline-block align-middle">{zeroVal}</span></>;
       } else if (idx === 1) {
@@ -193,13 +175,7 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
         content = <><span className="text-rose-300 drop-shadow-[0_0_10px_rgba(251,113,133,0.8)] text-[1.2em] inline-block align-middle">شلوغ‌ترین</span></>;
       }
       return (
-        <BinaryText
-          key={idx}
-          binaryClassName={line.color}
-          leftBinary={line.b1}
-          rightBinary={line.b2}
-          className="text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white"
-        >
+        <BinaryText key={idx} binaryClassName={line.color} leftBinary={line.b1} rightBinary={line.b2} className="text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
           {content}
         </BinaryText>
       );
@@ -210,21 +186,10 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
     return euServers.map(server => {
       const isOptimal = server.ping === minEuPing;
       return (
-        <div
-          key={server.id}
-          className={`p-2 rounded-xl border flex flex-col items-center justify-center text-center transition-all duration-300 relative ${
-            isOptimal
-              ? 'bg-sky-500/20 border-sky-500/80 shadow-[0_0_15px_rgba(56,189,248,0.3)] text-white scale-[1.02]'
-              : 'bg-white/5 border-white/10 text-slate-300'
-          }`}
-        >
-          <div className={`absolute -bottom-2.5 w-0.5 h-3 ${isOptimal ? 'bg-sky-400 shadow-[0_0_6px_#38bdf8] animate-pulse' : 'bg-white/10'}`}></div>
+        <div key={server.id} className={`p-2 rounded-xl border flex flex-col items-center justify-center text-center transition-all duration-300 relative ${isOptimal ? 'bg-sky-500/20 border-sky-500/80 shadow-[0_0_15px_rgba(56,189,248,0.3)] text-white scale-[1.02]' : 'bg-white/5 border-white/10 text-slate-300'}`}>
+          <div className={`absolute -bottom-2.5 w-0.5 h-3 ${isOptimal ? 'bg-sky-400 shadow-[0_0_6px_#38bdf8] animate-pulse' : 'bg-white/10'}`} />
           <span className="text-[11px] font-bold truncate w-full">{server.name}</span>
-          <span className={`font-mono font-bold text-[11px] mt-0.5 px-1.5 py-0.5 rounded ${
-            isOptimal ? 'bg-sky-500/30 text-sky-300 border border-sky-500/50' : 'bg-slate-800 text-slate-300'
-          }`}>
-            {server.ping} ms
-          </span>
+          <span className={`font-mono font-bold text-[11px] mt-0.5 px-1.5 py-0.5 rounded ${isOptimal ? 'bg-sky-500/30 text-sky-300 border border-sky-500/50' : 'bg-slate-800 text-slate-300'}`}>{server.ping} ms</span>
         </div>
       );
     });
@@ -234,22 +199,11 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
     return iranServers.map(server => {
       const isOptimal = server.ping === minIranPing;
       return (
-        <div
-          key={server.id}
-          className={`p-2 rounded-xl border flex flex-col items-center justify-center text-center relative transition-all duration-300 ${
-            isOptimal
-              ? 'bg-sky-500/20 border-sky-500/50 shadow-[0_0_15px_rgba(56,189,248,0.2)] text-white'
-              : 'bg-white/5 border-white/10 text-slate-300'
-          }`}
-        >
-          <div className={`absolute -top-2.5 w-0.5 h-3 ${isOptimal ? 'bg-sky-400 shadow-[0_0_6px_#38bdf8] animate-pulse' : 'bg-purple-400/50'}`}></div>
+        <div key={server.id} className={`p-2 rounded-xl border flex flex-col items-center justify-center text-center relative transition-all duration-300 ${isOptimal ? 'bg-sky-500/20 border-sky-500/50 shadow-[0_0_15px_rgba(56,189,248,0.2)] text-white' : 'bg-white/5 border-white/10 text-slate-300'}`}>
+          <div className={`absolute -top-2.5 w-0.5 h-3 ${isOptimal ? 'bg-sky-400 shadow-[0_0_6px_#38bdf8] animate-pulse' : 'bg-purple-400/50'}`} />
           <span className="text-[11px] font-bold truncate w-full">{server.name}</span>
-          <span className={`font-mono font-bold text-[11px] mt-0.5 px-1.5 py-0.5 rounded ${
-            isOptimal ? 'bg-sky-500/30 text-sky-300 border border-sky-500/50' : 'bg-slate-800 text-slate-300'
-          }`}>
-            {server.ping} ms
-          </span>
-          <div className={`absolute -bottom-3 w-0.5 h-3 ${isOptimal ? 'bg-sky-400 shadow-[0_0_6px_#38bdf8] animate-pulse' : 'bg-white/20'}`}></div>
+          <span className={`font-mono font-bold text-[11px] mt-0.5 px-1.5 py-0.5 rounded ${isOptimal ? 'bg-sky-500/30 text-sky-300 border border-sky-500/50' : 'bg-slate-800 text-slate-300'}`}>{server.ping} ms</span>
+          <div className={`absolute -bottom-3 w-0.5 h-3 ${isOptimal ? 'bg-sky-400 shadow-[0_0_6px_#38bdf8] animate-pulse' : 'bg-white/20'}`} />
         </div>
       );
     });
@@ -261,105 +215,71 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
   ], []);
 
   return (
-    <section
-      ref={sectionRef}
-      id="hero-section"
-      className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 overflow-hidden bg-cyber-grid"
-    >
+    <section ref={sectionRef} id="hero-section" className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 overflow-hidden bg-cyber-grid">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 -right-20 w-96 h-96 bg-purple-900/20 rounded-full blur-[120px] animate-pulse"></div>
-        <div className="absolute top-1/3 -left-20 w-96 h-96 bg-orange-600/15 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '4s' }}></div>
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[700px] h-80 bg-pink-900/15 rounded-full blur-[140px]"></div>
+        <div className="absolute top-1/4 -right-20 w-96 h-96 bg-purple-900/20 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute top-1/3 -left-20 w-96 h-96 bg-orange-600/15 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '4s' }} />
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[700px] h-80 bg-pink-900/15 rounded-full blur-[140px]" />
       </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-
           <div className="lg:col-span-7 flex flex-col items-center text-center space-y-6">
-            <h1 className="flex flex-col items-center gap-5 py-6">
-              {heroLinesContent}
-            </h1>
-
+            <h1 className="flex flex-col items-center gap-5 py-6">{heroLinesContent}</h1>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-20 w-full sm:w-auto">
-              <button
-                id="hero-view-plans-cta"
-                onClick={handleViewPlans}
-                className="whitespace-nowrap flex-shrink-0 w-full sm:w-auto group relative px-7 py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 hover:from-purple-500 hover:via-pink-500 hover:to-orange-400 text-white font-bold text-sm sm:text-base shadow-[0_10px_30px_rgba(236,72,153,0.4)] hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2.5 text-center shine-effect"
-              >
+              <button id="hero-view-plans-cta" onClick={handleViewPlans} className="whitespace-nowrap flex-shrink-0 w-full sm:w-auto group relative px-7 py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 hover:from-purple-500 hover:via-pink-500 hover:to-orange-400 text-white font-bold text-sm sm:text-base shadow-[0_10px_30px_rgba(236,72,153,0.4)] hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2.5 text-center shine-effect">
                 <Layers className="w-5 h-5 text-sky-200 group-hover:rotate-12 transition duration-300" />
                 <span>مشاهده پلن‌ها و شرایط</span>
                 <ArrowLeft className="w-4 h-4 rtl:rotate-0 ltr:rotate-180 group-hover:-translate-x-1 transition duration-200" />
               </button>
             </div>
           </div>
-
           <div className="lg:col-span-5 relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-orange-500/20 via-pink-500/20 to-purple-600/30 rounded-3xl blur-2xl opacity-80 animate-pulse"></div>
-
+            <div className="absolute -inset-1 bg-gradient-to-r from-orange-500/20 via-pink-500/20 to-purple-600/30 rounded-3xl blur-2xl opacity-80 animate-pulse" />
             <div className="relative rounded-3xl bg-slate-900/60 border border-white/10 p-6 sm:p-7 shadow-2xl backdrop-blur-2xl overflow-hidden space-y-5 text-center">
               <div className="flex items-center justify-center border-b border-white/10 pb-4">
                 <div className="flex items-center gap-2">
                   <div className="relative flex items-center justify-center w-3 h-3">
-                    <div className="absolute w-6 h-6 bg-sky-400/40 rounded-full animate-ping"></div>
-                    <div className="absolute w-4 h-4 bg-sky-400/60 rounded-full animate-pulse"></div>
-                    <div className="w-2.5 h-2.5 rounded-full bg-sky-400 shadow-[0_0_12px_#38bdf8] relative z-10"></div>
+                    <div className="absolute w-6 h-6 bg-sky-400/40 rounded-full animate-ping" />
+                    <div className="absolute w-4 h-4 bg-sky-400/60 rounded-full animate-pulse" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-sky-400 shadow-[0_0_12px_#38bdf8] relative z-10" />
                   </div>
                   <span className="text-xs font-bold text-slate-200">روتینگ اختصاصی بین‌المللی</span>
                 </div>
               </div>
-
               <div className="rounded-2xl bg-slate-950/80 border border-purple-500/30 p-3 shadow-xl space-y-3 text-right">
-                <div className="space-y-1">
-                  <div className="grid grid-cols-3 gap-2">
-                    {euServerElements}
-                  </div>
-                </div>
-
+                <div className="space-y-1"><div className="grid grid-cols-3 gap-2">{euServerElements}</div></div>
                 <div className="relative py-1">
-                  <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-0.5 bg-gradient-to-b from-sky-500/50 via-purple-500/50 to-purple-400/50"></div>
-                  <div className="absolute inset-x-0 top-1/2 h-0.5 bg-gradient-to-r from-purple-500/20 via-sky-500/50 to-purple-500/25 -translate-y-1/2"></div>
+                  <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-0.5 bg-gradient-to-b from-sky-500/50 via-purple-500/50 to-purple-400/50" />
+                  <div className="absolute inset-x-0 top-1/2 h-0.5 bg-gradient-to-r from-purple-500/20 via-sky-500/50 to-purple-500/25 -translate-y-1/2" />
                   <div className="relative z-10 p-2.5 rounded-xl bg-gradient-to-r from-purple-900/50 via-indigo-950/90 to-purple-900/50 border border-purple-500/50 flex items-center justify-center gap-4 shadow-md text-center">
                     <div className="flex items-center gap-2.5">
                       <div className="relative flex items-center justify-center w-2.5 h-2.5">
-                        <div className="absolute w-4 h-4 bg-purple-400/50 rounded-full animate-ping"></div>
-                        <div className="w-2 h-2 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc] relative z-10"></div>
+                        <div className="absolute w-4 h-4 bg-purple-400/50 rounded-full animate-ping" />
+                        <div className="w-2 h-2 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc] relative z-10" />
                       </div>
                       <span className="text-xs font-bold text-white">هاب مرکزی ترکیه</span>
                     </div>
-                    <span className="text-[10px] font-mono font-bold text-sky-400 bg-sky-500/10 border border-sky-500/30 px-2 py-0.5 rounded min-w-[45px]">
-                      {hubPing}ms
-                    </span>
+                    <span className="text-[10px] font-mono font-bold text-sky-400 bg-sky-500/10 border border-sky-500/30 px-2 py-0.5 rounded min-w-[45px]">{hubPing}ms</span>
                   </div>
                 </div>
-
-                <div className="space-y-1">
-                  <div className="grid grid-cols-3 gap-2">
-                    {iranServerElements}
-                  </div>
-                </div>
+                <div className="space-y-1"><div className="grid grid-cols-3 gap-2">{iranServerElements}</div></div>
               </div>
-
               <div className="space-y-3 text-xs text-center">
                 {performanceMetrics.map((metric, idx) => {
                   const colors = COLOR_MAP[metric.color as keyof typeof COLOR_MAP];
                   const barWidth = idx === 0 ? 'w-[12%]' : 'w-full';
                   return (
-                    <div
-                      key={idx}
-                      className={`p-3.5 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between gap-4 backdrop-blur-sm transition-all duration-300 ${colors.hoverBorder} hover:bg-white/[0.07]`}
-                    >
+                    <div key={idx} className={`p-3.5 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between gap-4 backdrop-blur-sm transition-all duration-300 ${colors.hoverBorder} hover:bg-white/[0.07]`}>
                       <div className="flex items-center gap-2.5 flex-shrink-0">
-                        <div className={`w-2 h-2 rounded-full ${colors.dot}`}></div>
+                        <div className={`w-2 h-2 rounded-full ${colors.dot}`} />
                         <span className="text-slate-200 font-bold">{metric.label}</span>
                       </div>
                       <div className="hidden sm:flex flex-1 items-center mx-2">
                         <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden shadow-inner">
-                          <div className={`${barWidth} h-full ${colors.bar} rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]`}></div>
+                          <div className={`${barWidth} h-full ${colors.bar} rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]`} />
                         </div>
                       </div>
-                      <span className={`text-xs font-mono font-bold ${colors.text} ${colors.bg} px-3 py-1.5 rounded-xl border ${colors.border} flex-shrink-0 min-w-[75px] inline-flex justify-center`} dir="ltr">
-                        {metric.value}
-                      </span>
+                      <span className={`text-xs font-mono font-bold ${colors.text} ${colors.bg} px-3 py-1.5 rounded-xl border ${colors.border} flex-shrink-0 min-w-[75px] inline-flex justify-center`} dir="ltr">{metric.value}</span>
                     </div>
                   );
                 })}

@@ -190,28 +190,33 @@
 }
 
 /* ============================================ */
-/* ===== کلاس‌های content-visibility با ارتفاع واقعی ===== */
+/* ===== کلاس‌های content-visibility با ارتفاع واقعی (اندازه‌گیری شده با DevTools) ===== */
 /* ============================================ */
 
+/* سکشن‌های کوتاه: Hero (≈400px) */
 .cv-400 {
   content-visibility: auto;
-  contain-intrinsic-size: 1px 420px;   /* Hero + بخش‌های کوچک */
+  contain-intrinsic-size: 1px 420px;
 }
+/* سکشن‌های متوسط: GameNet, Infrastructure (≈600px) */
 .cv-600 {
   content-visibility: auto;
-  contain-intrinsic-size: 1px 620px;   /* GameNet و بخش‌های متوسط */
+  contain-intrinsic-size: 1px 640px;
 }
+/* سکشن‌های بلند: Protocol, Packages, Apps, FreeTrial (≈800px) */
 .cv-800 {
   content-visibility: auto;
-  contain-intrinsic-size: 1px 820px;   /* Protocol, Packages, Apps */
+  contain-intrinsic-size: 1px 840px;
 }
+/* سکشن‌های بسیار بلند: ServerStatus, Faq, Privacy (≈950px) */
 .cv-900 {
   content-visibility: auto;
-  contain-intrinsic-size: 1px 920px;   /* ServerStatus, Faq, Privacy */
+  contain-intrinsic-size: 1px 960px;
 }
+/* سکشن‌های فوق‌بلند: (در صورت نیاز) */
 .cv-1000 {
   content-visibility: auto;
-  contain-intrinsic-size: 1px 1020px;  /* بخش‌های بسیار بلند */
+  contain-intrinsic-size: 1px 1050px;
 }
 
 /* ============================================ */

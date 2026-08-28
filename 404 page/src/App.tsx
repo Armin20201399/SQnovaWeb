@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export default function App() {
-  const [isHovered, setIsHovered] = useState(false);
+  const [, setIsHovered] = useState(false);
 
   return (
     <div
