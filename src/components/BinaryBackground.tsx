@@ -2,6 +2,8 @@ import React, { useEffect, useRef, memo } from 'react';
 
 const BinaryBackgroundComponent: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationFrameIdRef = useRef<number | null>(null);
+  const isVisibleRef = useRef(true);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -10,11 +12,13 @@ const BinaryBackgroundComponent: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let animationFrameId: number;
     let width: number;
     let height: number;
     let columns: number;
     let drops: number[];
+    let lastTime = 0;
+    const fps = 24;
+    const interval = 1000 / fps;
 
     const fontSize = 14;
     const chars = ['0', '1'];
@@ -24,7 +28,6 @@ const BinaryBackgroundComponent: React.FC = () => {
       height = window.innerHeight;
       canvas.width = width;
       canvas.height = height;
-      
       columns = Math.floor(width / fontSize);
       drops = new Array(columns).fill(1);
     };
@@ -40,7 +43,20 @@ const BinaryBackgroundComponent: React.FC = () => {
       'rgba(251, 191, 36, ',
     ];
 
-    const draw = () => {
+    const draw = (currentTime: number) => {
+      // اگر تب مخفی است، ادامه نده
+      if (!isVisibleRef.current) {
+        animationFrameIdRef.current = requestAnimationFrame(draw);
+        return;
+      }
+
+      // محدود کردن فریم‌ریت به ۲۴ فریم بر ثانیه
+      if (currentTime - lastTime < interval) {
+        animationFrameIdRef.current = requestAnimationFrame(draw);
+        return;
+      }
+      lastTime = currentTime;
+
       ctx.fillStyle = 'rgba(2, 6, 23, 0.1)';
       ctx.fillRect(0, 0, width, height);
 
@@ -77,14 +93,23 @@ const BinaryBackgroundComponent: React.FC = () => {
         ctx.fillText(rt, rx, ry);
       }
 
-      animationFrameId = requestAnimationFrame(draw);
+      animationFrameIdRef.current = requestAnimationFrame(draw);
     };
 
-    draw();
+    animationFrameIdRef.current = requestAnimationFrame(draw);
+
+    // ===== مدیریت visibilitychange =====
+    const handleVisibilityChange = () => {
+      isVisibleRef.current = !document.hidden;
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
       window.removeEventListener('resize', resize);
-      cancelAnimationFrame(animationFrameId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      if (animationFrameIdRef.current) {
+        cancelAnimationFrame(animationFrameIdRef.current);
+      }
     };
   }, []);
 

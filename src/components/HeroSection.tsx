@@ -1,20 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react';
-import {
-  Flame,
-  Sparkles,
-  Gamepad2,
-  ShieldCheck,
-  Zap,
-  CheckCircle2,
-  ArrowLeft,
-  Radio,
-  Globe2,
-  Server,
-  Layers,
-  Network,
-  Cpu,
-  Activity
-} from 'lucide-react';
+import { Flame, Sparkles, Gamepad2, ShieldCheck, Zap, CheckCircle2, ArrowLeft, Radio, Globe2, Server, Layers, Network, Cpu, Activity } from 'lucide-react';
 import { FlameLogo } from './FlameLogo';
 import { BinaryText } from './BinaryText';
 
@@ -44,24 +29,54 @@ const IRAN_SERVERS_INIT = [
   { id: 'hayweb', name: 'های وب', ping: 19 },
 ];
 
+// ===== مپ رنگ‌ها برای رفع باگ Tailwind داینامیک =====
+const COLOR_MAP = {
+  emerald: {
+    text: 'text-emerald-400',
+    bg: 'bg-emerald-500/10',
+    border: 'border-emerald-500/20',
+    dot: 'bg-emerald-400 shadow-[0_0_8px_#34d399]',
+    bar: 'bg-emerald-500',
+  },
+  purple: {
+    text: 'text-purple-400',
+    bg: 'bg-purple-500/10',
+    border: 'border-purple-500/20',
+    dot: 'bg-purple-400 shadow-[0_0_8px_#a855f7]',
+    bar: 'bg-purple-500',
+  },
+} as const;
+
 const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection }) => {
   const [zeroVal, setZeroVal] = useState('0.0%');
   const [uptimeVal, setUptimeVal] = useState('99.99%');
   const [hubPing, setHubPing] = useState(58);
   const [euServers, setEuServers] = useState(EU_SERVERS_INIT);
   const [iranServers, setIranServers] = useState(IRAN_SERVERS_INIT);
+  const [isVisible, setIsVisible] = useState(true);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
+  // ===== توقف/ادامه تایمرها بر اساس visibility =====
+  const pauseTimers = useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+  }, []);
+
+  const resumeTimers = useCallback(() => {
+    // اگر بخش قابل مشاهده نیست، تایمرها را شروع نکن
+    if (!isVisible) return;
+
+    // راه‌اندازی مجدد interval پینگ
+    if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
       setEuServers(prev => prev.map(r => {
         const basePing = r.id === 'hetzner' ? 85 : r.id === 'apex' ? 95 : 90;
         const delta = Math.floor(Math.random() * 9) - 4;
         return { ...r, ping: Math.max(60, basePing + delta) };
       }));
-
       setIranServers(prev => prev.map(r => {
         const delta = Math.floor(Math.random() * 7) - 3;
         let newPing = r.ping + delta;
@@ -69,7 +84,6 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
         if (newPing > 40) newPing = 40;
         return { ...r, ping: newPing };
       }));
-
       setHubPing(prev => {
         const delta = Math.floor(Math.random() * 5) - 2;
         let newPing = prev + delta;
@@ -79,29 +93,59 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
       });
     }, 2000);
 
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, []);
-
-  useEffect(() => {
+    // راه‌اندازی مجدد timeout زنجیره‌ای
     const scheduleNext = () => {
       const delay = Math.floor(Math.random() * 500) + 300;
       timeoutRef.current = setTimeout(() => {
         const possibleLoss = ['0.0%', '0.1%', '0.0%', '1.0%', '0.0%'];
         setZeroVal(possibleLoss[Math.floor(Math.random() * possibleLoss.length)]);
-
         const possibleUptime = ['99.99%', '99.98%', '99.97%', '99.96%', '99.95%'];
         setUptimeVal(possibleUptime[Math.floor(Math.random() * possibleUptime.length)]);
-
         scheduleNext();
       }, delay);
     };
-
     scheduleNext();
+  }, [isVisible]);
 
+  // ===== مدیریت visibilitychange =====
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        pauseTimers();
+      } else {
+        resumeTimers();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [pauseTimers, resumeTimers]);
+
+  // ===== مدیریت IntersectionObserver =====
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const isVisibleNow = entries[0].isIntersecting;
+        setIsVisible(isVisibleNow);
+        if (!isVisibleNow) {
+          pauseTimers();
+        } else {
+          resumeTimers();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, [pauseTimers, resumeTimers]);
+
+  // ===== Effect اولیه =====
+  useEffect(() => {
+    resumeTimers();
     return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      pauseTimers();
     };
   }, []);
 
@@ -199,9 +243,11 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
 
   return (
     <section
+      ref={sectionRef}
       id="hero-section"
       className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 overflow-hidden bg-cyber-grid"
     >
+      {/* Ambient Lighting Orbs */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 -right-20 w-96 h-96 bg-purple-900/20 rounded-full blur-[120px] animate-pulse"></div>
         <div className="absolute top-1/3 -left-20 w-96 h-96 bg-orange-600/15 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '4s' }}></div>
@@ -275,26 +321,23 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
                 </div>
               </div>
 
+              {/* ===== نمایشگرهای عملکرد با COLOR_MAP ===== */}
               <div className="space-y-3 text-xs text-center">
                 {performanceMetrics.map((metric, idx) => {
-                  const bgLight = metric.color === 'emerald' ? 'emerald-500/10' : 'purple-500/10';
-                  const textColor = metric.color === 'emerald' ? 'emerald-400' : 'purple-400';
-                  const borderColor = metric.color === 'emerald' ? 'emerald-500/20' : 'purple-500/20';
-                  const dotColor = metric.color === 'emerald' ? 'emerald-400 shadow-[0_0_8px_#34d399]' : 'purple-400 shadow-[0_0_8px_#a855f7]';
+                  const colors = COLOR_MAP[metric.color as keyof typeof COLOR_MAP];
                   const barWidth = idx === 0 ? 'w-[12%]' : 'w-full';
-                  const barColor = metric.color === 'emerald' ? 'emerald-500' : 'purple-500';
                   return (
                     <div key={idx} className={`p-3.5 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between gap-4 backdrop-blur-sm transition-all duration-300 hover:border-${metric.color}-500/40 hover:bg-white/[0.07]`}>
                       <div className="flex items-center gap-2.5 flex-shrink-0">
-                        <div className={`w-2 h-2 rounded-full bg-${dotColor}`}></div>
+                        <div className={`w-2 h-2 rounded-full ${colors.dot}`}></div>
                         <span className="text-slate-200 font-bold">{metric.label}</span>
                       </div>
                       <div className="hidden sm:flex flex-1 items-center mx-2">
                         <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden shadow-inner">
-                          <div className={`${barWidth} h-full bg-${barColor} rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]`}></div>
+                          <div className={`${barWidth} h-full ${colors.bar} rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]`}></div>
                         </div>
                       </div>
-                      <span className={`text-xs font-mono font-bold text-${textColor} bg-${bgLight} px-3 py-1.5 rounded-xl border border-${borderColor} flex-shrink-0 min-w-[75px] inline-flex justify-center`} dir="ltr">
+                      <span className={`text-xs font-mono font-bold ${colors.text} ${colors.bg} px-3 py-1.5 rounded-xl border ${colors.border} flex-shrink-0 min-w-[75px] inline-flex justify-center`} dir="ltr">
                         {metric.value}
                       </span>
                     </div>

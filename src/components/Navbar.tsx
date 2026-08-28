@@ -1,21 +1,6 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
 import FlameLogo from './FlameLogo';
-import {
-  Menu,
-  X,
-  Sparkles,
-  Send,
-  Globe2,
-  Gamepad2,
-  ShieldCheck,
-  Download,
-  Layers,
-  Users2,
-  Activity,
-  Lock,
-  HelpCircle,
-  FileText
-} from 'lucide-react';
+import { Menu, X, Sparkles, Send, Globe2, Gamepad2, ShieldCheck, Download, Layers, Users2, Activity, Lock, HelpCircle, FileText } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 
 interface NavbarProps {
@@ -30,7 +15,8 @@ const NavbarComponent: React.FC<NavbarProps> = ({ onScrollToSection }) => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
+    // ===== اضافه شدن passive: true برای بهبود نرم‌ی اسکرول =====
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

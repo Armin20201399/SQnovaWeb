@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 interface BinaryTextProps {
   children: React.ReactNode;
@@ -8,9 +8,9 @@ interface BinaryTextProps {
   rightBinary?: string;
 }
 
-export const BinaryText: React.FC<BinaryTextProps> = ({ 
-  children, 
-  className = "", 
+const BinaryTextComponent: React.FC<BinaryTextProps> = ({
+  children,
+  className = "",
   binaryClassName = "text-sky-500/40",
   leftBinary = "010110",
   rightBinary = "110011"
@@ -27,3 +27,5 @@ export const BinaryText: React.FC<BinaryTextProps> = ({
     </div>
   );
 };
+
+export const BinaryText = memo(BinaryTextComponent);
