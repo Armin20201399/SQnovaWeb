@@ -117,9 +117,9 @@ const ServerStatusSection: React.FC<ServerStatusSectionProps> = ({
   const [lastChecked] = useState('هم‌اکنون (لحظه‌ای)');
 
   return (
-    <section 
-      id="status" 
-      className="py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center"
+    <section
+      id="status"
+      className="cv-900 py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center"
     >
       <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-sky-900/20 rounded-full blur-[140px] pointer-events-none"></div>
       <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-emerald-900/20 rounded-full blur-[140px] pointer-events-none"></div>

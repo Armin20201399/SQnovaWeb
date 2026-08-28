@@ -24,7 +24,10 @@ const ClientAppsDownloadComponent: React.FC = () => {
   });
 
   return (
-    <section id="apps" className="py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center">
+    <section
+      id="apps"
+      className="cv-800 py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center"
+    >
       <div className="absolute top-1/2 left-10 w-96 h-96 bg-purple-900/20 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

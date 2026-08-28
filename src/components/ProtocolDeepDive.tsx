@@ -52,9 +52,9 @@ const ProtocolDeepDive: React.FC<ProtocolDeepDiveProps> = ({
   ];
 
   return (
-    <section 
-      id="protocols" 
-      className="py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10"
+    <section
+      id="protocols"
+      className="cv-800 py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10"
     >
       <div className="absolute top-1/2 right-10 w-96 h-96 bg-purple-900/20 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-10 left-10 w-96 h-96 bg-pink-900/20 rounded-full blur-[120px] pointer-events-none"></div>

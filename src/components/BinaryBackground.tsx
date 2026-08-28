@@ -44,13 +44,11 @@ const BinaryBackgroundComponent: React.FC = () => {
     ];
 
     const draw = (currentTime: number) => {
-      // اگر تب مخفی است، ادامه نده
       if (!isVisibleRef.current) {
         animationFrameIdRef.current = requestAnimationFrame(draw);
         return;
       }
 
-      // محدود کردن فریم‌ریت به ۲۴ فریم بر ثانیه
       if (currentTime - lastTime < interval) {
         animationFrameIdRef.current = requestAnimationFrame(draw);
         return;
@@ -98,7 +96,6 @@ const BinaryBackgroundComponent: React.FC = () => {
 
     animationFrameIdRef.current = requestAnimationFrame(draw);
 
-    // ===== مدیریت visibilitychange =====
     const handleVisibilityChange = () => {
       isVisibleRef.current = !document.hidden;
     };

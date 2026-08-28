@@ -117,9 +117,9 @@ const FaqSectionComponent: React.FC<FaqSectionProps> = ({ onScrollToSection }) =
   ];
 
   return (
-    <section 
-      id="faq" 
-      className="pt-20 pb-16 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center scroll-mt-20"
+    <section
+      id="faq"
+      className="cv-900 pt-20 pb-16 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center scroll-mt-20"
     >
       <div className="absolute top-1/3 left-1/3 w-96 h-96 bg-pink-900/20 rounded-full blur-[140px] pointer-events-none"></div>
 

@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
-@import "tailwindcss";
+/* ============================================ */
+/* ===== فونت‌های Self-Hosted (آپلود شده روی سرور) ===== */
+/* ============================================ */
 
 @font-face {
   font-family: 'Vazirmatn';
@@ -39,21 +41,8 @@
   }
 }
 
-/* ... ادامه بقیه کدهای شما (انیمیشن‌ها، افکت‌ها و ...) */
-@layer base {
-  html {
-    scroll-behavior: smooth;
-    background-color: #020617;
-    color: #f8fafc;
-  }
-  body {
-    background-color: #020617;
-    color: #f8fafc;
-    overflow-x: hidden;
-  }
-}
-
-/* Custom glowing effects and flame animations */
+/* ============================================ */
+/* ===== انیمیشن‌ها و افکت‌ها ===== */
 @keyframes flame-pulse {
   0%, 100% {
     filter: drop-shadow(0 0 15px rgba(255, 102, 0, 0.6)) drop-shadow(0 0 35px rgba(255, 60, 0, 0.3));
@@ -186,5 +175,42 @@
   transition: 0.7s ease-in-out;
 }
 
+/* ============================================ */
+/* ===== کلاس‌های content-visibility برای بخش‌های پایین صفحه ===== */
+/* ============================================ */
 
+.cv-400 {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 400px;
+}
+.cv-600 {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 600px;
+}
+.cv-800 {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 800px;
+}
+.cv-900 {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 900px;
+}
+.cv-1000 {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 1000px;
+}
 
+/* ============================================ */
+/* ===== احترام به prefers-reduced-motion ===== */
+/* ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,5 +1,20 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react';
-import { Flame, Sparkles, Gamepad2, ShieldCheck, Zap, CheckCircle2, ArrowLeft, Radio, Globe2, Server, Layers, Network, Cpu, Activity } from 'lucide-react';
+import {
+  Flame,
+  Sparkles,
+  Gamepad2,
+  ShieldCheck,
+  Zap,
+  CheckCircle2,
+  ArrowLeft,
+  Radio,
+  Globe2,
+  Server,
+  Layers,
+  Network,
+  Cpu,
+  Activity
+} from 'lucide-react';
 import { FlameLogo } from './FlameLogo';
 import { BinaryText } from './BinaryText';
 
@@ -29,7 +44,7 @@ const IRAN_SERVERS_INIT = [
   { id: 'hayweb', name: 'های وب', ping: 19 },
 ];
 
-// ===== مپ رنگ‌ها برای رفع باگ Tailwind داینامیک =====
+// ===== مپ رنگ‌ها با اضافه شدن hoverBorder =====
 const COLOR_MAP = {
   emerald: {
     text: 'text-emerald-400',
@@ -37,6 +52,7 @@ const COLOR_MAP = {
     border: 'border-emerald-500/20',
     dot: 'bg-emerald-400 shadow-[0_0_8px_#34d399]',
     bar: 'bg-emerald-500',
+    hoverBorder: 'hover:border-emerald-500/40',
   },
   purple: {
     text: 'text-purple-400',
@@ -44,6 +60,7 @@ const COLOR_MAP = {
     border: 'border-purple-500/20',
     dot: 'bg-purple-400 shadow-[0_0_8px_#a855f7]',
     bar: 'bg-purple-500',
+    hoverBorder: 'hover:border-purple-500/40',
   },
 } as const;
 
@@ -59,24 +76,26 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
-  // ===== توقف/ادامه تایمرها بر اساس visibility =====
+  // ===== توقف تمام تایمرها =====
   const pauseTimers = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
   }, []);
 
+  // ===== شروع مجدد تایمرها (با clearTimeout قبلی) =====
   const resumeTimers = useCallback(() => {
-    // اگر بخش قابل مشاهده نیست، تایمرها را شروع نکن
     if (!isVisible) return;
 
-    // راه‌اندازی مجدد interval پینگ
     if (intervalRef.current) clearInterval(intervalRef.current);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current); // ← رفع باگ ۲
+
     intervalRef.current = setInterval(() => {
       setEuServers(prev => prev.map(r => {
         const basePing = r.id === 'hetzner' ? 85 : r.id === 'apex' ? 95 : 90;
         const delta = Math.floor(Math.random() * 9) - 4;
         return { ...r, ping: Math.max(60, basePing + delta) };
       }));
+
       setIranServers(prev => prev.map(r => {
         const delta = Math.floor(Math.random() * 7) - 3;
         let newPing = r.ping + delta;
@@ -84,6 +103,7 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
         if (newPing > 40) newPing = 40;
         return { ...r, ping: newPing };
       }));
+
       setHubPing(prev => {
         const delta = Math.floor(Math.random() * 5) - 2;
         let newPing = prev + delta;
@@ -93,7 +113,6 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
       });
     }, 2000);
 
-    // راه‌اندازی مجدد timeout زنجیره‌ای
     const scheduleNext = () => {
       const delay = Math.floor(Math.random() * 500) + 300;
       timeoutRef.current = setTimeout(() => {
@@ -247,7 +266,6 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
       id="hero-section"
       className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 overflow-hidden bg-cyber-grid"
     >
-      {/* Ambient Lighting Orbs */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 -right-20 w-96 h-96 bg-purple-900/20 rounded-full blur-[120px] animate-pulse"></div>
         <div className="absolute top-1/3 -left-20 w-96 h-96 bg-orange-600/15 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '4s' }}></div>
@@ -321,13 +339,15 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
                 </div>
               </div>
 
-              {/* ===== نمایشگرهای عملکرد با COLOR_MAP ===== */}
               <div className="space-y-3 text-xs text-center">
                 {performanceMetrics.map((metric, idx) => {
                   const colors = COLOR_MAP[metric.color as keyof typeof COLOR_MAP];
                   const barWidth = idx === 0 ? 'w-[12%]' : 'w-full';
                   return (
-                    <div key={idx} className={`p-3.5 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between gap-4 backdrop-blur-sm transition-all duration-300 hover:border-${metric.color}-500/40 hover:bg-white/[0.07]`}>
+                    <div
+                      key={idx}
+                      className={`p-3.5 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between gap-4 backdrop-blur-sm transition-all duration-300 ${colors.hoverBorder} hover:bg-white/[0.07]`}
+                    >
                       <div className="flex items-center gap-2.5 flex-shrink-0">
                         <div className={`w-2 h-2 rounded-full ${colors.dot}`}></div>
                         <span className="text-slate-200 font-bold">{metric.label}</span>
