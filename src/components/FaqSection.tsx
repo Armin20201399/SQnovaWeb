@@ -132,14 +132,16 @@ const FaqSectionComponent = ({ onScrollToSection }: FaqSectionProps) => {
                   </div>
                 </button>
 
+                {/* 🔥 تغییر: حذف aria-hidden از اینجا */}
                 <div
                   className={`grid transition-[grid-template-rows,opacity] duration-250 ease-in-out ${
                     isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
                   }`}
-                  aria-hidden={!isOpen}
                 >
                   <div className="min-h-0 overflow-hidden">
-                    <div className="px-5 sm:px-6 pb-6 pt-1 text-sm text-slate-300 leading-relaxed border-t border-white/5">{faq.answer}</div>
+                    <div className="px-5 sm:px-6 pb-6 pt-1 text-sm text-slate-300 leading-relaxed border-t border-white/5">
+                      {faq.answer}
+                    </div>
                   </div>
                 </div>
               </div>
