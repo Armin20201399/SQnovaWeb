@@ -27,10 +27,10 @@ const ClientAppsDownloadComponent = () => {
         <div className="flex justify-center gap-3 mb-10">
           <button
             onClick={() => setActiveCategory('mobile')}
-            className={`px-6 py-3 rounded-2xl text-xs sm:text-sm font-bold transition duration-200 border flex items-center justify-center gap-2 backdrop-blur-sm ${
+            className={`px-6 py-3 rounded-2xl text-xs sm:text-sm font-bold transition duration-200 border flex items-center justify-center gap-2 ${
               activeCategory === 'mobile'
                 ? 'bg-gradient-to-r from-purple-600 to-pink-600 border-pink-400/80 text-white shadow-[0_0_20px_rgba(236,72,153,0.35)] scale-105'
-                : 'bg-white/5 border-white/10 text-slate-400 hover:text-slate-200 hover:bg-white/10'
+                : 'bg-slate-900/80 hover:bg-slate-800/80 border-white/10 text-slate-400 hover:text-slate-200'
             }`}
           >
             <Smartphone className="w-4 h-4" />
@@ -38,10 +38,10 @@ const ClientAppsDownloadComponent = () => {
           </button>
           <button
             onClick={() => setActiveCategory('pc')}
-            className={`px-6 py-3 rounded-2xl text-xs sm:text-sm font-bold transition duration-200 border flex items-center justify-center gap-2 backdrop-blur-sm ${
+            className={`px-6 py-3 rounded-2xl text-xs sm:text-sm font-bold transition duration-200 border flex items-center justify-center gap-2 ${
               activeCategory === 'pc'
                 ? 'bg-gradient-to-r from-purple-600 to-pink-600 border-pink-400/80 text-white shadow-[0_0_20px_rgba(236,72,153,0.35)] scale-105'
-                : 'bg-white/5 border-white/10 text-slate-400 hover:text-slate-200 hover:bg-white/10'
+                : 'bg-slate-900/80 hover:bg-slate-800/80 border-white/10 text-slate-400 hover:text-slate-200'
             }`}
           >
             <Monitor className="w-4 h-4" />
@@ -51,16 +51,19 @@ const ClientAppsDownloadComponent = () => {
 
         <div className={`grid grid-cols-1 ${activeCategory === 'mobile' ? 'md:grid-cols-2' : 'max-w-2xl mx-auto'} gap-6 mb-12 text-center`}>
           {filteredApps.map((app) => (
-            <div key={app.id} className="rounded-3xl bg-slate-900/40 border border-white/10 hover:border-pink-500/50 p-6 sm:p-8 shadow-xl transition duration-300 flex flex-col items-center justify-between space-y-6 group hover:-translate-y-1 backdrop-blur-2xl text-center shine-effect">
+            <div
+              key={app.id}
+              className="rounded-3xl bg-slate-900/80 border border-white/10 hover:border-pink-500/50 p-6 sm:p-8 shadow-xl transition duration-300 flex flex-col items-center justify-between space-y-6 group hover:-translate-y-1 text-center shine-effect"
+            >
               <div className="w-full flex flex-col items-center">
                 <div className="flex items-center justify-between w-full mb-4">
                   <div className="text-right">
                     <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-pink-300 transition font-['Rajdhani']">
                       <BinaryText binaryClassName="text-white/10" leftBinary="01" rightBinary="10">{app.name}</BinaryText>
                     </h3>
-                    <span className="text-[11px] text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-full font-medium mt-1 inline-block backdrop-blur-sm">{app.storeBadge}</span>
+                    <span className="text-[11px] text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-full font-medium mt-1 inline-block">{app.storeBadge}</span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs text-amber-400 font-mono font-bold bg-white/5 px-2.5 py-1 rounded-full border border-white/10 backdrop-blur-sm">
+                  <div className="flex items-center gap-1.5 text-xs text-amber-400 font-mono font-bold bg-slate-900/80 px-2.5 py-1 rounded-full border border-white/10">
                     <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                     <span>{app.rating}</span>
                   </div>
@@ -69,13 +72,13 @@ const ClientAppsDownloadComponent = () => {
                   <span className="text-[11px] text-slate-400 block mb-1.5 font-medium text-center">پروتکل‌های پشتیبانی‌شده:</span>
                   <div className="flex flex-wrap items-center justify-center gap-1.5">
                     {app.recommendedFor.map((p) => (
-                      <span key={p} className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-slate-300">
+                      <span key={p} className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-slate-900/80 border border-white/10 text-slate-300">
                         {p === 'hysteria2' ? 'Hysteria 2 Turbo' : p === 'tcp-reality' ? 'TCP Raw Reality' : p.toUpperCase()}
                       </span>
                     ))}
                   </div>
                 </div>
-                <div className="w-full p-4 rounded-2xl bg-white/5 border border-white/5 space-y-2.5 text-xs text-slate-300 backdrop-blur-sm text-center">
+                <div className="w-full p-4 rounded-2xl bg-slate-900/80 border border-white/5 space-y-2.5 text-xs text-slate-300 text-center">
                   <div className="font-bold text-slate-200 text-center">مراحل راه‌اندازی و اتصال:</div>
                   {app.guideSteps.map((step, sIdx) => (
                     <div key={sIdx} className="flex items-center justify-center gap-2 text-xs text-slate-300 text-center">
@@ -86,12 +89,23 @@ const ClientAppsDownloadComponent = () => {
                 </div>
               </div>
               <div className="w-full pt-2 flex items-center justify-center gap-2">
-                <a href={app.downloadUrl} target="_blank" rel="noreferrer" className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition shadow-[0_10px_25px_rgba(147,51,234,0.35)] hover:scale-105 text-center">
+                <a
+                  href={app.downloadUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition shadow-[0_10px_25px_rgba(147,51,234,0.35)] hover:scale-105 text-center"
+                >
                   <Download className="w-4 h-4" />
                   <span>دانلود نرم‌افزار</span>
                 </a>
                 {app.githubUrl && (
-                  <a href={app.githubUrl} target="_blank" rel="noreferrer" className="p-3.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition backdrop-blur-sm" title="لینک دانلود جایگزین / گیت‌هاب">
+                  <a
+                    href={app.githubUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-3.5 rounded-2xl bg-slate-900/80 hover:bg-slate-800/80 border border-white/10 text-slate-300 hover:text-white transition"
+                    title="لینک دانلود جایگزین / گیت‌هاب"
+                  >
                     <ExternalLink className="w-4 h-4" />
                   </a>
                 )}
