@@ -1,0 +1,6 @@
+{
+  "name": "SQ nova VPN",
+  "description": "Ultra-fast Iranian VPN landing page v3.1 featuring zero packet loss, European datacenter routing (APEX & Hetzner), Iranian MikroTik edge nodes, Universal Smart Subscription, and 24/7 dedicated support by ArminSQ & SQteam.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

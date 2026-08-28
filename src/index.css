@@ -1,0 +1,190 @@
+@import "tailwindcss";
+
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('/fonts/vazirmatn-v16-arabic-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('/fonts/plus-jakarta-sans-v12-latin-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('/fonts/rajdhani-v17-latin-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+/* ============================================ */
+/* ===== تنظیمات پایه ===== */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: #020617;
+    color: #f8fafc;
+  }
+  body {
+    background-color: #020617;
+    color: #f8fafc;
+    overflow-x: hidden;
+    font-family: 'Vazirmatn', 'Plus Jakarta Sans', sans-serif;
+  }
+}
+
+/* ... ادامه بقیه کدهای شما (انیمیشن‌ها، افکت‌ها و ...) */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: #020617;
+    color: #f8fafc;
+  }
+  body {
+    background-color: #020617;
+    color: #f8fafc;
+    overflow-x: hidden;
+  }
+}
+
+/* Custom glowing effects and flame animations */
+@keyframes flame-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 15px rgba(255, 102, 0, 0.6)) drop-shadow(0 0 35px rgba(255, 60, 0, 0.3));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 25px rgba(255, 120, 0, 0.8)) drop-shadow(0 0 50px rgba(255, 70, 0, 0.5)) drop-shadow(0 0 70px rgba(236, 72, 153, 0.4));
+    transform: scale(1.02);
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes glow-line {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+}
+
+.animate-flame {
+  animation: flame-pulse 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float-slow 4s ease-in-out infinite;
+}
+
+.animate-glow-line {
+  animation: glow-line 3s linear infinite;
+}
+
+/* Cyber grid & atmospheric background patterns */
+.bg-cyber-grid {
+  background-image: 
+    linear-gradient(to right, rgba(236, 72, 153, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(168, 85, 247, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.bg-radial-gradient {
+  background: radial-gradient(circle at 50% 20%, rgba(217, 70, 239, 0.15), rgba(2, 6, 23, 0) 70%);
+}
+
+.bg-flame-glow {
+  background: radial-gradient(circle at center, rgba(255, 107, 0, 0.22) 0%, rgba(236, 72, 153, 0.12) 40%, rgba(2, 6, 23, 0) 75%);
+}
+
+/* Immersive Glassmorphism */
+.glass-card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(2, 6, 23, 0.8) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card-hover:hover {
+  border-color: rgba(236, 72, 153, 0.35);
+  box-shadow: 0 10px 30px -10px rgba(217, 70, 239, 0.2), 0 0 20px 0 rgba(255, 107, 0, 0.15);
+  transform: translateY(-3px);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ec4899;
+}
+
+/* Shine sweep from left to right on hover */
+.shine-effect {
+  position: relative;
+  overflow: hidden;
+}
+.shine-effect::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: none;
+}
+.shine-effect:hover::after {
+  left: 100%;
+  transition: 0.7s ease-in-out;
+}
+
+
+
