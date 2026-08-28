@@ -1,11 +1,12 @@
 import { BinaryText } from './BinaryText';
 import { AmbientGlow } from './ui/AmbientGlow';
+import { SectionShell } from './ui/SectionShell';
 
 const LiveGamingPingSimulator = () => {
   return (
-    <section id="gaming-ping" className="py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center">
-      <AmbientGlow position="top-1/3 right-1/4" color="bg-purple-900/20" size="w-96 h-96" blur="blur-[120px]" />
-      <AmbientGlow position="bottom-10 left-1/4" color="bg-pink-900/20" size="w-96 h-96" blur="blur-[120px]" />
+    <SectionShell id="gaming-ping">
+      <AmbientGlow position="top-1/3 right-1/4" color="bg-purple-900/20" size="w-[58rem] h-[58rem]" />
+      <AmbientGlow position="bottom-10 left-1/4" color="bg-pink-900/20" size="w-[38rem] h-[38rem]" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center leading-[1.3] py-2">
@@ -18,7 +19,7 @@ const LiveGamingPingSimulator = () => {
           <p className="text-slate-400 text-sm sm:text-base leading-relaxed text-center">کیفیت بدون محدودیت!</p>
         </div>
       </div>
-    </section>
+    </SectionShell>
   );
 };
 

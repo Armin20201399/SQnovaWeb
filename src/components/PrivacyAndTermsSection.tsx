@@ -2,11 +2,11 @@ import { useState, useEffect, memo } from 'react';
 import { Lock, FileText, CheckCircle2, Send, RotateCcw, Smartphone, Share2, Clock, Sparkles } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 import { AmbientGlow } from './ui/AmbientGlow';
+import { SectionShell } from './ui/SectionShell';
 
 const PrivacyAndTermsSectionComponent = () => {
   const [activeTab, setActiveTab] = useState<'privacy' | 'terms'>('privacy');
 
-  // گوش دادن به رویداد سفارشی برای تغییر تب از فوتر
   useEffect(() => {
     const handleTabChange = (event: CustomEvent<{ tab: 'privacy' | 'terms' }>) => {
       setActiveTab(event.detail.tab);
@@ -19,9 +19,9 @@ const PrivacyAndTermsSectionComponent = () => {
   }, []);
 
   return (
-    <section id="privacy-terms" className="py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center">
-      <AmbientGlow position="top-1/3 right-1/4" color="bg-purple-900/20" size="w-96 h-96" blur="blur-[140px]" />
-      <AmbientGlow position="bottom-10 left-1/4" color="bg-emerald-900/20" size="w-96 h-96" blur="blur-[140px]" />
+    <SectionShell id="privacy-terms">
+      <AmbientGlow position="top-1/3 right-1/4" color="bg-purple-900/20" size="w-[46rem] h-[46rem]" />
+      <AmbientGlow position="bottom-10 left-1/4" color="bg-emerald-900/20" size="w-[36rem] h-[36rem]" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex items-center justify-center gap-2 mb-12">
           <button
@@ -158,9 +158,8 @@ const PrivacyAndTermsSectionComponent = () => {
           </div>
         )}
       </div>
-    </section>
+    </SectionShell>
   );
 };
 
-const PrivacyAndTermsSection = memo(PrivacyAndTermsSectionComponent);
-export default PrivacyAndTermsSection;
+export default memo(PrivacyAndTermsSectionComponent);

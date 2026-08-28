@@ -3,6 +3,7 @@ import { CLIENT_APPS } from '../data/vpnData';
 import { Download, Smartphone, Monitor, ExternalLink, Star } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 import { AmbientGlow } from './ui/AmbientGlow';
+import { SectionShell } from './ui/SectionShell';
 
 const ClientAppsDownloadComponent = () => {
   const [activeCategory, setActiveCategory] = useState<'mobile' | 'pc'>('mobile');
@@ -12,8 +13,8 @@ const ClientAppsDownloadComponent = () => {
   });
 
   return (
-    <section id="apps" className="py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center">
-      <AmbientGlow position="top-1/2 left-10" color="bg-purple-900/20" size="w-96 h-96" blur="blur-[120px]" />
+    <SectionShell id="apps">
+      <AmbientGlow position="top-1/2 left-10" color="bg-purple-900/20" size="w-[52rem] h-[52rem]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-14 space-y-4">
@@ -114,7 +115,7 @@ const ClientAppsDownloadComponent = () => {
           ))}
         </div>
       </div>
-    </section>
+    </SectionShell>
   );
 };
 

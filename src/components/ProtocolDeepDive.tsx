@@ -4,6 +4,7 @@ import { Flame, ShieldCheck, Zap, CheckCircle2, Layers, Sparkles } from 'lucide-
 import { ProtocolType } from '../types';
 import { BinaryText } from './BinaryText';
 import { AmbientGlow } from './ui/AmbientGlow';
+import { SectionShell } from './ui/SectionShell';
 
 interface ProtocolDeepDiveProps {
   onScrollToSection?: (sectionId: string) => void;
@@ -21,9 +22,9 @@ const ProtocolDeepDive = ({ onScrollToSection }: ProtocolDeepDiveProps) => {
   ];
 
   return (
-    <section id="protocols" className="py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10">
-      <AmbientGlow position="top-1/2 right-10" color="bg-purple-900/20" size="w-96 h-96" blur="blur-[120px]" />
-      <AmbientGlow position="bottom-10 left-10" color="bg-pink-900/20" size="w-96 h-96" blur="blur-[120px]" />
+    <SectionShell id="protocols">
+      <AmbientGlow position="top-1/2 right-10" color="bg-purple-900/20" size="w-[42rem] h-[42rem]" />
+      <AmbientGlow position="bottom-10 left-10" color="bg-pink-900/20" size="w-[48rem] h-[48rem]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
@@ -52,9 +53,7 @@ const ProtocolDeepDive = ({ onScrollToSection }: ProtocolDeepDiveProps) => {
                 >
                   <TabIcon className="w-4 h-4 flex-shrink-0 relative z-10" />
                   <span className="relative z-10">{tab.label}</span>
-                  {isSelected && (
-                    <span className="absolute inset-0 -z-10 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500" style={{ borderRadius: '1rem' }} />
-                  )}
+                  {isSelected && <span className="absolute inset-0 -z-10 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500" style={{ borderRadius: '1rem' }} />}
                 </button>
               );
             })}
@@ -124,7 +123,7 @@ const ProtocolDeepDive = ({ onScrollToSection }: ProtocolDeepDiveProps) => {
           </div>
         </div>
       </div>
-    </section>
+    </SectionShell>
   );
 };
 

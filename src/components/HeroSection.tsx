@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react';
 import { ArrowLeft, Layers } from 'lucide-react';
 import { BinaryText } from './BinaryText';
+import { AmbientGlow } from './ui/AmbientGlow';
 
 interface HeroSectionProps {
   onScrollToSection: (sectionId: string) => void;
@@ -28,7 +29,6 @@ const IRAN_SERVERS_INIT = [
   { id: 'hayweb', name: 'های وب', ping: 19 },
 ];
 
-// ===== مپ رنگ‌ها =====
 const COLOR_MAP = {
   emerald: {
     text: 'text-emerald-400',
@@ -60,13 +60,11 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
-  // ===== توقف تمام تایمرها =====
   const pauseTimers = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
   }, []);
 
-  // ===== شروع مجدد تایمرها =====
   const resumeTimers = useCallback(() => {
     if (!isVisible) return;
 
@@ -110,7 +108,6 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
     scheduleNext();
   }, [isVisible]);
 
-  // ===== مدیریت visibilitychange =====
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
@@ -124,7 +121,6 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ===== مدیریت IntersectionObserver =====
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -146,7 +142,6 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ===== Effect اولیه =====
   useEffect(() => {
     resumeTimers();
     return () => {
@@ -216,11 +211,10 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
 
   return (
     <section ref={sectionRef} id="hero-section" className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 overflow-hidden bg-cyber-grid">
-      {/* پس‌زمینه‌ی هیرو: تغییر ۳ - حذف animate-pulse از گلوی بنفش */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 -right-20 w-96 h-96 bg-purple-900/20 rounded-full blur-[120px]" />
-        <div className="absolute top-1/3 -left-20 w-96 h-96 bg-orange-600/15 rounded-full blur-[120px]" />
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[700px] h-80 bg-pink-900/15 rounded-full blur-[140px]" />
+        <AmbientGlow position="top-1/4 -right-20" color="bg-purple-900/20" size="w-[48rem] h-[48rem]" />
+        <AmbientGlow position="top-1/3 -left-20" color="bg-orange-600/15" size="w-[48rem] h-[48rem]" />
+        <AmbientGlow position="bottom-10 left-1/2 -translate-x-1/2" color="bg-pink-900/15" size="w-[50rem] h-[30rem]" />
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -236,11 +230,9 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
           </div>
           <div className="lg:col-span-5 relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-orange-500/20 via-pink-500/20 to-purple-600/30 rounded-3xl blur-2xl opacity-80" />
-            {/* تغییر ۱: حذف backdrop-blur-2xl و تغییر bg-slate-900/60 به bg-slate-900/90 */}
             <div className="relative rounded-3xl bg-slate-900/90 border border-white/10 p-6 sm:p-7 shadow-2xl overflow-hidden space-y-5 text-center">
               <div className="flex items-center justify-center border-b border-white/10 pb-4">
                 <div className="flex items-center gap-2">
-                  {/* تغییر ۴: حذف لایه animate-pulse میانی */}
                   <div className="relative flex items-center justify-center w-3 h-3">
                     <div className="absolute w-6 h-6 bg-sky-400/40 rounded-full animate-ping" />
                     <div className="w-2.5 h-2.5 rounded-full bg-sky-400 shadow-[0_0_12px_#38bdf8] relative z-10" />
@@ -271,7 +263,6 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
                   const colors = COLOR_MAP[metric.color as keyof typeof COLOR_MAP];
                   const barWidth = idx === 0 ? 'w-[12%]' : 'w-full';
                   return (
-                    // تغییر ۲: حذف backdrop-blur-sm و تغییر bg-white/5 به bg-slate-800/60
                     <div key={idx} className={`p-3.5 rounded-2xl bg-slate-800/60 border border-white/5 flex items-center justify-between gap-4 transition-all duration-300 ${colors.hoverBorder} hover:bg-white/[0.07]`}>
                       <div className="flex items-center gap-2.5 flex-shrink-0">
                         <div className={`w-2 h-2 rounded-full ${colors.dot}`} />

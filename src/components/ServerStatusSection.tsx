@@ -1,6 +1,7 @@
 import { CheckCircle2, Info } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 import { AmbientGlow } from './ui/AmbientGlow';
+import { SectionShell } from './ui/SectionShell';
 
 interface ServerNodeStatus {
   id: string;
@@ -27,9 +28,9 @@ const SERVER_NODES: ServerNodeStatus[] = [
 
 const ServerStatusSection = () => {
   return (
-    <section id="status" className="py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center">
-      <AmbientGlow position="top-1/4 right-1/4" color="bg-sky-900/20" size="w-96 h-96" blur="blur-[140px]" />
-      <AmbientGlow position="bottom-1/4 left-1/4" color="bg-emerald-900/20" size="w-96 h-96" blur="blur-[140px]" />
+    <SectionShell id="status">
+      <AmbientGlow position="top-1/4 right-1/4" color="bg-sky-900/20" size="w-[36rem] h-[36rem]" />
+      <AmbientGlow position="bottom-1/4 left-1/4" color="bg-emerald-900/20" size="w-[40rem] h-[40rem]" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center">
@@ -89,7 +90,7 @@ const ServerStatusSection = () => {
           <span>کلیه نودها مجهز به مانیتورینگ خودکار پکت‌لاس هستند و در صورت افت کیفیت هر مسیر، ترافیک مشترکین در کمتر از 0.5 ثانیه به نود پشتیبان هدایت می‌شود.</span>
         </div>
       </div>
-    </section>
+    </SectionShell>
   );
 };
 

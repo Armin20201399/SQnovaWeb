@@ -1,6 +1,7 @@
 import { Send, Download, Headphones, Heart } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 import { AmbientGlow } from './ui/AmbientGlow';
+import { SectionShell } from './ui/SectionShell';
 
 interface FreeTrialDedicatedSectionProps {
   onScrollToSection?: (sectionId: string) => void;
@@ -8,9 +9,9 @@ interface FreeTrialDedicatedSectionProps {
 
 const FreeTrialDedicatedSection = ({ onScrollToSection }: FreeTrialDedicatedSectionProps) => {
   return (
-    <section id="free-test" className="py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center">
-      <AmbientGlow position="top-1/3 right-10" color="bg-amber-600/10" size="w-96 h-96" blur="blur-[130px]" />
-      <AmbientGlow position="bottom-10 left-10" color="bg-purple-900/20" size="w-96 h-96" blur="blur-[130px]" />
+    <SectionShell id="free-test">
+      <AmbientGlow position="top-1/3 right-10" color="bg-amber-600/10" size="w-[42rem] h-[42rem]" />
+      <AmbientGlow position="bottom-10 left-10" color="bg-purple-900/20" size="w-[42rem] h-[42rem]" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-14 space-y-4">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center">
@@ -20,11 +21,11 @@ const FreeTrialDedicatedSection = ({ onScrollToSection }: FreeTrialDedicatedSect
           </h2>
           <p className="text-slate-400 text-sm sm:text-base leading-relaxed text-center">می‌تونی یه اشتراک تست شامل تمام پروتکل‌ها و خدمات قبل از خریدت داشته باشی!</p>
         </div>
-        <div className="max-w-3xl mx-auto rounded-3xl bg-slate-900/60 border border-amber-500/30 p-6 sm:p-10 shadow-2xl backdrop-blur-2xl space-y-8 text-center flex flex-col items-center">
-          <div className="w-full p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-purple-950/50 via-slate-900/90 to-pink-950/40 border border-pink-500/30 space-y-5 shadow-xl backdrop-blur-xl flex flex-col items-center">
+        <div className="max-w-3xl mx-auto rounded-3xl bg-slate-900/95 border border-amber-500/30 p-6 sm:p-10 shadow-2xl space-y-8 text-center flex flex-col items-center">
+          <div className="w-full p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-purple-950/80 via-slate-900/95 to-pink-950/70 border border-pink-500/30 space-y-5 shadow-xl flex flex-col items-center">
             <div className="p-3.5 rounded-2xl bg-purple-500/20 text-purple-300 border border-purple-500/30"><Headphones className="w-8 h-8 text-pink-400" /></div>
             <div className="space-y-2 text-center">
-              <div className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-2xl bg-white/5 border border-white/10 text-xs text-amber-300 backdrop-blur-sm mt-2 max-w-xl">
+              <div className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-2xl bg-slate-800/70 border border-white/10 text-xs text-amber-300 mt-2 max-w-xl">
                 <Heart className="w-4 h-4 text-pink-400 fill-pink-400 flex-shrink-0" />
                 <span className="leading-relaxed">دمتون گرم که همراهمونید! هر ایده، پیشنهاد یا نیازی دارین حتماً باهامون در میون بذارید؛ با کمال میل می‌شنویم و بررسی می‌کنیم! 🌟</span>
               </div>
@@ -59,7 +60,7 @@ const FreeTrialDedicatedSection = ({ onScrollToSection }: FreeTrialDedicatedSect
           )}
         </div>
       </div>
-    </section>
+    </SectionShell>
   );
 };
 

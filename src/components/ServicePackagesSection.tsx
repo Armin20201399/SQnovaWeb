@@ -1,11 +1,9 @@
 import React, { memo } from 'react';
 import { SERVICE_PACKAGES } from '../data/vpnData';
-import {
-  CheckCircle2,
-  Send,
-  Sparkles
-} from 'lucide-react';
+import { CheckCircle2, Send, Sparkles } from 'lucide-react';
 import { BinaryText } from './BinaryText';
+import { AmbientGlow } from './ui/AmbientGlow';
+import { SectionShell } from './ui/SectionShell';
 
 interface ServicePackagesSectionProps {
   onScrollToSection?: (sectionId: string) => void;
@@ -15,11 +13,8 @@ const ServicePackagesSectionComponent: React.FC<ServicePackagesSectionProps> = (
   onScrollToSection
 }) => {
   return (
-    <section
-      id="packages"
-      className="py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center"
-    >
-      <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-purple-900/20 rounded-full blur-[130px] pointer-events-none"></div>
+    <SectionShell id="packages">
+      <AmbientGlow position="top-1/3 left-1/4" color="bg-purple-900/20" size="w-[48rem] h-[48rem]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
@@ -38,7 +33,7 @@ const ServicePackagesSectionComponent: React.FC<ServicePackagesSectionProps> = (
                 key={pkg.id}
                 className={`rounded-3xl p-6 transition-all duration-300 flex flex-col items-center space-y-5 relative group text-center shine-effect ${
                   isPopular
-                    ? 'bg-slate-900/90 border-2 border-pink-500 shadow-[0_0_35px_rgba(236,72,153,0.35)] -translate-y-2 backdrop-blur-2xl'
+                    ? 'bg-slate-900/98 border-2 border-pink-500 shadow-[0_0_35px_rgba(236,72,153,0.35)] -translate-y-2'
                     : 'bg-slate-900/80 border border-white/10 hover:border-white/25 hover:-translate-y-1 shadow-xl'
                 }`}
               >
@@ -117,7 +112,7 @@ const ServicePackagesSectionComponent: React.FC<ServicePackagesSectionProps> = (
           </div>
         )}
       </div>
-    </section>
+    </SectionShell>
   );
 };
 
