@@ -36,10 +36,9 @@ const ServicePackagesSectionComponent: React.FC<ServicePackagesSectionProps> = (
             return (
               <div
                 key={pkg.id}
-                // ---- ۲.۳: حذف backdrop-blur از کارت‌های پکیج ----
                 className={`rounded-3xl p-6 transition-all duration-300 flex flex-col items-center space-y-5 relative group text-center shine-effect ${
                   isPopular
-                    ? 'bg-slate-900/90 border-2 border-pink-500 shadow-[0_0_35px_rgba(236,72,153,0.35)] -translate-y-2'
+                    ? 'bg-slate-900/90 border-2 border-pink-500 shadow-[0_0_35px_rgba(236,72,153,0.35)] -translate-y-2 backdrop-blur-2xl'
                     : 'bg-slate-900/80 border border-white/10 hover:border-white/25 hover:-translate-y-1 shadow-xl'
                 }`}
               >
@@ -97,7 +96,6 @@ const ServicePackagesSectionComponent: React.FC<ServicePackagesSectionProps> = (
         </div>
 
         {onScrollToSection && (
-          // ---- ۲.۳: حذف backdrop-blur از کارت پایین ----
           <div className="p-6 rounded-3xl bg-slate-900/80 border border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-center sm:text-right">
               <div className="flex items-center justify-center sm:justify-start gap-2 text-amber-300 font-bold text-sm">

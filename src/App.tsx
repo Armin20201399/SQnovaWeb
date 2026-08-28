@@ -29,6 +29,16 @@ const scrollToWhenReady = (id: string, attempts = 20) => {
 export default function App() {
   const handleScrollToSection = (sectionId: string) => {
     const cleanId = sectionId.replace('#', '').replace('/', '');
+    
+    // اگر target terms یا privacy بود، به PrivacyAndTermsSection بگو تب را عوض کند
+    if (cleanId === 'terms' || cleanId === 'privacy') {
+      window.dispatchEvent(
+        new CustomEvent('sq-scroll-to-tab', {
+          detail: { tab: cleanId },
+        })
+      );
+    }
+    
     scrollToWhenReady(cleanId);
     window.history.replaceState(null, '', `#${cleanId}`);
   };
@@ -38,6 +48,13 @@ export default function App() {
     const pathname = window.location.pathname.replace('/', '');
     const target = hash || pathname;
     if (target) {
+      if (target === 'terms' || target === 'privacy') {
+        window.dispatchEvent(
+          new CustomEvent('sq-scroll-to-tab', {
+            detail: { tab: target },
+          })
+        );
+      }
       scrollToWhenReady(target);
     }
   }, []);

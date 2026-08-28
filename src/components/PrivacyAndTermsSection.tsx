@@ -1,10 +1,22 @@
-import { useState, memo } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { Lock, FileText, CheckCircle2, Send, RotateCcw, Smartphone, Share2, Clock, Sparkles } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 import { AmbientGlow } from './ui/AmbientGlow';
 
 const PrivacyAndTermsSectionComponent = () => {
   const [activeTab, setActiveTab] = useState<'privacy' | 'terms'>('privacy');
+
+  // گوش دادن به رویداد سفارشی برای تغییر تب از فوتر
+  useEffect(() => {
+    const handleTabChange = (event: CustomEvent<{ tab: 'privacy' | 'terms' }>) => {
+      setActiveTab(event.detail.tab);
+    };
+
+    window.addEventListener('sq-scroll-to-tab', handleTabChange as EventListener);
+    return () => {
+      window.removeEventListener('sq-scroll-to-tab', handleTabChange as EventListener);
+    };
+  }, []);
 
   return (
     <section id="privacy-terms" className="cv-900 py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center">

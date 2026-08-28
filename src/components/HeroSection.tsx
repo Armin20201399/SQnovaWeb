@@ -122,7 +122,7 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // pauseTimers و resumeTimers با useCallback تعریف شده‌اند و تغییری نمی‌کنند
+  }, []);
 
   // ===== مدیریت IntersectionObserver =====
   useEffect(() => {
@@ -144,7 +144,7 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
     observer.observe(section);
     return () => observer.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // pauseTimers و resumeTimers با useCallback تعریف شده‌اند و تغییری نمی‌کنند
+  }, []);
 
   // ===== Effect اولیه =====
   useEffect(() => {
@@ -216,9 +216,10 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
 
   return (
     <section ref={sectionRef} id="hero-section" className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 overflow-hidden bg-cyber-grid">
+      {/* پس‌زمینه‌ی هیرو با حذف animate-pulse از دو گلو */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 -right-20 w-96 h-96 bg-purple-900/20 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute top-1/3 -left-20 w-96 h-96 bg-orange-600/15 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '4s' }} />
+        <div className="absolute top-1/3 -left-20 w-96 h-96 bg-orange-600/15 rounded-full blur-[120px]" />
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[700px] h-80 bg-pink-900/15 rounded-full blur-[140px]" />
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
@@ -234,7 +235,8 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
             </div>
           </div>
           <div className="lg:col-span-5 relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-orange-500/20 via-pink-500/20 to-purple-600/30 rounded-3xl blur-2xl opacity-80 animate-pulse" />
+            {/* گلوی دور کارت سمت راست بدون animate-pulse */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-orange-500/20 via-pink-500/20 to-purple-600/30 rounded-3xl blur-2xl opacity-80" />
             <div className="relative rounded-3xl bg-slate-900/60 border border-white/10 p-6 sm:p-7 shadow-2xl backdrop-blur-2xl overflow-hidden space-y-5 text-center">
               <div className="flex items-center justify-center border-b border-white/10 pb-4">
                 <div className="flex items-center gap-2">
