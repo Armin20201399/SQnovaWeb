@@ -37,11 +37,13 @@ const ServerStatusSection = () => {
           </h2>
           <p className="text-slate-400 text-sm sm:text-base leading-relaxed text-center max-w-2xl mx-auto">پایش 24 ساعته پایداری نودهای بین‌المللی و مراکز داده داخلی با سوییچ هوشمند و پکت‌لاس صفر</p>
         </div>
-        <div className="mb-10 max-w-xl mx-auto p-4 rounded-2xl bg-slate-900/70 border border-white/10 backdrop-blur-xl flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs text-slate-300">
+
+        <div className="mb-10 max-w-xl mx-auto p-4 rounded-2xl bg-slate-900/70 border border-white/10 flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs text-slate-300">
           <div className="flex items-center gap-2"><span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" /><span className="font-medium text-emerald-300">سبز = آنلاین و پایدار</span></div>
           <div className="flex items-center gap-2"><span className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]" /><span className="font-medium text-amber-300">زرد = کندی جزئی</span></div>
           <div className="flex items-center gap-2"><span className="w-2.5 h-2.5 rounded-full bg-rose-400 shadow-[0_0_8px_rgba(251,113,133,0.8)]" /><span className="font-medium text-rose-300">قرمز = قطعی</span></div>
         </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {SERVER_NODES.map((node) => (
             <div key={node.id} className="relative rounded-3xl p-6 bg-slate-900/80 border border-white/10 transition-all duration-300 hover:border-emerald-500/40 hover:-translate-y-1 hover:shadow-[0_10px_35px_rgba(16,185,129,0.15)] flex flex-col justify-between text-right group shine-effect">
@@ -55,12 +57,12 @@ const ServerStatusSection = () => {
                       </h3>
                     </div>
                   </div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border backdrop-blur-md bg-emerald-500/10 border-emerald-500/30 text-emerald-300 shadow-[0_0_12px_rgba(52,211,153,0.2)]">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border bg-emerald-500/10 border-emerald-500/30 text-emerald-300 shadow-[0_0_12px_rgba(52,211,153,0.2)]">
                     <span className="relative flex h-2 w-2"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" /><span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" /></span>
                     <span>آنلاین و پایدار</span>
                   </div>
                 </div>
-                <div className="grid grid-cols-3 gap-2 p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 my-4 text-center">
+                <div className="grid grid-cols-3 gap-2 p-3.5 rounded-2xl bg-slate-900/80 border border-white/5 my-4 text-center">
                   <div><div className="text-[10px] text-slate-400 mb-1">آپ‌تایم</div><div className="text-xs font-mono font-bold text-sky-300">{node.uptime}</div></div>
                   <div className="border-x border-white/5"><div className="text-[10px] text-slate-400 mb-1">پکت‌لاس</div><div className="text-xs font-mono font-bold text-emerald-300">{node.packetLoss}</div></div>
                   <div><div className="text-[10px] text-slate-400 mb-1">بار مصرفی</div><div className="text-xs font-bold text-slate-300">{node.load}</div></div>
@@ -69,7 +71,7 @@ const ServerStatusSection = () => {
                   <div className="text-[11px] text-slate-400 font-medium">پروتکل‌های فعال:</div>
                   <div className="flex flex-wrap gap-1.5">
                     {node.protocolSupport.map((proto, idx) => (
-                      <span key={idx} className="px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-[10px] font-mono text-slate-300">{proto}</span>
+                      <span key={idx} className="px-2 py-0.5 rounded-md bg-slate-900/80 border border-white/10 text-[10px] font-mono text-slate-300">{proto}</span>
                     ))}
                   </div>
                 </div>
@@ -81,6 +83,7 @@ const ServerStatusSection = () => {
             </div>
           ))}
         </div>
+
         <div className="p-4 sm:p-5 rounded-2xl bg-slate-900/80 border border-white/10 max-w-3xl mx-auto flex items-center justify-center gap-3 text-xs text-slate-400 text-center">
           <Info className="w-4 h-4 text-sky-400 flex-shrink-0" />
           <span>کلیه نودها مجهز به مانیتورینگ خودکار پکت‌لاس هستند و در صورت افت کیفیت هر مسیر، ترافیک مشترکین در کمتر از 0.5 ثانیه به نود پشتیبان هدایت می‌شود.</span>

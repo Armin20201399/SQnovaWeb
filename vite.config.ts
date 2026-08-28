@@ -21,14 +21,7 @@ export default defineConfig({
       compress: {
         drop_console: true,
         drop_debugger: true,
-        pure_funcs: [
-          'console.log',
-          'console.info',
-          'console.debug',
-          'console.warn',
-          'console.error',
-          'console.trace',
-        ],
+        pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.warn', 'console.error', 'console.trace'],
         passes: 2,
         dead_code: true,
         unused: true,
@@ -46,7 +39,6 @@ export default defineConfig({
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
-          'ui-vendor': ['lucide-react', 'motion'],
         },
         entryFileNames: 'assets/[name]-[hash].js',
         chunkFileNames: 'assets/[name]-[hash].js',
@@ -56,10 +48,10 @@ export default defineConfig({
     sourcemap: false,
     chunkSizeWarningLimit: 1000,
     cssCodeSplit: true,
-    assetsInlineLimit: 0,
+    assetsInlineLimit: 4096,
     emptyOutDir: true,
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'lucide-react', 'motion'],
+    include: ['react', 'react-dom', 'lucide-react'],
   },
 });

@@ -1,26 +1,16 @@
-import React, { useState } from 'react';
-import { motion } from 'motion/react';
+import { useState } from 'react';
 import { PROTOCOLS_DATA } from '../data/vpnData';
-import { 
-  Flame, 
-  ShieldCheck, 
-  Zap, 
-  CheckCircle2, 
-  Layers, 
-  Sparkles
-} from 'lucide-react';
+import { Flame, ShieldCheck, Zap, CheckCircle2, Layers, Sparkles } from 'lucide-react';
 import { ProtocolType } from '../types';
 import { BinaryText } from './BinaryText';
+import { AmbientGlow } from './ui/AmbientGlow';
 
 interface ProtocolDeepDiveProps {
   onScrollToSection?: (sectionId: string) => void;
 }
 
-const ProtocolDeepDive: React.FC<ProtocolDeepDiveProps> = ({
-  onScrollToSection
-}) => {
+const ProtocolDeepDive = ({ onScrollToSection }: ProtocolDeepDiveProps) => {
   const [selectedProtocolId, setSelectedProtocolId] = useState<ProtocolType>('hysteria2');
-
   const selectedProtocol = PROTOCOLS_DATA.find((p) => p.id === selectedProtocolId) || PROTOCOLS_DATA[0];
 
   const protocolTabInfo = [
@@ -31,33 +21,22 @@ const ProtocolDeepDive: React.FC<ProtocolDeepDiveProps> = ({
   ];
 
   return (
-    <section
-      id="protocols"
-      className="cv-800 py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10"
-    >
-      <div className="absolute top-1/2 right-10 w-96 h-96 bg-purple-900/20 rounded-full blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-10 left-10 w-96 h-96 bg-pink-900/20 rounded-full blur-[120px] pointer-events-none"></div>
+    <section id="protocols" className="cv-800 py-24 relative overflow-hidden bg-cyber-grid border-t border-white/10">
+      <AmbientGlow position="top-1/2 right-10" color="bg-purple-900/20" size="w-96 h-96" blur="blur-[120px]" />
+      <AmbientGlow position="bottom-10 left-10" color="bg-pink-900/20" size="w-96 h-96" blur="blur-[120px]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center">
             <BinaryText binaryClassName="text-sky-500/40" leftBinary="101001" rightBinary="010110">
-              پروتکل‌های{' '}
-              <span className="text-sky-300 drop-shadow-[0_0_12px_rgba(56,189,248,0.9)]">به‌روز</span>{' '}
-              و{' '}
-              <span className="text-amber-300 drop-shadow-[0_0_12px_rgba(251,191,36,0.9)]">قدرتمند</span> ⚡
+              پروتکل‌های <span className="text-sky-300 drop-shadow-[0_0_12px_rgba(56,189,248,0.9)]">به‌روز</span> و <span className="text-amber-300 drop-shadow-[0_0_12px_rgba(251,191,36,0.9)]">قدرتمند</span> ⚡
             </BinaryText>
           </h2>
-
-          <p className="text-slate-400 text-sm sm:text-base leading-relaxed text-center">
-            بهینه‌شده برای دریافت بهترین عملکرد و پایداری در سخت‌ترین شرایط و محدودیت‌ها
-          </p>
+          <p className="text-slate-400 text-sm sm:text-base leading-relaxed text-center">بهینه‌شده برای دریافت بهترین عملکرد و پایداری در سخت‌ترین شرایط و محدودیت‌ها</p>
         </div>
 
         <div className="flex items-center justify-center mb-10">
-          <div className="inline-flex items-center justify-center gap-2 p-2 rounded-3xl bg-slate-900/90 border border-white/10 backdrop-blur-2xl shadow-2xl flex-wrap relative">
+          <div className="inline-flex items-center justify-center gap-2 p-2 rounded-3xl bg-slate-900/90 border border-white/10 shadow-2xl flex-wrap relative">
             {protocolTabInfo.map((tab) => {
               const isSelected = tab.id === selectedProtocolId;
               const TabIcon = tab.icon;
@@ -65,32 +44,16 @@ const ProtocolDeepDive: React.FC<ProtocolDeepDiveProps> = ({
                 <button
                   key={tab.id}
                   onClick={() => setSelectedProtocolId(tab.id)}
-                  className={`relative whitespace-nowrap flex-shrink-0 px-4 sm:px-6 py-3 rounded-2xl text-xs sm:text-sm font-bold transition-colors duration-300 flex items-center justify-center gap-2.5 overflow-hidden group z-10 ${
+                  className={`relative whitespace-nowrap flex-shrink-0 px-4 sm:px-6 py-3 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-300 flex items-center justify-center gap-2.5 overflow-hidden group z-10 ${
                     isSelected
-                      ? 'text-white'
-                      : 'text-slate-400 hover:text-white'
+                      ? `text-white bg-gradient-to-r ${tab.color} shadow-lg`
+                      : 'text-slate-400 hover:text-white bg-slate-900/80 hover:bg-slate-800/80'
                   }`}
                 >
-                  <div className="absolute inset-0 translate-x-[-150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 pointer-events-none" />
-                  
                   <TabIcon className="w-4 h-4 flex-shrink-0 relative z-10" />
                   <span className="relative z-10">{tab.label}</span>
-
                   {isSelected && (
-                    <motion.div
-                      layoutId="protocolActiveTab"
-                      initial={{ scale: 0.96, opacity: 0.8 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      className={`absolute inset-0 bg-gradient-to-r ${tab.color} shadow-lg -z-10`}
-                      transition={{
-                        type: "spring",
-                        stiffness: 160,
-                        damping: 18,
-                        mass: 1,
-                        bounce: 0.2
-                      }}
-                      style={{ borderRadius: '1rem' }}
-                    />
+                    <span className="absolute inset-0 -z-10 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500" style={{ borderRadius: '1rem' }} />
                   )}
                 </button>
               );
@@ -98,13 +61,9 @@ const ProtocolDeepDive: React.FC<ProtocolDeepDiveProps> = ({
           </div>
         </div>
 
-        {/* ---- ۲.۳: حذف backdrop-blur از کارت اصلی ---- */}
         <div className="rounded-3xl bg-slate-900/80 border border-white/10 p-6 sm:p-10 shadow-2xl relative overflow-hidden text-center transition-all duration-300">
-          
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
             <div className="lg:col-span-7 space-y-6 flex flex-col items-center text-center">
-              
               <div className="flex flex-col items-center text-center space-y-3">
                 <div className="flex items-center justify-center gap-3 pt-1">
                   <h3 className="text-2xl sm:text-3xl font-black text-white font-['Rajdhani'] text-center">
@@ -113,16 +72,13 @@ const ProtocolDeepDive: React.FC<ProtocolDeepDiveProps> = ({
                     </BinaryText>
                   </h3>
                 </div>
-
-                <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl text-center">
-                  {selectedProtocol.description}
-                </p>
+                <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl text-center">{selectedProtocol.description}</p>
               </div>
 
               <div className="space-y-3 pt-2 w-full flex flex-col items-center">
                 <div className="space-y-2.5 w-full max-w-xl">
                   {selectedProtocol.features.map((feat, idx) => (
-                    <div key={idx} className="flex items-center justify-center gap-2.5 text-xs sm:text-sm text-slate-300 bg-white/5 p-3 rounded-2xl border border-white/5 backdrop-blur-sm text-center">
+                    <div key={idx} className="flex items-center justify-center gap-2.5 text-xs sm:text-sm text-slate-300 bg-slate-900/80 p-3 rounded-2xl border border-white/5 text-center">
                       <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                       <span>{feat}</span>
                     </div>
@@ -131,42 +87,29 @@ const ProtocolDeepDive: React.FC<ProtocolDeepDiveProps> = ({
               </div>
 
               <div className="pt-2 flex flex-col items-center text-center">
-                <span className="text-xs text-slate-300 block mb-2.5 font-bold text-center">
-                  پیشنهاد شده برای:
-                </span>
-                <div className="text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-200 backdrop-blur-sm text-center max-w-xl">
-                  {selectedProtocol.id === 'hysteria2' 
+                <span className="text-xs text-slate-300 block mb-2.5 font-bold text-center">پیشنهاد شده برای:</span>
+                <div className="text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-200 text-center max-w-xl">
+                  {selectedProtocol.id === 'hysteria2'
                     ? 'همه‌چیز! این پروتکل همه‌فن‌حریفه اما بیشتر برای استریم محتوا و گیمینگ پیشنهاد می‌شه!'
-                    : selectedProtocol.bestFor.join(' | ')
-                  }
+                    : selectedProtocol.bestFor.join(' | ')}
                 </div>
               </div>
-
             </div>
 
             <div className="lg:col-span-5 space-y-6 flex flex-col items-center w-full">
-              
-              <div className="w-full p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-purple-950/50 via-slate-900/90 to-pink-950/40 border border-purple-500/40 space-y-5 shadow-xl backdrop-blur-xl text-center flex flex-col items-center">
+              <div className="w-full p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-purple-950/50 via-slate-900/90 to-pink-950/40 border border-purple-500/40 space-y-5 shadow-xl text-center flex flex-col items-center">
                 <div className="flex flex-col items-center justify-center gap-2">
                   <div className="p-3.5 rounded-2xl bg-purple-500/20 text-purple-300 border border-purple-500/30">
                     <Layers className="w-7 h-7" />
                   </div>
                   <div>
                     <h4 className="text-lg font-bold text-white">
-                      <BinaryText binaryClassName="text-purple-400/40" leftBinary="01" rightBinary="10">
-                        با یه کلیک آپدیت شو
-                      </BinaryText>
+                      <BinaryText binaryClassName="text-purple-400/40" leftBinary="01" rightBinary="10">با یه کلیک آپدیت شو</BinaryText>
                     </h4>
-                    <p className="text-xs text-purple-300 font-semibold mt-0.5">
-                      بدون نیاز به تنظیمات دستی
-                    </p>
+                    <p className="text-xs text-purple-300 font-semibold mt-0.5">بدون نیاز به تنظیمات دستی</p>
                   </div>
                 </div>
-
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed text-center">
-                  با لینک ساب هوشمند همیشه از آخرین نسخه کانفیگ‌ها فقط با یه کلیک و رفرش کردن لینک ساب‌تون استفاده کنید!
-                </p>
-
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed text-center">با لینک ساب هوشمند همیشه از آخرین نسخه کانفیگ‌ها فقط با یه کلیک و رفرش کردن لینک ساب‌تون استفاده کنید!</p>
                 {onScrollToSection && (
                   <button
                     onClick={() => onScrollToSection('free-test')}
@@ -177,13 +120,9 @@ const ProtocolDeepDive: React.FC<ProtocolDeepDiveProps> = ({
                   </button>
                 )}
               </div>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
     </section>
   );
