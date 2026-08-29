@@ -1,20 +1,20 @@
-import { useEffect, lazy, Suspense } from 'react';
+import { useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { Footer } from './components/Footer';
 import BinaryBackground from './components/BinaryBackground';
-import { SectionFallback } from './components/SectionFallback';
 import { AmbientGlowLayer } from './components/AmbientGlowLayer';
+import { createLazySection } from './components/LazySection';
 
-const ProtocolDeepDive = lazy(() => import('./components/ProtocolDeepDive'));
-const LiveGamingPingSimulator = lazy(() => import('./components/LiveGamingPingSimulator'));
-const ServerStatusSection = lazy(() => import('./components/ServerStatusSection'));
-const GameNetPartnershipSection = lazy(() => import('./components/GameNetPartnershipSection'));
-const FreeTrialDedicatedSection = lazy(() => import('./components/FreeTrialDedicatedSection'));
-const ServicePackagesSection = lazy(() => import('./components/ServicePackagesSection'));
-const ClientAppsDownload = lazy(() => import('./components/ClientAppsDownload'));
-const FaqSection = lazy(() => import('./components/FaqSection'));
-const PrivacyAndTermsSection = lazy(() => import('./components/PrivacyAndTermsSection'));
+const ProtocolDeepDive = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/ProtocolDeepDive'));
+const LiveGamingPingSimulator = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/LiveGamingPingSimulator'));
+const ServerStatusSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/ServerStatusSection'));
+const GameNetPartnershipSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/GameNetPartnershipSection'));
+const FreeTrialDedicatedSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/FreeTrialDedicatedSection'));
+const ServicePackagesSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/ServicePackagesSection'));
+const ClientAppsDownload = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/ClientAppsDownload'));
+const FaqSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/FaqSection'));
+const PrivacyAndTermsSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/PrivacyAndTermsSection'));
 
 const scrollToWhenReady = (id: string, attempts = 20) => {
   const el = document.getElementById(id);
@@ -58,42 +58,21 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen text-slate-100 font-['Vazirmatn',sans-serif] selection:bg-pink-500/30 selection:text-pink-200 overflow-x-hidden rtl relative">
+    <>
       <BinaryBackground />
       <AmbientGlowLayer />
       <Navbar onScrollToSection={handleScrollToSection} />
-      <main className="relative z-10">
-        <HeroSection onScrollToSection={handleScrollToSection} />
-
-        <Suspense fallback={<SectionFallback />}>
-          <ProtocolDeepDive onScrollToSection={handleScrollToSection} />
-        </Suspense>
-        <Suspense fallback={<SectionFallback />}>
-          <LiveGamingPingSimulator />
-        </Suspense>
-        <Suspense fallback={<SectionFallback />}>
-          <ServerStatusSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback />}>
-          <GameNetPartnershipSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback />}>
-          <FreeTrialDedicatedSection onScrollToSection={handleScrollToSection} />
-        </Suspense>
-        <Suspense fallback={<SectionFallback />}>
-          <ServicePackagesSection onScrollToSection={handleScrollToSection} />
-        </Suspense>
-        <Suspense fallback={<SectionFallback />}>
-          <ClientAppsDownload />
-        </Suspense>
-        <Suspense fallback={<SectionFallback />}>
-          <FaqSection onScrollToSection={handleScrollToSection} />
-        </Suspense>
-        <Suspense fallback={<SectionFallback />}>
-          <PrivacyAndTermsSection />
-        </Suspense>
-      </main>
-      <Footer onScrollToSection={handleScrollToSection} />
-    </div>
+      <HeroSection onScrollToSection={handleScrollToSection} />
+      <ProtocolDeepDive onScrollToSection={handleScrollToSection} />
+      <LiveGamingPingSimulator onScrollToSection={handleScrollToSection} />
+      <ServerStatusSection onScrollToSection={handleScrollToSection} />
+      <GameNetPartnershipSection onScrollToSection={handleScrollToSection} />
+      <FreeTrialDedicatedSection onScrollToSection={handleScrollToSection} />
+      <ServicePackagesSection onScrollToSection={handleScrollToSection} />
+      <ClientAppsDownload onScrollToSection={handleScrollToSection} />
+      <FaqSection onScrollToSection={handleScrollToSection} />
+      <PrivacyAndTermsSection onScrollToSection={handleScrollToSection} />
+      <Footer />
+    </>
   );
 }
