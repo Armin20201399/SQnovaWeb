@@ -80,16 +80,21 @@ export default function App() {
       <BinaryBackground />
       <AmbientGlowLayer />
       <Navbar onScrollToSection={handleScrollToSection} />
-      <HeroSection onScrollToSection={handleScrollToSection} />
-      <ProtocolDeepDive onScrollToSection={handleScrollToSection} />
-      <LiveGamingPingSimulator onScrollToSection={handleScrollToSection} />
-      <ServerStatusSection onScrollToSection={handleScrollToSection} />
-      <GameNetPartnershipSection onScrollToSection={handleScrollToSection} />
-      <FreeTrialDedicatedSection onScrollToSection={handleScrollToSection} />
-      <ServicePackagesSection onScrollToSection={handleScrollToSection} />
-      <ClientAppsDownload onScrollToSection={handleScrollToSection} />
-      <FaqSection onScrollToSection={handleScrollToSection} />
-      <PrivacyAndTermsSection onScrollToSection={handleScrollToSection} />
+      
+      {/* ===== فقط این خط اضافه شده ===== */}
+      <main id="main-content">
+        <HeroSection onScrollToSection={handleScrollToSection} />
+        <ProtocolDeepDive onScrollToSection={handleScrollToSection} />
+        <LiveGamingPingSimulator onScrollToSection={handleScrollToSection} />
+        <ServerStatusSection onScrollToSection={handleScrollToSection} />
+        <GameNetPartnershipSection onScrollToSection={handleScrollToSection} />
+        <FreeTrialDedicatedSection onScrollToSection={handleScrollToSection} />
+        <ServicePackagesSection onScrollToSection={handleScrollToSection} />
+        <ClientAppsDownload onScrollToSection={handleScrollToSection} />
+        <FaqSection onScrollToSection={handleScrollToSection} />
+        <PrivacyAndTermsSection onScrollToSection={handleScrollToSection} />
+      </main>
+      
       <Footer onScrollToSection={handleScrollToSection} />
     </>
   );

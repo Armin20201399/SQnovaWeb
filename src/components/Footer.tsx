@@ -8,14 +8,17 @@ interface FooterProps {
 }
 
 const FooterComponent = ({ onScrollToSection }: FooterProps) => {
-  const handleNav = useCallback((sectionId: string) => {
-    if (onScrollToSection) {
-      onScrollToSection(sectionId);
-    } else {
-      const el = document.getElementById(sectionId);
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [onScrollToSection]);
+  const handleNav = useCallback(
+    (sectionId: string) => {
+      if (onScrollToSection) {
+        onScrollToSection(sectionId);
+      } else {
+        const el = document.getElementById(sectionId);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }
+    },
+    [onScrollToSection]
+  );
 
   const quickLinks = [
     { label: 'خانه', target: 'hero-section' },
@@ -30,7 +33,7 @@ const FooterComponent = ({ onScrollToSection }: FooterProps) => {
   return (
     <footer
       id="site-footer"
-      className="relative z-10 border-t border-white/10 pt-16 pb-12 text-slate-400 text-xs bg-slate-950/85 backdrop-blur-2xl overflow-hidden text-center sm:text-right"
+      className="relative z-10 border-t border-white/10 pt-16 pb-12 text-slate-300 text-xs bg-slate-950/85 backdrop-blur-2xl overflow-hidden text-center sm:text-right"
     >
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-48 bg-purple-900/10 rounded-full blur-[140px] pointer-events-none" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -39,10 +42,10 @@ const FooterComponent = ({ onScrollToSection }: FooterProps) => {
             <a href="#" className="inline-block focus:outline-none">
               <FlameLogo size="lg" />
             </a>
-            <p className="text-slate-400 text-xs leading-relaxed max-w-sm">
+            <p className="text-slate-300 text-xs leading-relaxed max-w-sm">
               SQ nova با هدف رفع اختلالات اینترنت، دور زدن محدودیت‌ها و تجربه وب‌گردی و گیمینگ روان با پکت‌لاس نزدیک به صفر و روتینگ سخت‌افزاری پایدار ساخته شده است.
             </p>
-            <p className="text-[11px] text-slate-500 font-medium leading-relaxed max-w-sm">
+            <p className="text-[11px] text-slate-400 font-medium leading-relaxed max-w-sm">
               SQ nova محصول اختصاصی تیم ArminSQ هست 🚀 — از صفر تا صد طراحی و توسعه‌ش رو ما زدیم
             </p>
           </div>
@@ -57,9 +60,9 @@ const FooterComponent = ({ onScrollToSection }: FooterProps) => {
                 <li key={idx}>
                   <button
                     onClick={() => handleNav(link.target)}
-                    className="text-slate-400 hover:text-pink-300 transition-colors duration-200 flex items-center gap-1.5 focus:outline-none group text-right"
+                    className="text-slate-300 hover:text-pink-300 transition-colors duration-200 flex items-center gap-1.5 focus:outline-none group text-right"
                   >
-                    <ChevronLeft className="w-3 h-3 text-slate-600 group-hover:text-pink-400 transition-colors" />
+                    <ChevronLeft className="w-3 h-3 text-slate-500 group-hover:text-pink-400 transition-colors" />
                     <span>{link.label}</span>
                   </button>
                 </li>
@@ -97,9 +100,9 @@ const FooterComponent = ({ onScrollToSection }: FooterProps) => {
           </div>
         </div>
 
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 text-center">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 text-center">
           <div className="font-mono text-center sm:text-right">
-            <BinaryText binaryClassName="text-slate-700" leftBinary="01" rightBinary="10">
+            <BinaryText binaryClassName="text-slate-600" leftBinary="01" rightBinary="10">
               © 2026 SQ nova • All Rights Reserved.
             </BinaryText>
           </div>
