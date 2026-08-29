@@ -66,6 +66,8 @@ const BinaryBackgroundComponent: React.FC = () => {
     dpr: 0,
     columns: 0,
     drops: [] as number[],
+    columnX: [] as number[],
+    columnStyles: [] as string[],
     isVisible: true,
     profile: getPerformanceProfile(),
   });
@@ -109,6 +111,20 @@ const BinaryBackgroundComponent: React.FC = () => {
     ctx.fillRect(0, 0, width, height);
 
     const nextColumns = Math.ceil(width / FONT_SIZE);
+
+    // آماده‌سازی columnX و columnStyles
+    const nextX = new Array(nextColumns);
+    const nextStyles = new Array(nextColumns);
+
+    for (let i = 0; i < nextColumns; i++) {
+      nextX[i] = i * FONT_SIZE;
+      const colorBase = COLORS[i % COLORS.length];
+      const alpha = 0.16 + ((i * 7) % 28) / 100;
+      nextStyles[i] = `${colorBase}${alpha})`;
+    }
+
+    state.columnX = nextX;
+    state.columnStyles = nextStyles;
 
     if (state.columns !== nextColumns) {
       const previousDrops = state.drops;
@@ -158,6 +174,10 @@ const BinaryBackgroundComponent: React.FC = () => {
 
     ctxRef.current = ctx;
 
+    // تنظیمات ثابت context (یک بار)
+    ctx.font = BASE_FONT;
+    ctx.textBaseline = 'alphabetic';
+
     setupCanvas();
 
     const draw = () => {
@@ -167,15 +187,13 @@ const BinaryBackgroundComponent: React.FC = () => {
       const ctx = ctxRef.current;
       if (!ctx) return;
 
-      const { width, height, columns, drops, profile } = stateRef.current;
+      const { width, height, columns, drops, columnX, columnStyles, profile } = stateRef.current;
 
       if (!width || !height || !columns || !drops.length) return;
 
       ctx.fillStyle = TRAIL_COLOR;
       ctx.fillRect(0, 0, width, height);
 
-      ctx.font = BASE_FONT;
-      ctx.textBaseline = 'alphabetic';
       ctx.shadowBlur = 0;
 
       const now = performance.now();
@@ -187,30 +205,23 @@ const BinaryBackgroundComponent: React.FC = () => {
 
       for (let i = 0; i < columns; i++) {
         const char = CHARS[(i + charPhase) & 1];
-        const colorBase = COLORS[i % COLORS.length];
-        const alpha = 0.16 + ((i * 7) % 28) / 100;
-
-        const x = i * FONT_SIZE;
+        const x = columnX[i];
         const y = drops[i] * FONT_SIZE;
 
-        const isHighlight =
-          ((i * 17 + highlightPhase) % 101) === 0;
+        const isHighlight = ((i * 17 + highlightPhase) % 101) === 0;
 
         if (isHighlight) {
           ctx.fillStyle = '#fff';
           ctx.shadowBlur = isLowEnd ? 5 : 8;
           ctx.shadowColor = '#fff';
         } else {
-          ctx.fillStyle = `${colorBase}${alpha})`;
+          ctx.fillStyle = columnStyles[i];
           ctx.shadowBlur = 0;
         }
 
         ctx.fillText(char, x, y);
 
-        if (
-          y > height &&
-          ((i * 13 + resetPhase) % 100) > 96
-        ) {
+        if (y > height && ((i * 13 + resetPhase) % 100) > 96) {
           drops[i] = 0;
         }
 
@@ -257,10 +268,7 @@ const BinaryBackgroundComponent: React.FC = () => {
       }
     };
 
-    document.addEventListener(
-      'visibilitychange',
-      handleVisibilityChange
-    );
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
       if (animationFrameRef.current !== null) {
@@ -274,10 +282,7 @@ const BinaryBackgroundComponent: React.FC = () => {
       }
 
       window.removeEventListener('resize', handleResize);
-      document.removeEventListener(
-        'visibilitychange',
-        handleVisibilityChange
-      );
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [handleResize, setupCanvas]);
 

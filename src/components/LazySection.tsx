@@ -1,4 +1,11 @@
-import { Suspense, lazy, useEffect, useRef, useState, ComponentType } from 'react';
+import {
+  Suspense,
+  lazy,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import type { ComponentType } from 'react';
 import { SectionFallback } from './SectionFallback';
 
 export function createLazySection<P extends object>(

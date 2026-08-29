@@ -24,7 +24,6 @@ export default defineConfig({
       compress: {
         drop_console: true,
         drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.warn', 'console.error', 'console.trace'],
         passes: 2,
         dead_code: true,
         unused: true,
@@ -60,7 +59,5 @@ export default defineConfig({
     assetsInlineLimit: 4096,
     emptyOutDir: true,
   },
-  optimizeDeps: {
-    include: ['react', 'react-dom'],
-  },
+  // optimizeDeps حذف شد (طبق گایدلاین بخش ۳)
 });

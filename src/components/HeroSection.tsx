@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react';
+import React, { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { ArrowLeft, Layers } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 
@@ -46,6 +46,218 @@ const COLOR_MAP = {
   },
 } as const;
 
+const PERFORMANCE_METRICS = [
+  { label: 'پینگ', value: '50 ms', color: 'emerald' },
+  { label: 'پهنای باند', value: '1 Gb/s', color: 'purple' },
+] as const;
+
+// ===== HeroHeadline (memoized) =====
+const HeroHeadline = memo(function HeroHeadline({
+  zeroVal,
+  uptimeVal,
+}: {
+  zeroVal: string;
+  uptimeVal: string;
+}) {
+  const content = HERO_LINES.map((line, idx) => {
+    let children: React.ReactNode = line.text;
+    if (idx === 0) {
+      children = (
+        <>
+          پکت‌لاس نزدیک به{' '}
+          <span className="font-mono text-sky-300 drop-shadow-[0_0_12px_rgba(56,189,248,0.9)] text-[1.2em] inline-block align-middle">
+            {zeroVal}
+          </span>
+        </>
+      );
+    } else if (idx === 1) {
+      children = (
+        <>
+          و آپ‌تایم{' '}
+          <span className="font-mono text-sky-300 drop-shadow-[0_0_12px_rgba(56,189,248,0.9)] text-[1.2em] inline-block align-middle">
+            {uptimeVal}
+          </span>
+        </>
+      );
+    } else if (idx === 2) {
+      children = (
+        <>
+          پایداری{' '}
+          <span className="text-emerald-300 drop-shadow-[0_0_10px_rgba(52,211,153,0.8)] text-[1.2em] inline-block align-middle">
+            مطلق
+          </span>
+        </>
+      );
+    } else if (idx === 4) {
+      children = (
+        <>
+          <span className="text-rose-300 drop-shadow-[0_0_10px_rgba(251,113,133,0.8)] text-[1.2em] inline-block align-middle">
+            شلوغ‌ترین
+          </span>
+        </>
+      );
+    }
+    return (
+      <BinaryText
+        key={idx}
+        binaryClassName={line.color}
+        leftBinary={line.b1}
+        rightBinary={line.b2}
+        className="text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white"
+        tight={false}
+      >
+        {children}
+      </BinaryText>
+    );
+  });
+
+  return <h1 className="flex flex-col items-center gap-5 py-6">{content}</h1>;
+});
+
+// ===== HeroRoutingCard (memoized) =====
+const HeroRoutingCard = memo(function HeroRoutingCard({
+  hubPing,
+  euServers,
+  iranServers,
+  minEuPing,
+  minIranPing,
+}: {
+  hubPing: number;
+  euServers: typeof EU_SERVERS_INIT;
+  iranServers: typeof IRAN_SERVERS_INIT;
+  minEuPing: number;
+  minIranPing: number;
+}) {
+  return (
+    <div className="rounded-2xl bg-slate-950/80 border border-purple-500/30 p-3 shadow-xl space-y-3 text-right">
+      <div className="space-y-1">
+        <div className="grid grid-cols-3 gap-2">
+          {euServers.map((server) => {
+            const isOptimal = server.ping === minEuPing;
+            return (
+              <div
+                key={server.id}
+                className={`p-2 rounded-xl border flex flex-col items-center justify-center text-center transition-all duration-300 relative ${
+                  isOptimal
+                    ? 'bg-sky-500/20 border-sky-500/80 shadow-[0_0_15px_rgba(56,189,248,0.3)] text-white scale-[1.02]'
+                    : 'bg-white/5 border-white/10 text-slate-300'
+                }`}
+              >
+                <div
+                  className={`absolute -bottom-2.5 w-0.5 h-3 ${
+                    isOptimal ? 'bg-sky-400 shadow-[0_0_6px_#38bdf8] animate-pulse' : 'bg-white/10'
+                  }`}
+                />
+                <span className="text-[11px] font-bold truncate w-full">{server.name}</span>
+                <span
+                  className={`font-mono font-bold text-[11px] mt-0.5 px-1.5 py-0.5 rounded ${
+                    isOptimal
+                      ? 'bg-sky-500/30 text-sky-300 border border-sky-500/50'
+                      : 'bg-slate-800 text-slate-300'
+                  }`}
+                >
+                  {server.ping} ms
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <div className="relative py-1">
+        <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-0.5 bg-gradient-to-b from-sky-500/50 via-purple-500/50 to-purple-400/50" />
+        <div className="absolute inset-x-0 top-1/2 h-0.5 bg-gradient-to-r from-purple-500/20 via-sky-500/50 to-purple-500/25 -translate-y-1/2" />
+        <div className="relative z-10 p-2.5 rounded-xl bg-gradient-to-r from-purple-900/50 via-indigo-950/90 to-purple-900/50 border border-purple-500/50 flex items-center justify-center gap-4 shadow-md text-center">
+          <div className="flex items-center gap-2.5">
+            <div className="relative flex items-center justify-center w-2.5 h-2.5">
+              <div className="absolute w-4 h-4 bg-purple-400/50 rounded-full animate-ping" />
+              <div className="w-2 h-2 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc] relative z-10" />
+            </div>
+            <span className="text-xs font-bold text-white">هاب مرکزی ترکیه</span>
+          </div>
+          <span className="text-[10px] font-mono font-bold text-sky-400 bg-sky-500/10 border border-sky-500/30 px-2 py-0.5 rounded min-w-[45px]">
+            {hubPing}ms
+          </span>
+        </div>
+      </div>
+      <div className="space-y-1">
+        <div className="grid grid-cols-3 gap-2">
+          {iranServers.map((server) => {
+            const isOptimal = server.ping === minIranPing;
+            return (
+              <div
+                key={server.id}
+                className={`p-2 rounded-xl border flex flex-col items-center justify-center text-center relative transition-all duration-300 ${
+                  isOptimal
+                    ? 'bg-sky-500/20 border-sky-500/50 shadow-[0_0_15px_rgba(56,189,248,0.2)] text-white'
+                    : 'bg-white/5 border-white/10 text-slate-300'
+                }`}
+              >
+                <div
+                  className={`absolute -top-2.5 w-0.5 h-3 ${
+                    isOptimal ? 'bg-sky-400 shadow-[0_0_6px_#38bdf8] animate-pulse' : 'bg-purple-400/50'
+                  }`}
+                />
+                <span className="text-[11px] font-bold truncate w-full">{server.name}</span>
+                <span
+                  className={`font-mono font-bold text-[11px] mt-0.5 px-1.5 py-0.5 rounded ${
+                    isOptimal
+                      ? 'bg-sky-500/30 text-sky-300 border border-sky-500/50'
+                      : 'bg-slate-800 text-slate-300'
+                  }`}
+                >
+                  {server.ping} ms
+                </span>
+                <div
+                  className={`absolute -bottom-3 w-0.5 h-3 ${
+                    isOptimal ? 'bg-sky-400 shadow-[0_0_6px_#38bdf8] animate-pulse' : 'bg-white/20'
+                  }`}
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+});
+
+// ===== HeroPerformanceMetrics (memoized) =====
+const HeroPerformanceMetrics = memo(function HeroPerformanceMetrics() {
+  return (
+    <div className="space-y-3 text-xs text-center">
+      {PERFORMANCE_METRICS.map((metric, idx) => {
+        const colors = COLOR_MAP[metric.color];
+        const barWidth = idx === 0 ? 'w-[12%]' : 'w-full';
+        return (
+          <div
+            key={idx}
+            className={`p-3.5 rounded-2xl bg-slate-800/60 border border-white/5 flex items-center justify-between gap-4 transition-all duration-300 ${colors.hoverBorder} hover:bg-white/[0.07]`}
+          >
+            <div className="flex items-center gap-2.5 flex-shrink-0">
+              <div className={`w-2 h-2 rounded-full ${colors.dot}`} />
+              <span className="text-slate-200 font-bold">{metric.label}</span>
+            </div>
+            <div className="hidden sm:flex flex-1 items-center mx-2">
+              <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden shadow-inner">
+                <div
+                  className={`${barWidth} h-full ${colors.bar} rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]`}
+                />
+              </div>
+            </div>
+            <span
+              className={`text-xs font-mono font-bold ${colors.text} ${colors.bg} px-3 py-1.5 rounded-xl border ${colors.border} flex-shrink-0 min-w-[75px] inline-flex justify-center`}
+              dir="ltr"
+            >
+              {metric.value}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+});
+
+// ===== HeroSection اصلی =====
 const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection }) => {
   const [zeroVal, setZeroVal] = useState('0.0%');
   const [uptimeVal, setUptimeVal] = useState('99.99%');
@@ -91,8 +303,7 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
     }, 2000);
 
     const scheduleNext = () => {
-      // 🔥 افزایش حداقل delay به 1000ms برای کاهش به‌روزرسانی‌های بی‌دلیل
-      const delay = Math.floor(Math.random() * 1000) + 1000; // 1000-2000ms
+      const delay = Math.floor(Math.random() * 1000) + 1000;
       timeoutRef.current = setTimeout(() => {
         const possibleLoss = ['0.0%', '0.1%', '0.0%', '1.0%', '0.0%'];
         setZeroVal(possibleLoss[Math.floor(Math.random() * possibleLoss.length)]);
@@ -138,76 +349,21 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
     onScrollToSection('packages');
   }, [onScrollToSection]);
 
-  const minEuPing = useMemo(() => Math.min(...euServers.map(x => x.ping)), [euServers]);
-  const minIranPing = useMemo(() => Math.min(...iranServers.map(x => x.ping)), [iranServers]);
-
-  const heroLinesContent = useMemo(() => {
-    return HERO_LINES.map((line, idx) => {
-      let content: React.ReactNode = line.text;
-      if (idx === 0) {
-        content = <>پکت‌لاس نزدیک به <span className="font-mono text-sky-300 drop-shadow-[0_0_12px_rgba(56,189,248,0.9)] text-[1.2em] inline-block align-middle">{zeroVal}</span></>;
-      } else if (idx === 1) {
-        content = <>و آپ‌تایم <span className="font-mono text-sky-300 drop-shadow-[0_0_12px_rgba(56,189,248,0.9)] text-[1.2em] inline-block align-middle">{uptimeVal}</span></>;
-      } else if (idx === 2) {
-        content = <>پایداری <span className="text-emerald-300 drop-shadow-[0_0_10px_rgba(52,211,153,0.8)] text-[1.2em] inline-block align-middle">مطلق</span></>;
-      } else if (idx === 4) {
-        content = <><span className="text-rose-300 drop-shadow-[0_0_10px_rgba(251,113,133,0.8)] text-[1.2em] inline-block align-middle">شلوغ‌ترین</span></>;
-      }
-      return (
-        <BinaryText
-          key={idx}
-          binaryClassName={line.color}
-          leftBinary={line.b1}
-          rightBinary={line.b2}
-          className="text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white"
-          tight={false}
-        >
-          {content}
-        </BinaryText>
-      );
-    });
-  }, [zeroVal, uptimeVal]);
-
-  const euServerElements = useMemo(() => {
-    return euServers.map(server => {
-      const isOptimal = server.ping === minEuPing;
-      return (
-        <div key={server.id} className={`p-2 rounded-xl border flex flex-col items-center justify-center text-center transition-all duration-300 relative ${isOptimal ? 'bg-sky-500/20 border-sky-500/80 shadow-[0_0_15px_rgba(56,189,248,0.3)] text-white scale-[1.02]' : 'bg-white/5 border-white/10 text-slate-300'}`}>
-          <div className={`absolute -bottom-2.5 w-0.5 h-3 ${isOptimal ? 'bg-sky-400 shadow-[0_0_6px_#38bdf8] animate-pulse' : 'bg-white/10'}`} />
-          <span className="text-[11px] font-bold truncate w-full">{server.name}</span>
-          <span className={`font-mono font-bold text-[11px] mt-0.5 px-1.5 py-0.5 rounded ${isOptimal ? 'bg-sky-500/30 text-sky-300 border border-sky-500/50' : 'bg-slate-800 text-slate-300'}`}>{server.ping} ms</span>
-        </div>
-      );
-    });
-  }, [euServers, minEuPing]);
-
-  const iranServerElements = useMemo(() => {
-    return iranServers.map(server => {
-      const isOptimal = server.ping === minIranPing;
-      return (
-        <div key={server.id} className={`p-2 rounded-xl border flex flex-col items-center justify-center text-center relative transition-all duration-300 ${isOptimal ? 'bg-sky-500/20 border-sky-500/50 shadow-[0_0_15px_rgba(56,189,248,0.2)] text-white' : 'bg-white/5 border-white/10 text-slate-300'}`}>
-          <div className={`absolute -top-2.5 w-0.5 h-3 ${isOptimal ? 'bg-sky-400 shadow-[0_0_6px_#38bdf8] animate-pulse' : 'bg-purple-400/50'}`} />
-          <span className="text-[11px] font-bold truncate w-full">{server.name}</span>
-          <span className={`font-mono font-bold text-[11px] mt-0.5 px-1.5 py-0.5 rounded ${isOptimal ? 'bg-sky-500/30 text-sky-300 border border-sky-500/50' : 'bg-slate-800 text-slate-300'}`}>{server.ping} ms</span>
-          <div className={`absolute -bottom-3 w-0.5 h-3 ${isOptimal ? 'bg-sky-400 shadow-[0_0_6px_#38bdf8] animate-pulse' : 'bg-white/20'}`} />
-        </div>
-      );
-    });
-  }, [iranServers, minIranPing]);
-
-  const performanceMetrics = useMemo(() => [
-    { label: 'پینگ', value: '50 ms', color: 'emerald' },
-    { label: 'پهنای باند', value: '1 Gb/s', color: 'purple' },
-  ], []);
+  const minEuPing = React.useMemo(() => Math.min(...euServers.map(x => x.ping)), [euServers]);
+  const minIranPing = React.useMemo(() => Math.min(...iranServers.map(x => x.ping)), [iranServers]);
 
   return (
     <section ref={sectionRef} id="hero-section" className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 overflow-hidden bg-cyber-grid">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-7 flex flex-col items-center text-center space-y-6">
-            <h1 className="flex flex-col items-center gap-5 py-6">{heroLinesContent}</h1>
+            <HeroHeadline zeroVal={zeroVal} uptimeVal={uptimeVal} />
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-20 w-full sm:w-auto">
-              <button id="hero-view-plans-cta" onClick={handleViewPlans} className="whitespace-nowrap flex-shrink-0 w-full sm:w-auto group relative px-7 py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 hover:from-purple-500 hover:via-pink-500 hover:to-orange-400 text-white font-bold text-sm sm:text-base shadow-[0_10px_30px_rgba(236,72,153,0.4)] hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2.5 text-center shine-effect">
+              <button
+                id="hero-view-plans-cta"
+                onClick={handleViewPlans}
+                className="whitespace-nowrap flex-shrink-0 w-full sm:w-auto group relative px-7 py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 hover:from-purple-500 hover:via-pink-500 hover:to-orange-400 text-white font-bold text-sm sm:text-base shadow-[0_10px_30px_rgba(236,72,153,0.4)] hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2.5 text-center shine-effect"
+              >
                 <Layers className="w-5 h-5 text-sky-200 group-hover:rotate-12 transition duration-300" />
                 <span>مشاهده پلن‌ها و شرایط</span>
                 <ArrowLeft className="w-4 h-4 rtl:rotate-0 ltr:rotate-180 group-hover:-translate-x-1 transition duration-200" />
@@ -226,44 +382,14 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
                   <span className="text-xs font-bold text-slate-200">روتینگ اختصاصی بین‌المللی</span>
                 </div>
               </div>
-              <div className="rounded-2xl bg-slate-950/80 border border-purple-500/30 p-3 shadow-xl space-y-3 text-right">
-                <div className="space-y-1"><div className="grid grid-cols-3 gap-2">{euServerElements}</div></div>
-                <div className="relative py-1">
-                  <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-0.5 bg-gradient-to-b from-sky-500/50 via-purple-500/50 to-purple-400/50" />
-                  <div className="absolute inset-x-0 top-1/2 h-0.5 bg-gradient-to-r from-purple-500/20 via-sky-500/50 to-purple-500/25 -translate-y-1/2" />
-                  <div className="relative z-10 p-2.5 rounded-xl bg-gradient-to-r from-purple-900/50 via-indigo-950/90 to-purple-900/50 border border-purple-500/50 flex items-center justify-center gap-4 shadow-md text-center">
-                    <div className="flex items-center gap-2.5">
-                      <div className="relative flex items-center justify-center w-2.5 h-2.5">
-                        <div className="absolute w-4 h-4 bg-purple-400/50 rounded-full animate-ping" />
-                        <div className="w-2 h-2 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc] relative z-10" />
-                      </div>
-                      <span className="text-xs font-bold text-white">هاب مرکزی ترکیه</span>
-                    </div>
-                    <span className="text-[10px] font-mono font-bold text-sky-400 bg-sky-500/10 border border-sky-500/30 px-2 py-0.5 rounded min-w-[45px]">{hubPing}ms</span>
-                  </div>
-                </div>
-                <div className="space-y-1"><div className="grid grid-cols-3 gap-2">{iranServerElements}</div></div>
-              </div>
-              <div className="space-y-3 text-xs text-center">
-                {performanceMetrics.map((metric, idx) => {
-                  const colors = COLOR_MAP[metric.color as keyof typeof COLOR_MAP];
-                  const barWidth = idx === 0 ? 'w-[12%]' : 'w-full';
-                  return (
-                    <div key={idx} className={`p-3.5 rounded-2xl bg-slate-800/60 border border-white/5 flex items-center justify-between gap-4 transition-all duration-300 ${colors.hoverBorder} hover:bg-white/[0.07]`}>
-                      <div className="flex items-center gap-2.5 flex-shrink-0">
-                        <div className={`w-2 h-2 rounded-full ${colors.dot}`} />
-                        <span className="text-slate-200 font-bold">{metric.label}</span>
-                      </div>
-                      <div className="hidden sm:flex flex-1 items-center mx-2">
-                        <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden shadow-inner">
-                          <div className={`${barWidth} h-full ${colors.bar} rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]`} />
-                        </div>
-                      </div>
-                      <span className={`text-xs font-mono font-bold ${colors.text} ${colors.bg} px-3 py-1.5 rounded-xl border ${colors.border} flex-shrink-0 min-w-[75px] inline-flex justify-center`} dir="ltr">{metric.value}</span>
-                    </div>
-                  );
-                })}
-              </div>
+              <HeroRoutingCard
+                hubPing={hubPing}
+                euServers={euServers}
+                iranServers={iranServers}
+                minEuPing={minEuPing}
+                minIranPing={minIranPing}
+              />
+              <HeroPerformanceMetrics />
             </div>
           </div>
         </div>
