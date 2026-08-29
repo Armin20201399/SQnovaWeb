@@ -91,7 +91,8 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
     }, 2000);
 
     const scheduleNext = () => {
-      const delay = Math.floor(Math.random() * 500) + 300;
+      // 🔥 افزایش حداقل delay به 1000ms برای کاهش به‌روزرسانی‌های بی‌دلیل
+      const delay = Math.floor(Math.random() * 1000) + 1000; // 1000-2000ms
       timeoutRef.current = setTimeout(() => {
         const possibleLoss = ['0.0%', '0.1%', '0.0%', '1.0%', '0.0%'];
         setZeroVal(possibleLoss[Math.floor(Math.random() * possibleLoss.length)]);

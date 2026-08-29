@@ -7,15 +7,33 @@ import { AmbientGlowLayer } from './components/AmbientGlowLayer';
 import { createLazySection } from './components/LazySection';
 import { prefetchSectionsWhenIdle } from './utils/prefetchSections';
 
-const ProtocolDeepDive = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/ProtocolDeepDive'));
-const LiveGamingPingSimulator = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/LiveGamingPingSimulator'));
-const ServerStatusSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/ServerStatusSection'));
-const GameNetPartnershipSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/GameNetPartnershipSection'));
-const FreeTrialDedicatedSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/FreeTrialDedicatedSection'));
-const ServicePackagesSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/ServicePackagesSection'));
-const ClientAppsDownload = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/ClientAppsDownload'));
-const FaqSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/FaqSection'));
-const PrivacyAndTermsSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/PrivacyAndTermsSection'));
+const ProtocolDeepDive = createLazySection<{ onScrollToSection: (id: string) => void }>(() =>
+  import('./components/ProtocolDeepDive')
+);
+const LiveGamingPingSimulator = createLazySection<{ onScrollToSection: (id: string) => void }>(() =>
+  import('./components/LiveGamingPingSimulator')
+);
+const ServerStatusSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() =>
+  import('./components/ServerStatusSection')
+);
+const GameNetPartnershipSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() =>
+  import('./components/GameNetPartnershipSection')
+);
+const FreeTrialDedicatedSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() =>
+  import('./components/FreeTrialDedicatedSection')
+);
+const ServicePackagesSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() =>
+  import('./components/ServicePackagesSection')
+);
+const ClientAppsDownload = createLazySection<{ onScrollToSection: (id: string) => void }>(() =>
+  import('./components/ClientAppsDownload')
+);
+const FaqSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() =>
+  import('./components/FaqSection')
+);
+const PrivacyAndTermsSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() =>
+  import('./components/PrivacyAndTermsSection')
+);
 
 const scrollToWhenReady = (id: string, attempts = 20) => {
   const el = document.getElementById(id);
@@ -58,9 +76,35 @@ export default function App() {
     }
   }, []);
 
-  // 🔥 شروع prefetch بعد از لود شدن صفحه
+  // 🔥 Prefetch محدود برای دستگاه‌های با منابع محدود (بخش ۹ گاید)
   useEffect(() => {
-    prefetchSectionsWhenIdle();
+    const connection = (navigator as Navigator & {
+      connection?: {
+        saveData?: boolean;
+        effectiveType?: string;
+      };
+    }).connection;
+
+    const isConstrained =
+      connection?.saveData === true ||
+      connection?.effectiveType === 'slow-2g' ||
+      connection?.effectiveType === '2g';
+
+    if (isConstrained) {
+      return;
+    }
+
+    const run = () => prefetchSectionsWhenIdle();
+
+    if ('requestIdleCallback' in window) {
+      const idle = (window as Window & {
+        requestIdleCallback?: (cb: () => void, options?: { timeout?: number }) => number;
+      }).requestIdleCallback;
+
+      idle?.(run, { timeout: 6000 });
+    } else {
+      setTimeout(run, 3500);
+    }
   }, []);
 
   return (
@@ -78,7 +122,7 @@ export default function App() {
       <ClientAppsDownload onScrollToSection={handleScrollToSection} />
       <FaqSection onScrollToSection={handleScrollToSection} />
       <PrivacyAndTermsSection onScrollToSection={handleScrollToSection} />
-      <Footer onScrollToSection={handleScrollToSection} /> {/* 🔥 رفع رگرسیون */}
+      <Footer onScrollToSection={handleScrollToSection} />
     </>
   );
 }

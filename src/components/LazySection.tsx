@@ -13,6 +13,26 @@ export function createLazySection<P extends object>(
     useEffect(() => {
       const el = containerRef.current;
       if (!el) return;
+
+      const nav = navigator as Navigator & {
+        deviceMemory?: number;
+        connection?: { saveData?: boolean };
+      };
+
+      const lowEnd =
+        nav.connection?.saveData === true ||
+        (navigator.hardwareConcurrency || 4) <= 4 ||
+        (nav.deviceMemory ?? 4) <= 4;
+
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+      let rootMargin = '600px 0px';
+      if (lowEnd) {
+        rootMargin = '180px 0px';
+      } else if (isMobile) {
+        rootMargin = '250px 0px';
+      }
+
       const observer = new IntersectionObserver(
         (entries) => {
           if (entries[0].isIntersecting) {
@@ -20,8 +40,9 @@ export function createLazySection<P extends object>(
             observer.disconnect();
           }
         },
-        { rootMargin: '600px 0px' } // ۶۰۰px قبل از رسیدن، شروع به لود می‌کنه
+        { rootMargin }
       );
+
       observer.observe(el);
       return () => observer.disconnect();
     }, []);
