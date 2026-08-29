@@ -26,10 +26,17 @@ export const AmbientGlow = memo(function AmbientGlow({
   });
 
   useEffect(() => {
+    // 🔥 تشخیص دستگاه‌های ضعیف و احترام به prefers-reduced-motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isLowEndDevice = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+
+    // در دستگاه‌های ضعیف یا کسانی که حرکت کم رو ترجیح میدن، رنگ ثابت می‌مونه
+    if (prefersReducedMotion || isLowEndDevice) return;
+
     const interval = setInterval(() => {
       const random = COLORS[Math.floor(Math.random() * COLORS.length)];
       setCurrentColor(random.rgb);
-    }, 5000);
+    }, 8000); // 🔥 فاصله بیشتر برای کاهش فشار
 
     return () => clearInterval(interval);
   }, []);
@@ -47,9 +54,10 @@ export const AmbientGlow = memo(function AmbientGlow({
         maskRepeat: 'no-repeat',
         filter: 'blur(45px)',
         opacity: 0.55,
-        mixBlendMode: 'screen',
+        // 🔥 حذف mixBlendMode: 'screen' برای کاهش فشار GPU
         transition: 'background-color 4s ease-in-out',
-        willChange: 'background-color, transform',
+        // 🔥 تغییر willChange به 'auto' برای کاهش مصرف حافظه GPU
+        willChange: 'auto',
         transform: 'translateZ(0)',
       }}
       aria-hidden="true"

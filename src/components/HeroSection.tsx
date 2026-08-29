@@ -153,7 +153,14 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
         content = <><span className="text-rose-300 drop-shadow-[0_0_10px_rgba(251,113,133,0.8)] text-[1.2em] inline-block align-middle">شلوغ‌ترین</span></>;
       }
       return (
-        <BinaryText key={idx} binaryClassName={line.color} leftBinary={line.b1} rightBinary={line.b2} className="text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
+        <BinaryText
+          key={idx}
+          binaryClassName={line.color}
+          leftBinary={line.b1}
+          rightBinary={line.b2}
+          className="text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white"
+          tight={false}
+        >
           {content}
         </BinaryText>
       );
