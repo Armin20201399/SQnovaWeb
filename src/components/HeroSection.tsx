@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react';
 import { ArrowLeft, Layers } from 'lucide-react';
 import { BinaryText } from './BinaryText';
-import { AmbientGlow } from './ui/AmbientGlow';
 
 interface HeroSectionProps {
   onScrollToSection: (sectionId: string) => void;
 }
 
-// ===== داده‌های ثابت =====
 const HERO_LINES = [
   { text: 'پکت‌لاس نزدیک به 0.0%', color: 'text-sky-500/40', b1: '010110', b2: '110011' },
   { text: 'و آپ‌تایم 99.99%', color: 'text-sky-500/40', b1: '101001', b2: '001100' },
@@ -67,7 +65,6 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
 
   const resumeTimers = useCallback(() => {
     if (!isVisible) return;
-
     if (intervalRef.current) clearInterval(intervalRef.current);
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
@@ -77,7 +74,6 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
         const delta = Math.floor(Math.random() * 9) - 4;
         return { ...r, ping: Math.max(60, basePing + delta) };
       }));
-
       setIranServers(prev => prev.map(r => {
         const delta = Math.floor(Math.random() * 7) - 3;
         let newPing = r.ping + delta;
@@ -85,7 +81,6 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
         if (newPing > 40) newPing = 40;
         return { ...r, ping: newPing };
       }));
-
       setHubPing(prev => {
         const delta = Math.floor(Math.random() * 5) - 2;
         let newPing = prev + delta;
@@ -110,45 +105,33 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
 
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (document.hidden) {
-        pauseTimers();
-      } else {
-        resumeTimers();
-      }
+      if (document.hidden) pauseTimers();
+      else resumeTimers();
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pauseTimers, resumeTimers]);
 
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
-
     const observer = new IntersectionObserver(
       (entries) => {
         const isVisibleNow = entries[0].isIntersecting;
         setIsVisible(isVisibleNow);
-        if (!isVisibleNow) {
-          pauseTimers();
-        } else {
-          resumeTimers();
-        }
+        if (!isVisibleNow) pauseTimers();
+        else resumeTimers();
       },
       { threshold: 0.1 }
     );
     observer.observe(section);
     return () => observer.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pauseTimers, resumeTimers]);
 
   useEffect(() => {
     resumeTimers();
-    return () => {
-      pauseTimers();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    return () => pauseTimers();
+  }, [resumeTimers, pauseTimers]);
 
   const handleViewPlans = useCallback(() => {
     onScrollToSection('packages');
@@ -211,11 +194,6 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
 
   return (
     <section ref={sectionRef} id="hero-section" className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 overflow-hidden bg-cyber-grid">
-      <div className="absolute inset-0 pointer-events-none">
-        <AmbientGlow position="top-1/4 -right-20" color="bg-purple-900/20" size="w-[48rem] h-[48rem]" />
-        <AmbientGlow position="top-1/3 -left-20" color="bg-orange-600/15" size="w-[48rem] h-[48rem]" />
-        <AmbientGlow position="bottom-10 left-1/2 -translate-x-1/2" color="bg-pink-900/15" size="w-[50rem] h-[30rem]" />
-      </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-7 flex flex-col items-center text-center space-y-6">

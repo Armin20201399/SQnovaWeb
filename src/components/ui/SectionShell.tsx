@@ -9,7 +9,7 @@ interface SectionShellProps {
 export const SectionShell: React.FC<SectionShellProps> = ({ id, className = '', children }) => (
   <section
     id={id}
-    className={`relative overflow-hidden bg-cyber-grid border-t border-white/10 text-center py-24 ${className}`}
+    className={`relative overflow-hidden bg-cyber-grid text-center py-24 ${className}`}
   >
     {children}
   </section>

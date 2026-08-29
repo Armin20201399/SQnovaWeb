@@ -1,27 +1,38 @@
 import { Send, Download, Headphones, Heart } from 'lucide-react';
 import { BinaryText } from './BinaryText';
-import { AmbientGlow } from './ui/AmbientGlow';
 import { SectionShell } from './ui/SectionShell';
+import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
 interface FreeTrialDedicatedSectionProps {
   onScrollToSection?: (sectionId: string) => void;
 }
 
 const FreeTrialDedicatedSection = ({ onScrollToSection }: FreeTrialDedicatedSectionProps) => {
+  const { ref: titleRef, isVisible: titleVisible } = useRevealOnScroll<HTMLHeadingElement>();
+  const { ref: cardRef, isVisible: cardVisible } = useRevealOnScroll<HTMLDivElement>();
+
   return (
     <SectionShell id="free-test">
-      <AmbientGlow position="top-1/3 right-10" color="bg-amber-600/10" size="w-[42rem] h-[42rem]" />
-      <AmbientGlow position="bottom-10 left-10" color="bg-purple-900/20" size="w-[42rem] h-[42rem]" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-14 space-y-4">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center">
+          <h2
+            ref={titleRef}
+            className={`text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center ${
+              titleVisible ? 'reveal-active' : 'reveal-init'
+            }`}
+          >
             <BinaryText binaryClassName="text-emerald-500/30" leftBinary="0101" rightBinary="1010">
               دریافت تست <span className="inline-block text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,0.4)]">رایگان</span> 🎁
             </BinaryText>
           </h2>
           <p className="text-slate-400 text-sm sm:text-base leading-relaxed text-center">می‌تونی یه اشتراک تست شامل تمام پروتکل‌ها و خدمات قبل از خریدت داشته باشی!</p>
         </div>
-        <div className="max-w-3xl mx-auto rounded-3xl bg-slate-900/95 border border-amber-500/30 p-6 sm:p-10 shadow-2xl space-y-8 text-center flex flex-col items-center">
+        <div
+          ref={cardRef}
+          className={`max-w-3xl mx-auto rounded-3xl bg-slate-900/95 border border-amber-500/30 p-6 sm:p-10 shadow-2xl space-y-8 text-center flex flex-col items-center ${
+            cardVisible ? 'reveal-active' : 'reveal-init'
+          }`}
+        >
           <div className="w-full p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-purple-950/80 via-slate-900/95 to-pink-950/70 border border-pink-500/30 space-y-5 shadow-xl flex flex-col items-center">
             <div className="p-3.5 rounded-2xl bg-purple-500/20 text-purple-300 border border-purple-500/30"><Headphones className="w-8 h-8 text-pink-400" /></div>
             <div className="space-y-2 text-center">

@@ -3,8 +3,8 @@ import { PROTOCOLS_DATA } from '../data/vpnData';
 import { Flame, ShieldCheck, Zap, CheckCircle2, Layers, Sparkles } from 'lucide-react';
 import { ProtocolType } from '../types';
 import { BinaryText } from './BinaryText';
-import { AmbientGlow } from './ui/AmbientGlow';
 import { SectionShell } from './ui/SectionShell';
+import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
 interface ProtocolDeepDiveProps {
   onScrollToSection?: (sectionId: string) => void;
@@ -13,6 +13,8 @@ interface ProtocolDeepDiveProps {
 const ProtocolDeepDive = ({ onScrollToSection }: ProtocolDeepDiveProps) => {
   const [selectedProtocolId, setSelectedProtocolId] = useState<ProtocolType>('hysteria2');
   const selectedProtocol = PROTOCOLS_DATA.find((p) => p.id === selectedProtocolId) || PROTOCOLS_DATA[0];
+  const { ref: titleRef, isVisible: titleVisible } = useRevealOnScroll<HTMLHeadingElement>();
+  const { ref: cardRef, isVisible: cardVisible } = useRevealOnScroll<HTMLDivElement>();
 
   const protocolTabInfo = [
     { id: 'hysteria2' as ProtocolType, label: 'Hysteria 2 Turbo', sublabel: 'UDP / Brisk', icon: Flame, color: 'from-orange-500 to-pink-600' },
@@ -23,12 +25,14 @@ const ProtocolDeepDive = ({ onScrollToSection }: ProtocolDeepDiveProps) => {
 
   return (
     <SectionShell id="protocols">
-      <AmbientGlow position="top-1/2 right-10" color="bg-purple-900/20" size="w-[42rem] h-[42rem]" />
-      <AmbientGlow position="bottom-10 left-10" color="bg-pink-900/20" size="w-[48rem] h-[48rem]" />
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center">
+          <h2
+            ref={titleRef}
+            className={`text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center ${
+              titleVisible ? 'reveal-active' : 'reveal-init'
+            }`}
+          >
             <BinaryText binaryClassName="text-sky-500/40" leftBinary="101001" rightBinary="010110">
               پروتکل‌های <span className="text-sky-300 drop-shadow-[0_0_12px_rgba(56,189,248,0.9)]">به‌روز</span> و <span className="text-amber-300 drop-shadow-[0_0_12px_rgba(251,191,36,0.9)]">قدرتمند</span> ⚡
             </BinaryText>
@@ -60,7 +64,12 @@ const ProtocolDeepDive = ({ onScrollToSection }: ProtocolDeepDiveProps) => {
           </div>
         </div>
 
-        <div className="rounded-3xl bg-slate-900/80 border border-white/10 p-6 sm:p-10 shadow-2xl relative overflow-hidden text-center transition-all duration-300">
+        <div
+          ref={cardRef}
+          className={`rounded-3xl bg-slate-900/80 border border-white/10 p-6 sm:p-10 shadow-2xl relative overflow-hidden text-center transition-all duration-300 ${
+            cardVisible ? 'reveal-active' : 'reveal-init'
+          }`}
+        >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-7 space-y-6 flex flex-col items-center text-center">
               <div className="flex flex-col items-center text-center space-y-3">
@@ -73,7 +82,6 @@ const ProtocolDeepDive = ({ onScrollToSection }: ProtocolDeepDiveProps) => {
                 </div>
                 <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl text-center">{selectedProtocol.description}</p>
               </div>
-
               <div className="space-y-3 pt-2 w-full flex flex-col items-center">
                 <div className="space-y-2.5 w-full max-w-xl">
                   {selectedProtocol.features.map((feat, idx) => (
@@ -84,7 +92,6 @@ const ProtocolDeepDive = ({ onScrollToSection }: ProtocolDeepDiveProps) => {
                   ))}
                 </div>
               </div>
-
               <div className="pt-2 flex flex-col items-center text-center">
                 <span className="text-xs text-slate-300 block mb-2.5 font-bold text-center">پیشنهاد شده برای:</span>
                 <div className="text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-200 text-center max-w-xl">
@@ -94,7 +101,6 @@ const ProtocolDeepDive = ({ onScrollToSection }: ProtocolDeepDiveProps) => {
                 </div>
               </div>
             </div>
-
             <div className="lg:col-span-5 space-y-6 flex flex-col items-center w-full">
               <div className="w-full p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-purple-950/50 via-slate-900/90 to-pink-950/40 border border-purple-500/40 space-y-5 shadow-xl text-center flex flex-col items-center">
                 <div className="flex flex-col items-center justify-center gap-2">

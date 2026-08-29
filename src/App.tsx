@@ -4,6 +4,7 @@ import { HeroSection } from './components/HeroSection';
 import { Footer } from './components/Footer';
 import BinaryBackground from './components/BinaryBackground';
 import { SectionFallback } from './components/SectionFallback';
+import { AmbientGlowLayer } from './components/AmbientGlowLayer';
 
 const ProtocolDeepDive = lazy(() => import('./components/ProtocolDeepDive'));
 const LiveGamingPingSimulator = lazy(() => import('./components/LiveGamingPingSimulator'));
@@ -29,8 +30,6 @@ const scrollToWhenReady = (id: string, attempts = 20) => {
 export default function App() {
   const handleScrollToSection = (sectionId: string) => {
     const cleanId = sectionId.replace('#', '').replace('/', '');
-    
-    // اگر target terms یا privacy بود، به PrivacyAndTermsSection بگو تب را عوض کند
     if (cleanId === 'terms' || cleanId === 'privacy') {
       window.dispatchEvent(
         new CustomEvent('sq-scroll-to-tab', {
@@ -38,7 +37,6 @@ export default function App() {
         })
       );
     }
-    
     scrollToWhenReady(cleanId);
     window.history.replaceState(null, '', `#${cleanId}`);
   };
@@ -62,8 +60,9 @@ export default function App() {
   return (
     <div className="min-h-screen text-slate-100 font-['Vazirmatn',sans-serif] selection:bg-pink-500/30 selection:text-pink-200 overflow-x-hidden rtl relative">
       <BinaryBackground />
+      <AmbientGlowLayer />
       <Navbar onScrollToSection={handleScrollToSection} />
-      <main>
+      <main className="relative z-10">
         <HeroSection onScrollToSection={handleScrollToSection} />
 
         <Suspense fallback={<SectionFallback />}>

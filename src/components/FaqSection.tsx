@@ -1,8 +1,8 @@
 import { useState, memo } from 'react';
 import { HelpCircle, ChevronDown, Send, ShieldCheck, Sparkles, Smartphone, RefreshCw, ExternalLink, Lock } from 'lucide-react';
 import { BinaryText } from './BinaryText';
-import { AmbientGlow } from './ui/AmbientGlow';
 import { SectionShell } from './ui/SectionShell';
+import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
 interface FaqSectionProps {
   onScrollToSection?: (sectionId: string) => void;
@@ -15,8 +15,66 @@ interface FaqItem {
   icon: React.ElementType;
 }
 
+const FaqItemComponent = ({
+  faq,
+  isOpen,
+  onToggle,
+  index,
+}: {
+  faq: FaqItem;
+  isOpen: boolean;
+  onToggle: (id: string) => void;
+  index: number;
+}) => {
+  const { ref: itemRef, isVisible: itemVisible } = useRevealOnScroll<HTMLDivElement>();
+  const Icon = faq.icon;
+
+  return (
+    <div
+      ref={itemRef}
+      style={{ transitionDelay: itemVisible ? `${index * 80}ms` : '0ms' }}
+      className={`rounded-3xl border transition-all duration-300 overflow-hidden ${
+        isOpen
+          ? 'bg-slate-900/80 border-pink-500/40 shadow-[0_10px_35px_rgba(236,72,153,0.12)]'
+          : 'bg-slate-900/80 border-white/10 hover:border-white/20'
+      } ${itemVisible ? 'reveal-active' : 'reveal-init'}`}
+    >
+      <button
+        onClick={() => onToggle(faq.id)}
+        className="w-full p-5 sm:p-6 flex items-center justify-between gap-4 text-right focus:outline-none"
+        aria-expanded={isOpen}
+      >
+        <div className="flex items-center gap-3.5">
+          <div className={`p-2 rounded-2xl border transition-colors ${isOpen ? 'bg-pink-500/20 text-pink-300 border-pink-500/30' : 'bg-slate-900/80 text-slate-400 border-white/5'}`}>
+            <Icon className="w-4 h-4" />
+          </div>
+          <span className="text-base sm:text-lg font-bold text-white leading-snug">{faq.question}</span>
+        </div>
+        <div className={`p-1.5 rounded-full bg-slate-900/80 text-slate-400 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180 text-pink-400 bg-pink-500/10' : ''}`}>
+          <ChevronDown className="w-4 h-4" />
+        </div>
+      </button>
+
+      <div
+        className={`grid transition-[grid-template-rows,opacity] duration-250 ease-in-out ${
+          isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+        }`}
+        aria-hidden={!isOpen}
+        inert={!isOpen ? true : undefined}
+      >
+        <div className="min-h-0 overflow-hidden">
+          <div className="px-5 sm:px-6 pb-6 pt-1 text-sm text-slate-300 leading-relaxed border-t border-white/5">
+            {faq.answer}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const FaqSectionComponent = ({ onScrollToSection }: FaqSectionProps) => {
   const [openId, setOpenId] = useState<string | null>('faq-1');
+  const { ref: titleRef, isVisible: titleVisible } = useRevealOnScroll<HTMLHeadingElement>();
 
   const toggleItem = (id: string) => {
     setOpenId((prev) => (prev === id ? null : id));
@@ -94,61 +152,29 @@ const FaqSectionComponent = ({ onScrollToSection }: FaqSectionProps) => {
 
   return (
     <SectionShell id="faq" className="pt-20 pb-16 scroll-mt-20">
-      <AmbientGlow position="top-1/3 left-1/3" color="bg-pink-900/20" size="w-[36rem] h-[36rem]" />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center">
+          <h2
+            ref={titleRef}
+            className={`text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center ${
+              titleVisible ? 'reveal-active' : 'reveal-init'
+            }`}
+          >
             <BinaryText binaryClassName="text-pink-500/30" leftBinary="1010" rightBinary="0101">سوالاتی که همه می‌پرسن ❓</BinaryText>
           </h2>
           <p className="text-slate-400 text-sm sm:text-base leading-relaxed text-center">پاسخ سریع به متداول‌ترین سوالات درباره عملکرد، سازگاری و امنیت سرویس‌های SQ nova</p>
         </div>
 
         <div className="space-y-4 mb-10 text-right">
-          {FAQS.map((faq) => {
-            const isOpen = openId === faq.id;
-            const Icon = faq.icon;
-            return (
-              <div
-                key={faq.id}
-                className={`rounded-3xl border transition-all duration-300 overflow-hidden ${
-                  isOpen
-                    ? 'bg-slate-900/80 border-pink-500/40 shadow-[0_10px_35px_rgba(236,72,153,0.12)]'
-                    : 'bg-slate-900/80 border-white/10 hover:border-white/20'
-                }`}
-              >
-                <button
-                  onClick={() => toggleItem(faq.id)}
-                  className="w-full p-5 sm:p-6 flex items-center justify-between gap-4 text-right focus:outline-none"
-                  aria-expanded={isOpen}
-                >
-                  <div className="flex items-center gap-3.5">
-                    <div className={`p-2 rounded-2xl border transition-colors ${isOpen ? 'bg-pink-500/20 text-pink-300 border-pink-500/30' : 'bg-slate-900/80 text-slate-400 border-white/5'}`}>
-                      <Icon className="w-4 h-4" />
-                    </div>
-                    <span className="text-base sm:text-lg font-bold text-white leading-snug">{faq.question}</span>
-                  </div>
-                  <div className={`p-1.5 rounded-full bg-slate-900/80 text-slate-400 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180 text-pink-400 bg-pink-500/10' : ''}`}>
-                    <ChevronDown className="w-4 h-4" />
-                  </div>
-                </button>
-
-                {/* 🔥 تغییر: اضافه شدن inert برای رفع باگ Accessibility */}
-                <div
-                  className={`grid transition-[grid-template-rows,opacity] duration-250 ease-in-out ${
-                    isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
-                  }`}
-                  aria-hidden={!isOpen}
-                  inert={!isOpen ? true : undefined}
-                >
-                  <div className="min-h-0 overflow-hidden">
-                    <div className="px-5 sm:px-6 pb-6 pt-1 text-sm text-slate-300 leading-relaxed border-t border-white/5">
-                      {faq.answer}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+          {FAQS.map((faq, idx) => (
+            <FaqItemComponent
+              key={faq.id}
+              faq={faq}
+              isOpen={openId === faq.id}
+              onToggle={toggleItem}
+              index={idx}
+            />
+          ))}
         </div>
 
         <div className="p-6 rounded-3xl bg-slate-900/80 border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-right shine-effect">

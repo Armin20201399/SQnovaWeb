@@ -1,7 +1,7 @@
 import { CheckCircle2, Info } from 'lucide-react';
 import { BinaryText } from './BinaryText';
-import { AmbientGlow } from './ui/AmbientGlow';
 import { SectionShell } from './ui/SectionShell';
+import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
 interface ServerNodeStatus {
   id: string;
@@ -26,14 +26,66 @@ const SERVER_NODES: ServerNodeStatus[] = [
   { id: 'ir-asiatech', name: 'آسیاتک (برج میلاد)', country: 'Iran', flag: '🇮🇷', datacenter: 'Asiatech Milad Tower Edge', type: 'iran', status: 'online', uptime: '99.99%', packetLoss: '0.0%', protocolSupport: ['MikroTik Hardware Routing', 'Intranet Bridge'], load: 'عادی' }
 ];
 
+const ServerCard = ({ node, index }: { node: ServerNodeStatus; index: number }) => {
+  const { ref, isVisible } = useRevealOnScroll<HTMLDivElement>();
+  return (
+    <div
+      ref={ref}
+      style={{ transitionDelay: isVisible ? `${index * 80}ms` : '0ms' }}
+      className={`relative rounded-3xl p-6 bg-slate-900/80 border border-white/10 transition-all duration-300 hover:border-emerald-500/40 hover:-translate-y-1 hover:shadow-[0_10px_35px_rgba(16,185,129,0.15)] flex flex-col justify-between text-right group shine-effect ${
+        isVisible ? 'reveal-active' : 'reveal-init'
+      }`}
+    >
+      <div>
+        <div className="flex items-center justify-between gap-2 mb-4">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl select-none" role="img" aria-label={node.country}>{node.flag}</span>
+            <div>
+              <h3 className="text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">
+                <BinaryText binaryClassName="text-white/10" leftBinary="01" rightBinary="10">{node.name}</BinaryText>
+              </h3>
+            </div>
+          </div>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border bg-emerald-500/10 border-emerald-500/30 text-emerald-300 shadow-[0_0_12px_rgba(52,211,153,0.2)]">
+            <span className="relative flex h-2 w-2"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" /><span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" /></span>
+            <span>آنلاین و پایدار</span>
+          </div>
+        </div>
+        <div className="grid grid-cols-3 gap-2 p-3.5 rounded-2xl bg-slate-900/80 border border-white/5 my-4 text-center">
+          <div><div className="text-[10px] text-slate-400 mb-1">آپ‌تایم</div><div className="text-xs font-mono font-bold text-sky-300">{node.uptime}</div></div>
+          <div className="border-x border-white/5"><div className="text-[10px] text-slate-400 mb-1">پکت‌لاس</div><div className="text-xs font-mono font-bold text-emerald-300">{node.packetLoss}</div></div>
+          <div><div className="text-[10px] text-slate-400 mb-1">بار مصرفی</div><div className="text-xs font-bold text-slate-300">{node.load}</div></div>
+        </div>
+        <div className="space-y-1.5">
+          <div className="text-[11px] text-slate-400 font-medium">پروتکل‌های فعال:</div>
+          <div className="flex flex-wrap gap-1.5">
+            {node.protocolSupport.map((proto, idx) => (
+              <span key={idx} className="px-2 py-0.5 rounded-md bg-slate-900/80 border border-white/10 text-[10px] font-mono text-slate-300">{proto}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="mt-5 pt-3 border-t border-white/5 flex items-center justify-between text-[11px] text-slate-400">
+        <div className="flex items-center gap-1.5 text-emerald-400"><CheckCircle2 className="w-3.5 h-3.5" /><span>مسیریابی فعال و بهینه</span></div>
+        <span className="font-mono text-[10px] text-slate-500">Auto-Brisk UDP</span>
+      </div>
+    </div>
+  );
+};
+
 const ServerStatusSection = () => {
+  const { ref: titleRef, isVisible: titleVisible } = useRevealOnScroll<HTMLHeadingElement>();
+
   return (
     <SectionShell id="status">
-      <AmbientGlow position="top-1/4 right-1/4" color="bg-sky-900/20" size="w-[36rem] h-[36rem]" />
-      <AmbientGlow position="bottom-1/4 left-1/4" color="bg-emerald-900/20" size="w-[40rem] h-[40rem]" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center">
+          <h2
+            ref={titleRef}
+            className={`text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center ${
+              titleVisible ? 'reveal-active' : 'reveal-init'
+            }`}
+          >
             <BinaryText binaryClassName="text-emerald-500/30" leftBinary="0101" rightBinary="1010">وضعیت لحظه‌ای سرورها 📡</BinaryText>
           </h2>
           <p className="text-slate-400 text-sm sm:text-base leading-relaxed text-center max-w-2xl mx-auto">پایش 24 ساعته پایداری نودهای بین‌المللی و مراکز داده داخلی با سوییچ هوشمند و پکت‌لاس صفر</p>
@@ -46,42 +98,8 @@ const ServerStatusSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {SERVER_NODES.map((node) => (
-            <div key={node.id} className="relative rounded-3xl p-6 bg-slate-900/80 border border-white/10 transition-all duration-300 hover:border-emerald-500/40 hover:-translate-y-1 hover:shadow-[0_10px_35px_rgba(16,185,129,0.15)] flex flex-col justify-between text-right group shine-effect">
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-4">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl select-none" role="img" aria-label={node.country}>{node.flag}</span>
-                    <div>
-                      <h3 className="text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">
-                        <BinaryText binaryClassName="text-white/10" leftBinary="01" rightBinary="10">{node.name}</BinaryText>
-                      </h3>
-                    </div>
-                  </div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border bg-emerald-500/10 border-emerald-500/30 text-emerald-300 shadow-[0_0_12px_rgba(52,211,153,0.2)]">
-                    <span className="relative flex h-2 w-2"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" /><span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" /></span>
-                    <span>آنلاین و پایدار</span>
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-2 p-3.5 rounded-2xl bg-slate-900/80 border border-white/5 my-4 text-center">
-                  <div><div className="text-[10px] text-slate-400 mb-1">آپ‌تایم</div><div className="text-xs font-mono font-bold text-sky-300">{node.uptime}</div></div>
-                  <div className="border-x border-white/5"><div className="text-[10px] text-slate-400 mb-1">پکت‌لاس</div><div className="text-xs font-mono font-bold text-emerald-300">{node.packetLoss}</div></div>
-                  <div><div className="text-[10px] text-slate-400 mb-1">بار مصرفی</div><div className="text-xs font-bold text-slate-300">{node.load}</div></div>
-                </div>
-                <div className="space-y-1.5">
-                  <div className="text-[11px] text-slate-400 font-medium">پروتکل‌های فعال:</div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {node.protocolSupport.map((proto, idx) => (
-                      <span key={idx} className="px-2 py-0.5 rounded-md bg-slate-900/80 border border-white/10 text-[10px] font-mono text-slate-300">{proto}</span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <div className="mt-5 pt-3 border-t border-white/5 flex items-center justify-between text-[11px] text-slate-400">
-                <div className="flex items-center gap-1.5 text-emerald-400"><CheckCircle2 className="w-3.5 h-3.5" /><span>مسیریابی فعال و بهینه</span></div>
-                <span className="font-mono text-[10px] text-slate-500">Auto-Brisk UDP</span>
-              </div>
-            </div>
+          {SERVER_NODES.map((node, idx) => (
+            <ServerCard key={node.id} node={node} index={idx} />
           ))}
         </div>
 
