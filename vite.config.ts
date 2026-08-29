@@ -4,23 +4,16 @@ import path from 'path';
 import { defineConfig } from 'vite';
 import { visualizer } from 'rollup-plugin-visualizer';
 
-const isAnalyze = process.env.ANALYZE === 'true';
-
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    ...(isAnalyze
-      ? [
-          visualizer({
-            filename: 'dist/stats.html',
-            open: true,
-            gzipSize: true,
-            brotliSize: true,
-            template: 'treemap',
-          }),
-        ]
-      : []),
+    visualizer({
+      open: true,
+      gzipSize: true,
+      brotliSize: true,
+      filename: 'dist/stats.html',
+    }),
   ],
   resolve: {
     alias: {
