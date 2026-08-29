@@ -5,7 +5,6 @@ import { Footer } from './components/Footer';
 import BinaryBackground from './components/BinaryBackground';
 import { AmbientGlowLayer } from './components/AmbientGlowLayer';
 import { createLazySection } from './components/LazySection';
-import { prefetchSectionsWhenIdle } from './utils/prefetchSections';
 
 const ProtocolDeepDive = createLazySection<{ onScrollToSection: (id: string) => void }>(() =>
   import('./components/ProtocolDeepDive')
@@ -73,37 +72,6 @@ export default function App() {
         );
       }
       scrollToWhenReady(target);
-    }
-  }, []);
-
-  // 🔥 Prefetch محدود برای دستگاه‌های با منابع محدود (بخش ۹ گاید)
-  useEffect(() => {
-    const connection = (navigator as Navigator & {
-      connection?: {
-        saveData?: boolean;
-        effectiveType?: string;
-      };
-    }).connection;
-
-    const isConstrained =
-      connection?.saveData === true ||
-      connection?.effectiveType === 'slow-2g' ||
-      connection?.effectiveType === '2g';
-
-    if (isConstrained) {
-      return;
-    }
-
-    const run = () => prefetchSectionsWhenIdle();
-
-    if ('requestIdleCallback' in window) {
-      const idle = (window as Window & {
-        requestIdleCallback?: (cb: () => void, options?: { timeout?: number }) => number;
-      }).requestIdleCallback;
-
-      idle?.(run, { timeout: 6000 });
-    } else {
-      setTimeout(run, 3500);
     }
   }, []);
 

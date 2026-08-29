@@ -28,9 +28,9 @@ export function createLazySection<P extends object>(
 
       let rootMargin = '600px 0px';
       if (lowEnd) {
-        rootMargin = '180px 0px';
+        rootMargin = '320px 0px';
       } else if (isMobile) {
-        rootMargin = '250px 0px';
+        rootMargin = '420px 0px';
       }
 
       const observer = new IntersectionObserver(

@@ -1,36 +1,42 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SQ Nova</title>
+  <meta name="description" content="..." />
 
-    <title>SQ Nova | زیرساخت اختصاصی اروپا</title>
-    <meta name="description" content="پکت‌لاس نزدیک به 0، آپ‌تایم 99.99% و روتینگ مستقیم دیتاسنترهای معتبر اروپا با SQ Nova." />
+  <!-- فقط فونت‌های بالای صفحه -->
+  <link
+    rel="preload"
+    as="font"
+    type="font/woff2"
+    href="/fonts/vazirmatn-v16-arabic-regular.woff2"
+    crossorigin
+  />
+  <link
+    rel="preload"
+    as="font"
+    type="font/woff2"
+    href="/fonts/vazirmatn-v16-arabic-bold.woff2"
+    crossorigin
+  />
+  <!-- در صورت نیاز به Rajdhani bold در هدر، می‌توان نگه داشت -->
+  <!-- <link rel="preload" as="font" type="font/woff2" href="/fonts/rajdhani-v17-latin-bold.woff2" crossorigin /> -->
 
-    <meta property="og:title" content="SQ Nova | زیرساخت اختصاصی اروپا" />
-    <meta property="og:description" content="پکت‌لاس نزدیک به 0، آپ‌تایم 99.99% و روتینگ مستقیم دیتاسنترهای معتبر اروپا." />
-    <meta property="og:image" content="https://arminsq.ir/logo.jpeg" />
-    <meta property="og:url" content="https://arminsq.ir" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="SQ Nova" />
+  <!-- پیش‌بارگذاری glow mask اگر در viewport اولیه استفاده می‌شود -->
+  <link
+    rel="preload"
+    as="image"
+    href="/assets/glow-mask.webp"
+    crossorigin="anonymous"
+  />
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="SQ Nova | زیرساخت اختصاصی اروپا" />
-    <meta name="twitter:description" content="پکت‌لاس نزدیک به 0، آپ‌تایم 99.99% و روتینگ مستقیم دیتاسنترهای معتبر اروپا." />
-    <meta name="twitter:image" content="https://arminsq.ir/logo.jpeg" />
-
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-
-    <!-- فونت‌های حیاتی برای رندر اولیه (بالای صفحه) -->
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/vazirmatn-v16-arabic-regular.woff2" crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/vazirmatn-v16-arabic-bold.woff2" crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/rajdhani-v17-latin-bold.woff2" crossorigin />
-
-    <!-- 🔥 پیش‌بارگذاری فایل mask برای گلوها با crossorigin -->
-    <link rel="preload" as="image" href="/assets/glow-mask.webp" crossorigin="anonymous" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <!-- سایر meta tags -->
 </head>
 <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>

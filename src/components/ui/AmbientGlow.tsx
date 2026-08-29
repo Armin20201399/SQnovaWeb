@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useState, useRef } from 'react';
 
 interface AmbientGlowProps {
   position: string;
@@ -25,27 +25,54 @@ export const AmbientGlow = memo(function AmbientGlow({
     return random.rgb;
   });
 
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const isVisibleRef = useRef(true);
+
   useEffect(() => {
-    // 🔥 تشخیص دستگاه‌های ضعیف و احترام به prefers-reduced-motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isLowEndDevice = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+    if (prefersReducedMotion) return;
 
-    // در دستگاه‌های ضعیف یا کسانی که حرکت کم رو ترجیح میدن، رنگ ثابت می‌مونه
-    if (prefersReducedMotion || isLowEndDevice) return;
+    const startInterval = () => {
+      if (intervalRef.current) return;
+      intervalRef.current = setInterval(() => {
+        if (!isVisibleRef.current) return;
+        const random = COLORS[Math.floor(Math.random() * COLORS.length)];
+        const newColor = random.rgb;
+        setCurrentColor((prev) => (prev !== newColor ? newColor : prev));
+      }, 8000);
+    };
 
-    const interval = setInterval(() => {
-      const random = COLORS[Math.floor(Math.random() * COLORS.length)];
-      setCurrentColor(random.rgb);
-    }, 8000); // 🔥 فاصله بیشتر برای کاهش فشار
+    startInterval();
 
-    return () => clearInterval(interval);
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        isVisibleRef.current = false;
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
+      } else {
+        isVisibleRef.current = true;
+        startInterval();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   return (
     <div
-      className={`absolute ${position} ${size} pointer-events-none`}
+      className={`absolute rounded-full ${position} ${size} pointer-events-none`}
       style={{
-        backgroundColor: `rgba(${currentColor}, 0.45)`,
+        backgroundColor: `rgba(${currentColor}, 0.28)`,
         WebkitMaskImage: 'url(/assets/glow-mask.webp)',
         maskImage: 'url(/assets/glow-mask.webp)',
         WebkitMaskSize: '100% 100%',
@@ -53,14 +80,11 @@ export const AmbientGlow = memo(function AmbientGlow({
         WebkitMaskRepeat: 'no-repeat',
         maskRepeat: 'no-repeat',
         filter: 'blur(45px)',
-        opacity: 0.55,
-        // 🔥 حذف mixBlendMode: 'screen' برای کاهش فشار GPU
+        opacity: 0.48,
         transition: 'background-color 4s ease-in-out',
-        // 🔥 تغییر willChange به 'auto' برای کاهش مصرف حافظه GPU
         willChange: 'auto',
         transform: 'translateZ(0)',
       }}
-      aria-hidden="true"
     />
   );
 });

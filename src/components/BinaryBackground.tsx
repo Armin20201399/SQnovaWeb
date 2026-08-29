@@ -22,14 +22,12 @@ const BASE_FONT = `${FONT_SIZE}px monospace`;
 
 const getPerformanceProfile = () => {
   const hardwareConcurrency = navigator.hardwareConcurrency ?? 8;
-
   const deviceMemory =
     'deviceMemory' in navigator
       ? Number(
           (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 8
         )
       : 8;
-
   const saveData =
     'connection' in navigator
       ? Boolean(
@@ -58,7 +56,8 @@ const getPerformanceProfile = () => {
 const BinaryBackgroundComponent: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const lastFrameTimeRef = useRef(0);
   const resizeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const stateRef = useRef({
@@ -106,8 +105,6 @@ const BinaryBackgroundComponent: React.FC = () => {
 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    // Only repaint the full background when the canvas was created/resized
-    // or an explicit redraw was requested.
     ctx.fillStyle = BACKGROUND_COLOR;
     ctx.fillRect(0, 0, width, height);
 
@@ -161,7 +158,6 @@ const BinaryBackgroundComponent: React.FC = () => {
 
     ctxRef.current = ctx;
 
-    // Initial setup only: creates the canvas and initial background.
     setupCanvas();
 
     const draw = () => {
@@ -187,11 +183,11 @@ const BinaryBackgroundComponent: React.FC = () => {
       const highlightPhase = Math.floor(now / 500);
       const resetPhase = Math.floor(now / 1000);
 
+      const isLowEnd = profile.isLowEnd;
+
       for (let i = 0; i < columns; i++) {
         const char = CHARS[(i + charPhase) & 1];
         const colorBase = COLORS[i % COLORS.length];
-
-        // Slightly brighter than the original while keeping the same palette.
         const alpha = 0.16 + ((i * 7) % 28) / 100;
 
         const x = i * FONT_SIZE;
@@ -202,7 +198,7 @@ const BinaryBackgroundComponent: React.FC = () => {
 
         if (isHighlight) {
           ctx.fillStyle = '#fff';
-          ctx.shadowBlur = profile.isLowEnd ? 5 : 8;
+          ctx.shadowBlur = isLowEnd ? 5 : 8;
           ctx.shadowColor = '#fff';
         } else {
           ctx.fillStyle = `${colorBase}${alpha})`;
@@ -224,17 +220,23 @@ const BinaryBackgroundComponent: React.FC = () => {
       ctx.shadowBlur = 0;
     };
 
-    const tick = () => {
+    const animate = (time: number) => {
       if (!stateRef.current.isVisible) return;
-      draw();
+
+      const { frameInterval } = stateRef.current.profile;
+
+      if (time - lastFrameTimeRef.current >= frameInterval) {
+        lastFrameTimeRef.current = time;
+        draw();
+      }
+
+      animationFrameRef.current = requestAnimationFrame(animate);
     };
 
     const startAnimation = () => {
-      if (intervalRef.current) return;
-
-      const { frameInterval } = getPerformanceProfile();
-
-      intervalRef.current = setInterval(tick, frameInterval);
+      if (animationFrameRef.current !== null) return;
+      lastFrameTimeRef.current = performance.now();
+      animationFrameRef.current = requestAnimationFrame(animate);
     };
 
     startAnimation();
@@ -244,19 +246,13 @@ const BinaryBackgroundComponent: React.FC = () => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
         stateRef.current.isVisible = false;
-
-        if (intervalRef.current) {
-          clearInterval(intervalRef.current);
-          intervalRef.current = null;
+        if (animationFrameRef.current !== null) {
+          cancelAnimationFrame(animationFrameRef.current);
+          animationFrameRef.current = null;
         }
       } else {
         stateRef.current.isVisible = true;
-
-        // Do NOT repaint the canvas here.
-        // Keeping the existing pixels avoids the Matrix "starting over"
-        // visually when switching browser tabs.
-        setupCanvas();
-
+        setupCanvas(false);
         startAnimation();
       }
     };
@@ -267,9 +263,9 @@ const BinaryBackgroundComponent: React.FC = () => {
     );
 
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
       }
 
       if (resizeTimerRef.current) {
