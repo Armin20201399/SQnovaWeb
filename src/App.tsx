@@ -5,6 +5,7 @@ import { Footer } from './components/Footer';
 import BinaryBackground from './components/BinaryBackground';
 import { AmbientGlowLayer } from './components/AmbientGlowLayer';
 import { createLazySection } from './components/LazySection';
+import { prefetchSectionsWhenIdle } from './utils/prefetchSections';
 
 const ProtocolDeepDive = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/ProtocolDeepDive'));
 const LiveGamingPingSimulator = createLazySection<{ onScrollToSection: (id: string) => void }>(() => import('./components/LiveGamingPingSimulator'));
@@ -57,6 +58,11 @@ export default function App() {
     }
   }, []);
 
+  // 🔥 شروع prefetch بعد از لود شدن صفحه
+  useEffect(() => {
+    prefetchSectionsWhenIdle();
+  }, []);
+
   return (
     <>
       <BinaryBackground />
@@ -72,7 +78,7 @@ export default function App() {
       <ClientAppsDownload onScrollToSection={handleScrollToSection} />
       <FaqSection onScrollToSection={handleScrollToSection} />
       <PrivacyAndTermsSection onScrollToSection={handleScrollToSection} />
-      <Footer />
+      <Footer onScrollToSection={handleScrollToSection} /> {/* 🔥 رفع رگرسیون */}
     </>
   );
 }
