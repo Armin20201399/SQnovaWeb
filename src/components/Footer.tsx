@@ -51,10 +51,11 @@ const FooterComponent = ({ onScrollToSection }: FooterProps) => {
           </div>
 
           <div className="md:col-span-4 space-y-4 flex flex-col items-center md:items-start text-center md:text-right">
-            <h4 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
+            {/* تغییر h4 به h3 برای رفع خطای heading order */}
+            <h3 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-pink-500" />
               <span>دسترسی سریع</span>
-            </h4>
+            </h3>
             <ul className="grid grid-cols-2 gap-y-2.5 gap-x-4 w-full max-w-xs text-xs">
               {quickLinks.map((link, idx) => (
                 <li key={idx}>
@@ -71,10 +72,11 @@ const FooterComponent = ({ onScrollToSection }: FooterProps) => {
           </div>
 
           <div className="md:col-span-3 space-y-4 flex flex-col items-center md:items-start text-center md:text-right">
-            <h4 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
+            {/* تغییر h4 به h3 برای رفع خطای heading order */}
+            <h3 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-sky-400" />
               <span>ارتباط با ما</span>
-            </h4>
+            </h3>
             <div className="space-y-3 w-full max-w-xs flex flex-col items-center md:items-start">
               <a
                 href="https://t.me/ArminSQ"

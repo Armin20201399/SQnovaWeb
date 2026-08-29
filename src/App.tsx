@@ -81,7 +81,7 @@ export default function App() {
       <AmbientGlowLayer />
       <Navbar onScrollToSection={handleScrollToSection} />
       
-      {/* ===== فقط این خط اضافه شده ===== */}
+      {/* فقط این خط اضافه شده */}
       <main id="main-content">
         <HeroSection onScrollToSection={handleScrollToSection} />
         <ProtocolDeepDive onScrollToSection={handleScrollToSection} />

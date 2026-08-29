@@ -6,8 +6,7 @@
   <title>SQ Nova</title>
   <meta name="description" content="..." />
 
-  <!-- ===== فونت‌های حیاتی ===== -->
-  <!-- vazirmatn (قبلاً موجود) -->
+  <!-- ===== فقط فونت‌های واقعاً استفاده‌شده ===== -->
   <link
     rel="preload"
     as="font"
@@ -23,24 +22,7 @@
     crossorigin
   />
 
-  <!-- plus-jakarta-sans (جدید) -->
-  <link
-    rel="preload"
-    as="font"
-    type="font/woff2"
-    href="/fonts/plus-jakarta-sans-v12-latin-regular.woff2"
-    crossorigin="anonymous"
-  />
-  <!-- rajdhani (جدید) -->
-  <link
-    rel="preload"
-    as="font"
-    type="font/woff2"
-    href="/fonts/rajdhani-v17-latin-bold.woff2"
-    crossorigin="anonymous"
-  />
-
-  <!-- پیش‌بارگذاری تصویر -->
+  <!-- پیش‌بارگذاری تصویر (در صورت نیاز) -->
   <link
     rel="preload"
     as="image"
@@ -48,9 +30,8 @@
     crossorigin="anonymous"
   />
 
-  <!-- ===== Preconnect به دامنه‌های خارجی ===== -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- ===== حذف preconnectهای بلااستفاده ===== -->
+  <!-- حذف شدند: fonts.googleapis.com و fonts.gstatic.com -->
 
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <!-- سایر meta tags -->
