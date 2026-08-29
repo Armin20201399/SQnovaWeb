@@ -203,7 +203,6 @@
             margin-bottom: 2rem;
         }
 
-        /* ===== دکمه با استایل دقیقاً مشابه دکمه‌های اصلی سایت ===== */
         .cta-button {
             display: inline-flex;
             align-items: center;
@@ -327,7 +326,7 @@
     <footer class="footer"><p>SQ Nova · همه‌ی حقوق محفوظ است</p></footer>
 
     <script>
-        // ===== بک‌گراند باینری =====
+        // ===== بک‌گراند باینری (هماهنگ با نسخه جدید سایت) =====
         (function() {
             const canvas = document.getElementById('binary-canvas');
             if (!canvas) return;
@@ -335,8 +334,10 @@
             if (!ctx) return;
 
             const FONT_SIZE = 14;
-            const FRAME_INTERVAL = 1000 / 24;
-            const MAX_DEVICE_PIXEL_RATIO = 1.5;
+            const HIGH_END_FRAME_INTERVAL = 1000 / 24;
+            const LOW_END_FRAME_INTERVAL = 1000 / 20;
+            const HIGH_END_DPR = 1.5;
+            const LOW_END_DPR = 1.25;
             const CHARS = ['0', '1'];
             const COLORS = [
                 'rgba(56, 189, 248, ',
@@ -349,20 +350,38 @@
             const TRAIL_COLOR = 'rgba(2, 6, 23, 0.1)';
             const BASE_FONT = FONT_SIZE + 'px monospace';
 
+            // تشخیص دستگاه کم‌توان
+            function getPerformanceProfile() {
+                const hardwareConcurrency = navigator.hardwareConcurrency ?? 8;
+                const deviceMemory = ('deviceMemory' in navigator) ?
+                    Number(navigator.deviceMemory ?? 8) : 8;
+                const saveData = ('connection' in navigator) ?
+                    !!navigator.connection?.saveData : false;
+                const isLowEnd = hardwareConcurrency <= 4 || deviceMemory <= 4 || saveData;
+                return {
+                    isLowEnd,
+                    dpr: isLowEnd ? LOW_END_DPR : HIGH_END_DPR,
+                    frameInterval: isLowEnd ? LOW_END_FRAME_INTERVAL : HIGH_END_FRAME_INTERVAL,
+                };
+            }
+
             let state = {
                 width: 0,
                 height: 0,
                 columns: 0,
                 drops: [],
                 isVisible: true,
+                profile: getPerformanceProfile(),
             };
+
             let intervalId = null;
             let resizeTimer = null;
 
             function setupCanvas() {
                 const width = window.innerWidth;
                 const height = window.innerHeight;
-                const dpr = Math.min(window.devicePixelRatio || 1, MAX_DEVICE_PIXEL_RATIO);
+                const profile = getPerformanceProfile();
+                const dpr = profile.dpr;
 
                 canvas.width = Math.max(1, Math.floor(width * dpr));
                 canvas.height = Math.max(1, Math.floor(height * dpr));
@@ -377,60 +396,66 @@
                 state.height = height;
                 state.columns = Math.ceil(width / FONT_SIZE);
                 state.drops = new Array(state.columns).fill(1);
+                state.profile = profile;
             }
 
             function draw() {
                 if (!state.isVisible) return;
-                const { width, height, columns, drops } = state;
+                const { width, height, columns, drops, profile } = state;
                 if (!width || !height || !columns || !drops.length) return;
 
                 ctx.fillStyle = TRAIL_COLOR;
                 ctx.fillRect(0, 0, width, height);
                 ctx.font = BASE_FONT;
                 ctx.textBaseline = 'alphabetic';
+                ctx.shadowBlur = 0;
+
+                const now = performance.now();
+                const charPhase = Math.floor(now / 180);
+                const highlightPhase = Math.floor(now / 500);
+                const resetPhase = Math.floor(now / 1000);
 
                 for (let i = 0; i < columns; i++) {
-                    const char = CHARS[Math.floor(Math.random() * CHARS.length)];
-                    const colorBase = COLORS[Math.floor(Math.random() * COLORS.length)];
-                    const alpha = Math.random() * 0.25 + 0.12;
-                    const isHighlight = Math.random() > 0.98;
+                    const char = CHARS[(i + charPhase) & 1];
+                    const colorBase = COLORS[i % COLORS.length];
+                    const alpha = 0.16 + ((i * 7) % 28) / 100;
+                    const x = i * FONT_SIZE;
+                    const y = drops[i] * FONT_SIZE;
+                    const isHighlight = ((i * 17 + highlightPhase) % 101) === 0;
 
                     if (isHighlight) {
                         ctx.fillStyle = '#fff';
-                        ctx.shadowBlur = 8;
+                        ctx.shadowBlur = profile.isLowEnd ? 5 : 8;
                         ctx.shadowColor = '#fff';
                     } else {
                         ctx.fillStyle = colorBase + alpha + ')';
                         ctx.shadowBlur = 0;
                     }
 
-                    const x = i * FONT_SIZE;
-                    const y = drops[i] * FONT_SIZE;
                     ctx.fillText(char, x, y);
 
-                    if (y > height && Math.random() > 0.975) {
+                    if (y > height && ((i * 13 + resetPhase) % 100) > 96) {
                         drops[i] = 0;
                     }
                     drops[i] += 1;
                 }
 
                 ctx.shadowBlur = 0;
-                for (let i = 0; i < 5; i++) {
-                    const char = CHARS[Math.floor(Math.random() * CHARS.length)];
-                    const colorBase = COLORS[Math.floor(Math.random() * COLORS.length)];
-                    ctx.fillStyle = colorBase + (Math.random() * 0.2) + ')';
-                    ctx.fillText(char, Math.random() * width, Math.random() * height);
-                }
             }
 
             function tick() {
                 draw();
             }
 
+            function startAnimation() {
+                if (intervalId) clearInterval(intervalId);
+                const { frameInterval } = getPerformanceProfile();
+                intervalId = setInterval(tick, frameInterval);
+            }
+
             function init() {
                 setupCanvas();
-                if (intervalId) clearInterval(intervalId);
-                intervalId = setInterval(tick, FRAME_INTERVAL);
+                startAnimation();
 
                 const handleResize = function() {
                     if (resizeTimer) clearTimeout(resizeTimer);
@@ -439,12 +464,23 @@
                         resizeTimer = null;
                     }, 200);
                 };
+
                 const handleVisibility = function() {
-                    state.isVisible = !document.hidden;
+                    if (document.hidden) {
+                        state.isVisible = false;
+                        if (intervalId) {
+                            clearInterval(intervalId);
+                            intervalId = null;
+                        }
+                    } else {
+                        state.isVisible = true;
+                        setupCanvas(); // بازآرایی canvas بدون پاک کردن کامل (حفظ حالت)
+                        startAnimation();
+                    }
                 };
 
                 window.addEventListener('resize', handleResize, { passive: true });
-                window.addEventListener('visibilitychange', handleVisibility, { passive: true });
+                document.addEventListener('visibilitychange', handleVisibility, { passive: true });
 
                 window.addEventListener('beforeunload', function() {
                     if (intervalId) clearInterval(intervalId);
@@ -459,7 +495,7 @@
             }
         })();
 
-        // ===== گلوهای طیفی =====
+        // ===== گلوهای طیفی (بدون تغییر) =====
         (function() {
             const COLORS_RGB = [
                 '147, 51, 234',
