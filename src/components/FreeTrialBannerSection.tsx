@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { Gift, Send, Headphones, ShieldCheck } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 import { SectionShell } from './ui/SectionShell';
@@ -59,5 +58,4 @@ const FreeTrialBannerSectionComponent = ({ onScrollToSection }: FreeTrialBannerS
   );
 };
 
-export const FreeTrialBannerSection = memo(FreeTrialBannerSectionComponent);
-export default FreeTrialBannerSection;
+export default FreeTrialBannerSectionComponent;

@@ -137,5 +137,4 @@ const InteractivePackagesSectionComponent = () => {
   );
 };
 
-export const InteractivePackagesSection = React.memo(InteractivePackagesSectionComponent);
-export default InteractivePackagesSection;
+export default InteractivePackagesSectionComponent;

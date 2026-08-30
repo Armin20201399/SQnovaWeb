@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { CheckCircle2, XCircle, Zap, ShieldCheck, Headphones, Server } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 import { SectionShell } from './ui/SectionShell';
@@ -36,7 +35,6 @@ const ComparisonSectionComponent = () => {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center">
-            {/* اینجا دقیقاً رنگ‌بندی لوگو اعمال شد */}
             <BinaryText binaryClassName="text-purple-500/30" leftBinary="1010" rightBinary="0101">
               قطعا{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-500 to-yellow-400 drop-shadow-[0_0_12px_rgba(251,146,60,0.8)]">
@@ -97,5 +95,4 @@ const ComparisonSectionComponent = () => {
   );
 };
 
-export const ComparisonSection = memo(ComparisonSectionComponent);
-export default ComparisonSection;
+export default ComparisonSectionComponent;

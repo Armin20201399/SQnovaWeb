@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const FONT_SIZE = 14;
 const HIGH_END_FRAME_INTERVAL = 1000 / 24;
@@ -271,5 +271,4 @@ const BinaryBackgroundComponent: React.FC = () => {
   );
 };
 
-export const BinaryBackground = memo(BinaryBackgroundComponent);
-export default BinaryBackground;
+export default BinaryBackgroundComponent;
