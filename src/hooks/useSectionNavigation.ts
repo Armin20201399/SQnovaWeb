@@ -6,7 +6,11 @@ export function useSectionNavigation() {
     const element = document.getElementById(cleanId);
     if (!element) return;
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // محافظ برای محیط‌های تست (jsdom) و مرورگرهای قدیمی
+    const prefersReducedMotion = window.matchMedia
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false;
+
     element.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
     window.history.replaceState(null, '', `#${cleanId}`);
   }, []);

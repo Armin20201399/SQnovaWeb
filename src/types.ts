@@ -17,7 +17,7 @@ export interface ProtocolInfo {
   transport: string;
   lossResistance: string;
   dpiResistance: string;
-  speedRating?: string;
+  speedRating?: string; // طبق گایدلاین، فقط string شد
   pingScore?: number;
   bestFor: string[];
   portConfig: string;
@@ -39,10 +39,10 @@ export interface ServerNode {
   load: number;
   status: ServerStatus;
   uptime: string;
-  ipType: string; // به string برگشت تا با داده‌های فعلی سازگار باشد
-  supportedProtocols: ProtocolType[];
+  ipType: string; // با توجه به داده‌های فعلی vpnData
+  supportedProtocols: RecommendedProtocol[];
   ipPrefix: string;
-  role: string; // به string برگشت تا با داده‌های فعلی سازگار باشد
+  role: string; // با توجه به داده‌های فعلی vpnData
   autoFailover: boolean;
 }
 
@@ -54,7 +54,7 @@ export interface GameBenchmark {
   ispDefaultLoss: number;
   sqNovaPing: number;
   sqNovaLoss: number;
-  avgJitter: number;
+  avgJitter: number; // e.g. 2.1 ms
   recommendedProtocol: string;
   serverRegion: string;
   testedNote: string;

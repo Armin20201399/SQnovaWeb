@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Send, Database, Clock, Star, Check } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 import { SectionShell } from './ui/SectionShell';
@@ -11,7 +11,7 @@ const InteractivePackagesSectionComponent = () => {
   const [protocols, setProtocols] = useState<string[]>(['hysteria2', 'tcp-reality']);
 
   const hasGoldProtocol = protocols.includes('hysteria2') || protocols.includes('xhttp-vip');
-  const price = useMemo(() => calculatePrice({ volumeGb: gig, durationMonths: months, hasGoldProtocol }), [gig, months, hasGoldProtocol]);
+  const price = calculatePrice({ volumeGb: gig, durationMonths: months, hasGoldProtocol });
   const formattedPrice = protocols.length > 0 ? price.toLocaleString('fa-IR') : '';
 
   const toggleProtocol = (proto: string) => {
