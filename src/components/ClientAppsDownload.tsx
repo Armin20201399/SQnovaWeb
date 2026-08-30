@@ -3,19 +3,14 @@ import { CLIENT_APPS } from '../data/vpnData';
 import { Download, Smartphone, Monitor, ExternalLink, Star } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 import { SectionShell } from './ui/SectionShell';
-import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
 type ClientApp = typeof CLIENT_APPS[number];
 
-const AppCard = ({ app, index }: { app: ClientApp; index: number }) => {
-  const { ref, isVisible } = useRevealOnScroll<HTMLDivElement>();
+// پارامتر index حذف شد
+const AppCard = ({ app }: { app: ClientApp }) => {
   return (
     <div
-      ref={ref}
-      style={{ transitionDelay: isVisible ? `${index * 80}ms` : '0ms' }}
-      className={`rounded-3xl bg-slate-900/80 border border-white/10 hover:border-pink-500/50 p-6 sm:p-8 shadow-xl transition duration-300 flex flex-col items-center justify-between space-y-6 group hover:-translate-y-1 text-center shine-effect ${
-        isVisible ? 'reveal-active' : 'reveal-init'
-      }`}
+      className={`rounded-3xl bg-slate-900/80 border border-white/10 hover:border-pink-500/50 p-6 sm:p-8 shadow-xl transition duration-300 flex flex-col items-center justify-between space-y-6 group hover:-translate-y-1 text-center shine-effect`}
     >
       <div className="w-full flex flex-col items-center">
         <div className="flex items-center justify-between w-full mb-4">
@@ -67,7 +62,6 @@ const AppCard = ({ app, index }: { app: ClientApp; index: number }) => {
 
 const ClientAppsDownloadComponent = () => {
   const [activeCategory, setActiveCategory] = useState<'mobile' | 'pc'>('mobile');
-  const { ref: titleRef, isVisible: titleVisible } = useRevealOnScroll<HTMLHeadingElement>();
   const filteredApps = CLIENT_APPS.filter((app) => {
     if (activeCategory === 'mobile') return app.platform === 'android' || app.platform === 'ios';
     return app.platform === 'windows';
@@ -78,10 +72,7 @@ const ClientAppsDownloadComponent = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-14 space-y-4">
           <h2
-            ref={titleRef}
-            className={`text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center ${
-              titleVisible ? 'reveal-active' : 'reveal-init'
-            }`}
+            className={`text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center`}
           >
             <BinaryText binaryClassName="text-purple-500/30" leftBinary="101" rightBinary="010">
               دانلود نرم‌افزارهای کلاینت 📲
@@ -115,8 +106,8 @@ const ClientAppsDownloadComponent = () => {
         </div>
 
         <div className={`grid grid-cols-1 ${activeCategory === 'mobile' ? 'md:grid-cols-2' : 'max-w-2xl mx-auto'} gap-6 mb-12 text-center`}>
-          {filteredApps.map((app, idx) => (
-            <AppCard key={app.id} app={app} index={idx} />
+          {filteredApps.map((app) => (
+            <AppCard key={app.id} app={app} />
           ))}
         </div>
       </div>

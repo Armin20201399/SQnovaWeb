@@ -4,7 +4,6 @@ import { Flame, ShieldCheck, Zap, CheckCircle2, Layers, Sparkles } from 'lucide-
 import { ProtocolType } from '../types';
 import { BinaryText } from './BinaryText';
 import { SectionShell } from './ui/SectionShell';
-import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
 interface ProtocolDeepDiveProps {
   onScrollToSection?: (sectionId: string) => void;
@@ -13,8 +12,6 @@ interface ProtocolDeepDiveProps {
 const ProtocolDeepDive = ({ onScrollToSection }: ProtocolDeepDiveProps) => {
   const [selectedProtocolId, setSelectedProtocolId] = useState<ProtocolType>('hysteria2');
   const selectedProtocol = PROTOCOLS_DATA.find((p) => p.id === selectedProtocolId) || PROTOCOLS_DATA[0];
-  const { ref: titleRef, isVisible: titleVisible } = useRevealOnScroll<HTMLHeadingElement>();
-  const { ref: cardRef, isVisible: cardVisible } = useRevealOnScroll<HTMLDivElement>();
 
   const protocolTabInfo = [
     { id: 'hysteria2' as ProtocolType, label: 'Hysteria 2 Turbo', sublabel: 'UDP / Brisk', icon: Flame, color: 'from-orange-500 to-pink-600' },
@@ -28,10 +25,7 @@ const ProtocolDeepDive = ({ onScrollToSection }: ProtocolDeepDiveProps) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
           <h2
-            ref={titleRef}
-            className={`text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center ${
-              titleVisible ? 'reveal-active' : 'reveal-init'
-            }`}
+            className={`text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center`}
           >
             <BinaryText binaryClassName="text-sky-500/40" leftBinary="101001" rightBinary="010110">
               پروتکل‌های <span className="text-sky-300 drop-shadow-[0_0_12px_rgba(56,189,248,0.9)]">به‌روز</span> و <span className="text-amber-300 drop-shadow-[0_0_12px_rgba(251,191,36,0.9)]">قدرتمند</span> ⚡
@@ -65,10 +59,7 @@ const ProtocolDeepDive = ({ onScrollToSection }: ProtocolDeepDiveProps) => {
         </div>
 
         <div
-          ref={cardRef}
-          className={`rounded-3xl bg-slate-900/80 border border-white/10 p-6 sm:p-10 shadow-2xl relative overflow-hidden text-center transition-all duration-300 ${
-            cardVisible ? 'reveal-active' : 'reveal-init'
-          }`}
+          className={`rounded-3xl bg-slate-900/80 border border-white/10 p-6 sm:p-10 shadow-2xl relative overflow-hidden text-center transition-all duration-300`}
         >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-7 space-y-6 flex flex-col items-center text-center">

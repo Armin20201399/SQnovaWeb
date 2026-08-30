@@ -2,7 +2,6 @@ import { useState, memo } from 'react';
 import { HelpCircle, ChevronDown, Send, ShieldCheck, Sparkles, Smartphone, RefreshCw, ExternalLink, Lock } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 import { SectionShell } from './ui/SectionShell';
-import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
 interface FaqSectionProps {
   onScrollToSection?: (sectionId: string) => void;
@@ -15,29 +14,25 @@ interface FaqItem {
   icon: React.ElementType;
 }
 
+// پارامتر index حذف شد
 const FaqItemComponent = ({
   faq,
   isOpen,
   onToggle,
-  index,
 }: {
   faq: FaqItem;
   isOpen: boolean;
   onToggle: (id: string) => void;
-  index: number;
 }) => {
-  const { ref: itemRef, isVisible: itemVisible } = useRevealOnScroll<HTMLDivElement>();
   const Icon = faq.icon;
 
   return (
     <div
-      ref={itemRef}
-      style={{ transitionDelay: itemVisible ? `${index * 80}ms` : '0ms' }}
       className={`rounded-3xl border transition-all duration-300 overflow-hidden ${
         isOpen
           ? 'bg-slate-900/80 border-pink-500/40 shadow-[0_10px_35px_rgba(236,72,153,0.12)]'
           : 'bg-slate-900/80 border-white/10 hover:border-white/20'
-      } ${itemVisible ? 'reveal-active' : 'reveal-init'}`}
+      }`}
     >
       <button
         onClick={() => onToggle(faq.id)}
@@ -74,7 +69,6 @@ const FaqItemComponent = ({
 
 const FaqSectionComponent = ({ onScrollToSection }: FaqSectionProps) => {
   const [openId, setOpenId] = useState<string | null>('faq-1');
-  const { ref: titleRef, isVisible: titleVisible } = useRevealOnScroll<HTMLHeadingElement>();
 
   const toggleItem = (id: string) => {
     setOpenId((prev) => (prev === id ? null : id));
@@ -155,10 +149,7 @@ const FaqSectionComponent = ({ onScrollToSection }: FaqSectionProps) => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
           <h2
-            ref={titleRef}
-            className={`text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center ${
-              titleVisible ? 'reveal-active' : 'reveal-init'
-            }`}
+            className={`text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center`}
           >
             <BinaryText binaryClassName="text-pink-500/30" leftBinary="1010" rightBinary="0101">سوالاتی که همه می‌پرسن ❓</BinaryText>
           </h2>
@@ -166,13 +157,12 @@ const FaqSectionComponent = ({ onScrollToSection }: FaqSectionProps) => {
         </div>
 
         <div className="space-y-4 mb-10 text-right">
-          {FAQS.map((faq, idx) => (
+          {FAQS.map((faq) => (
             <FaqItemComponent
               key={faq.id}
               faq={faq}
               isOpen={openId === faq.id}
               onToggle={toggleItem}
-              index={idx}
             />
           ))}
         </div>

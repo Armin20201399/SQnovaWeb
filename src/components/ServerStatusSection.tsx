@@ -1,7 +1,6 @@
 import { CheckCircle2, Info } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 import { SectionShell } from './ui/SectionShell';
-import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
 interface ServerNodeStatus {
   id: string;
@@ -26,15 +25,11 @@ const SERVER_NODES: ServerNodeStatus[] = [
   { id: 'ir-asiatech', name: 'آسیاتک (برج میلاد)', country: 'Iran', flag: '🇮🇷', datacenter: 'Asiatech Milad Tower Edge', type: 'iran', status: 'online', uptime: '99.99%', packetLoss: '0.0%', protocolSupport: ['MikroTik Hardware Routing', 'Intranet Bridge'], load: 'عادی' }
 ];
 
-const ServerCard = ({ node, index }: { node: ServerNodeStatus; index: number }) => {
-  const { ref, isVisible } = useRevealOnScroll<HTMLDivElement>();
+// پارامتر index حذف شد
+const ServerCard = ({ node }: { node: ServerNodeStatus }) => {
   return (
     <div
-      ref={ref}
-      style={{ transitionDelay: isVisible ? `${index * 80}ms` : '0ms' }}
-      className={`relative rounded-3xl p-6 bg-slate-900/80 border border-white/10 transition-all duration-300 hover:border-emerald-500/40 hover:-translate-y-1 hover:shadow-[0_10px_35px_rgba(16,185,129,0.15)] flex flex-col justify-between text-right group shine-effect ${
-        isVisible ? 'reveal-active' : 'reveal-init'
-      }`}
+      className={`relative rounded-3xl p-6 bg-slate-900/80 border border-white/10 transition-all duration-300 hover:border-emerald-500/40 hover:-translate-y-1 hover:shadow-[0_10px_35px_rgba(16,185,129,0.15)] flex flex-col justify-between text-right group shine-effect`}
     >
       <div>
         <div className="flex items-center justify-between gap-2 mb-4">
@@ -74,17 +69,12 @@ const ServerCard = ({ node, index }: { node: ServerNodeStatus; index: number }) 
 };
 
 const ServerStatusSection = () => {
-  const { ref: titleRef, isVisible: titleVisible } = useRevealOnScroll<HTMLHeadingElement>();
-
   return (
     <SectionShell id="status">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
           <h2
-            ref={titleRef}
-            className={`text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center ${
-              titleVisible ? 'reveal-active' : 'reveal-init'
-            }`}
+            className={`text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center`}
           >
             <BinaryText binaryClassName="text-emerald-500/30" leftBinary="0101" rightBinary="1010">وضعیت لحظه‌ای سرورها 📡</BinaryText>
           </h2>
@@ -98,8 +88,8 @@ const ServerStatusSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {SERVER_NODES.map((node, idx) => (
-            <ServerCard key={node.id} node={node} index={idx} />
+          {SERVER_NODES.map((node) => (
+            <ServerCard key={node.id} node={node} />
           ))}
         </div>
 

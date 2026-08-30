@@ -3,7 +3,6 @@ import { SERVICE_PACKAGES } from '../data/vpnData';
 import { CheckCircle2, Send, Sparkles } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 import { SectionShell } from './ui/SectionShell';
-import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
 interface ServicePackagesSectionProps {
   onScrollToSection?: (sectionId: string) => void;
@@ -11,17 +10,15 @@ interface ServicePackagesSectionProps {
 
 type ServicePackage = typeof SERVICE_PACKAGES[number];
 
-const PackageCard = ({ pkg, isPopular, index }: { pkg: ServicePackage; isPopular: boolean; index: number }) => {
-  const { ref, isVisible } = useRevealOnScroll<HTMLDivElement>();
+// پارامتر index حذف شد
+const PackageCard = ({ pkg, isPopular }: { pkg: ServicePackage; isPopular: boolean }) => {
   return (
     <div
-      ref={ref}
-      style={{ transitionDelay: isVisible ? `${index * 80}ms` : '0ms' }}
       className={`rounded-3xl p-6 transition-all duration-300 flex flex-col items-center space-y-5 relative group text-center shine-effect ${
         isPopular
           ? 'bg-slate-900/98 border-2 border-pink-500 shadow-[0_0_35px_rgba(236,72,153,0.35)] -translate-y-2'
           : 'bg-slate-900/80 border border-white/10 hover:border-white/25 hover:-translate-y-1 shadow-xl'
-      } ${isVisible ? 'reveal-active' : 'reveal-init'}`}
+      }`}
     >
       {isPopular && <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-500" />}
       <div className="w-full flex flex-col items-center space-y-2">
@@ -52,17 +49,12 @@ const PackageCard = ({ pkg, isPopular, index }: { pkg: ServicePackage; isPopular
 };
 
 const ServicePackagesSectionComponent: React.FC<ServicePackagesSectionProps> = ({ onScrollToSection }) => {
-  const { ref: titleRef, isVisible: titleVisible } = useRevealOnScroll<HTMLHeadingElement>();
-
   return (
     <SectionShell id="packages">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2
-            ref={titleRef}
-            className={`text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight ${
-              titleVisible ? 'reveal-active' : 'reveal-init'
-            }`}
+            className={`text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight`}
           >
             <BinaryText binaryClassName="text-pink-500/30" leftBinary="0101" rightBinary="1010">
               پلن‌هایی متناسب با نیازهای مختلف شما ! 💎
@@ -71,8 +63,8 @@ const ServicePackagesSectionComponent: React.FC<ServicePackagesSectionProps> = (
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {SERVICE_PACKAGES.map((pkg, idx) => (
-            <PackageCard key={pkg.id} pkg={pkg} isPopular={pkg.popular || false} index={idx} />
+          {SERVICE_PACKAGES.map((pkg) => (
+            <PackageCard key={pkg.id} pkg={pkg} isPopular={pkg.popular || false} />
           ))}
         </div>
 

@@ -2,11 +2,9 @@ import { useState, useEffect, memo } from 'react';
 import { Lock, FileText, CheckCircle2, Send, RotateCcw, Smartphone, Share2, Clock } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 import { SectionShell } from './ui/SectionShell';
-import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
 const PrivacyAndTermsSectionComponent = () => {
   const [activeTab, setActiveTab] = useState<'privacy' | 'terms'>('privacy');
-  const { ref: titleRef, isVisible: titleVisible } = useRevealOnScroll<HTMLDivElement>();
 
   useEffect(() => {
     const handleTabChange = (event: CustomEvent<{ tab: 'privacy' | 'terms' }>) => {
@@ -43,8 +41,7 @@ const PrivacyAndTermsSectionComponent = () => {
         </div>
 
         <div
-          ref={titleRef}
-          className={titleVisible ? 'reveal-active' : 'reveal-init'}
+          className=""
         >
           {activeTab === 'privacy' ? (
             <div id="privacy" className="mb-20 scroll-mt-28">
