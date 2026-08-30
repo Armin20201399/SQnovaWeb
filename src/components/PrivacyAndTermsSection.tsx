@@ -1,4 +1,4 @@
-import { useState, memo } from 'react'; // useEffect حذف شد
+import { useState, memo } from 'react';
 import { Lock, FileText, Database, EyeOff, Trash2, RotateCcw, Smartphone, Share2, Clock } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 import { SectionShell } from './ui/SectionShell';
@@ -39,8 +39,8 @@ const PrivacyAndTermsSectionComponent = () => {
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          {activeFeatures.map((feature, idx) => (
-            <div key={idx} className="group p-6 rounded-3xl bg-slate-900/80 border border-white/10 transition-all duration-300 hover:-translate-y-1 hover:border-pink-500/40 flex gap-4 items-start shine-effect">
+          {activeFeatures.map((feature) => (
+            <div key={feature.title} className="group p-6 rounded-3xl bg-slate-900/80 border border-white/10 transition-all duration-300 hover:-translate-y-1 hover:border-pink-500/40 flex gap-4 items-start shine-effect">
               <div className={`p-3.5 rounded-2xl border ${feature.color}`}><feature.icon className="w-6 h-6" /></div>
               <div className="space-y-1 text-right"><h3 className="font-bold text-white text-lg">{feature.title}</h3><p className="text-sm text-slate-400 leading-relaxed">{feature.desc}</p></div>
             </div>

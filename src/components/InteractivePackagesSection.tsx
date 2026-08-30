@@ -3,6 +3,7 @@ import { Send, Database, Clock, Star, Check } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 import { SectionShell } from './ui/SectionShell';
 import { calculatePrice } from '../domain/pricing';
+import { specialProtocols, normalProtocols, allProtocols } from '../data/protocols';
 
 const InteractivePackagesSectionComponent = () => {
   const [gig, setGig] = useState<number>(25);
@@ -16,19 +17,6 @@ const InteractivePackagesSectionComponent = () => {
   const toggleProtocol = (proto: string) => {
     setProtocols(prev => prev.includes(proto) ? prev.filter(p => p !== proto) : [...prev, proto]);
   };
-
-  const specialProtocols = [
-    { id: 'hysteria2', label: 'Hysteria 2 Turbo' },
-    { id: 'xhttp-vip', label: 'xHTTP VIP' }
-  ];
-
-  const normalProtocols = [
-    { id: 'tcp-reality', label: 'TCP Raw Reality' },
-    { id: 'xhttp', label: 'xHTTP Engine' },
-    { id: 'mkcp', label: 'mKCP Turbo' }
-  ];
-
-  const allProtocols = [...specialProtocols, ...normalProtocols];
 
   const handleOrderClick = () => {
     const protocolNames = protocols.map(p => allProtocols.find(o => o.id === p)?.label).join('، ');

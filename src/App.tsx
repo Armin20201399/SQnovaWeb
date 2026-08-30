@@ -9,7 +9,6 @@ import BinaryBackground from './components/BinaryBackground';
 import { AmbientGlowLayer } from './components/AmbientGlowLayer';
 import { AsyncSection } from './components/AsyncSection';
 
-// ایمپورت های Lazy (Split Code)
 const ProtocolDeepDive = lazy(() => import('./components/ProtocolDeepDive'));
 const LiveGamingPingSimulator = lazy(() => import('./components/LiveGamingPingSimulator'));
 const ComparisonSection = lazy(() => import('./components/ComparisonSection'));
@@ -22,7 +21,7 @@ const FaqSection = lazy(() => import('./components/FaqSection'));
 
 export default function App() {
   const { navigate } = useSectionNavigation();
-  usePreloadSections(); // اجرای Preload در Idle
+  usePreloadSections();
 
   useEffect(() => {
     const hash = window.location.hash.replace('#', '');

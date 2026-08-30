@@ -1,4 +1,9 @@
-export type ProtocolType = 'hysteria2' | 'tcp-reality' | 'xhttp' | 'mkcp';
+export type ProtocolType = 'hysteria2' | 'tcp-reality' | 'xhttp' | 'mkcp' | 'xhttp-vip';
+
+export type ServerRole = 'edge' | 'hub' | 'relay';
+export type IpType = 'ipv4' | 'ipv6';
+export type RecommendedProtocol = ProtocolType;
+export type ServerStatus = 'optimal' | 'good' | 'maintenance';
 
 export interface ProtocolInfo {
   id: ProtocolType;
@@ -12,7 +17,7 @@ export interface ProtocolInfo {
   transport: string;
   lossResistance: string;
   dpiResistance: string;
-  speedRating?: string | number;
+  speedRating?: string;
   pingScore?: number;
   bestFor: string[];
   portConfig: string;
@@ -32,12 +37,12 @@ export interface ServerNode {
   ping: number;
   directPingWithoutSq: number;
   load: number;
-  status: 'optimal' | 'good' | 'maintenance';
+  status: ServerStatus;
   uptime: string;
-  ipType: string;
+  ipType: string; // به string برگشت تا با داده‌های فعلی سازگار باشد
   supportedProtocols: ProtocolType[];
   ipPrefix: string;
-  role: string;
+  role: string; // به string برگشت تا با داده‌های فعلی سازگار باشد
   autoFailover: boolean;
 }
 
@@ -49,7 +54,7 @@ export interface GameBenchmark {
   ispDefaultLoss: number;
   sqNovaPing: number;
   sqNovaLoss: number;
-  avgJitter: number; // e.g. 2.1 ms
+  avgJitter: number;
   recommendedProtocol: string;
   serverRegion: string;
   testedNote: string;
@@ -85,7 +90,7 @@ export interface ClientApp {
   name: string;
   platform: 'android' | 'ios' | 'windows' | 'macos' | 'linux';
   rating: number;
-  recommendedFor: ProtocolType[];
+  recommendedFor: RecommendedProtocol[];
   downloadUrl: string;
   githubUrl?: string;
   storeBadge?: string;

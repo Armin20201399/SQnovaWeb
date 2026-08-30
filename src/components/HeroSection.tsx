@@ -60,9 +60,7 @@ const HeroSectionComponent: React.FC<HeroSectionProps> = ({ onScrollToSection })
                 );
               })}
             </h1>
-            <p className="text-slate-400 text-base sm:text-lg leading-relaxed max-w-xl text-center">
-              هر ساعت شبانه‌روز، حتی با بدترین اینترنت ایران، فقط وصل باش و حال کن!
-            </p>
+            <p className="text-slate-400 text-base sm:text-lg leading-relaxed max-w-xl text-center">هر ساعت شبانه‌روز، حتی با بدترین اینترنت ایران، فقط وصل باش و حال کن!</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 w-full sm:w-auto">
               <button id="hero-view-plans-cta" type="button" onClick={handleViewPlans} className="whitespace-nowrap flex-shrink-0 w-full sm:w-auto group relative px-8 py-4 rounded-2xl bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 hover:from-purple-500 hover:via-pink-500 hover:to-orange-400 text-white font-bold text-base shadow-[0_10px_30px_rgba(236,72,153,0.4)] hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2.5 text-center shine-effect">
                 <Layers className="w-5 h-5 text-sky-200 group-hover:rotate-12 transition duration-300" />

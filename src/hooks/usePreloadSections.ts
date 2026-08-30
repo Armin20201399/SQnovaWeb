@@ -14,7 +14,6 @@ export function usePreloadSections() {
       return () => window.cancelIdleCallback(idleId);
     }
 
-    // استفاده از تابع سراسری setTimeout به جای window.setTimeout برای رفع خطای TypeScript
     const timeoutId = setTimeout(preload, 800);
     return () => clearTimeout(timeoutId);
   }, []);
