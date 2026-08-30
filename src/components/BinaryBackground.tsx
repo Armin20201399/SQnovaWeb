@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef, useCallback } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 
 const FONT_SIZE = 14;
 const HIGH_END_FRAME_INTERVAL = 1000 / 24;
@@ -72,95 +72,6 @@ const BinaryBackgroundComponent: React.FC = () => {
     profile: getPerformanceProfile(),
   });
 
-  const setupCanvas = useCallback((forceRedraw = false) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = ctxRef.current;
-    if (!ctx) return;
-
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    const profile = getPerformanceProfile();
-    const { dpr } = profile;
-
-    const state = stateRef.current;
-
-    const previousWidth = state.width;
-    const previousHeight = state.height;
-    const previousDpr = state.dpr;
-
-    const sizeChanged =
-      previousWidth !== width ||
-      previousHeight !== height ||
-      previousDpr !== dpr;
-
-    if (!sizeChanged && !forceRedraw) {
-      state.profile = profile;
-      return;
-    }
-
-    canvas.width = Math.max(1, Math.floor(width * dpr));
-    canvas.height = Math.max(1, Math.floor(height * dpr));
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
-
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    ctx.fillStyle = BACKGROUND_COLOR;
-    ctx.fillRect(0, 0, width, height);
-
-    const nextColumns = Math.ceil(width / FONT_SIZE);
-
-    // آماده‌سازی columnX و columnStyles
-    const nextX = new Array(nextColumns);
-    const nextStyles = new Array(nextColumns);
-
-    for (let i = 0; i < nextColumns; i++) {
-      nextX[i] = i * FONT_SIZE;
-      const colorBase = COLORS[i % COLORS.length];
-      const alpha = 0.16 + ((i * 7) % 28) / 100;
-      nextStyles[i] = `${colorBase}${alpha})`;
-    }
-
-    state.columnX = nextX;
-    state.columnStyles = nextStyles;
-
-    if (state.columns !== nextColumns) {
-      const previousDrops = state.drops;
-      const nextDrops = new Array(nextColumns);
-
-      for (let i = 0; i < nextColumns; i++) {
-        if (i < previousDrops.length) {
-          nextDrops[i] = previousDrops[i];
-        } else {
-          nextDrops[i] = Math.random() * Math.max(1, height / FONT_SIZE);
-        }
-      }
-
-      state.drops = nextDrops;
-      state.columns = nextColumns;
-    } else if (state.drops.length === 0) {
-      state.drops = new Array(nextColumns).fill(1);
-      state.columns = nextColumns;
-    }
-
-    state.width = width;
-    state.height = height;
-    state.dpr = dpr;
-    state.profile = profile;
-  }, []);
-
-  const handleResize = useCallback(() => {
-    if (resizeTimerRef.current) {
-      clearTimeout(resizeTimerRef.current);
-    }
-
-    resizeTimerRef.current = setTimeout(() => {
-      setupCanvas();
-    }, 200);
-  }, [setupCanvas]);
-
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -174,19 +85,70 @@ const BinaryBackgroundComponent: React.FC = () => {
 
     ctxRef.current = ctx;
 
-    // تنظیمات ثابت context (یک بار)
+    const setupCanvas = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const profile = getPerformanceProfile();
+      const { dpr } = profile;
+
+      const state = stateRef.current;
+
+      canvas.width = Math.max(1, Math.floor(width * dpr));
+      canvas.height = Math.max(1, Math.floor(height * dpr));
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      ctx.fillStyle = BACKGROUND_COLOR;
+      ctx.fillRect(0, 0, width, height);
+
+      const nextColumns = Math.ceil(width / FONT_SIZE);
+
+      const nextX = new Array(nextColumns);
+      const nextStyles = new Array(nextColumns);
+
+      for (let i = 0; i < nextColumns; i++) {
+        nextX[i] = i * FONT_SIZE;
+        const colorBase = COLORS[i % COLORS.length];
+        const alpha = 0.16 + ((i * 7) % 28) / 100;
+        nextStyles[i] = `${colorBase}${alpha})`;
+      }
+
+      state.columnX = nextX;
+      state.columnStyles = nextStyles;
+
+      if (state.columns !== nextColumns) {
+        const previousDrops = state.drops;
+        const nextDrops = new Array(nextColumns);
+
+        for (let i = 0; i < nextColumns; i++) {
+          if (i < previousDrops.length) {
+            nextDrops[i] = previousDrops[i];
+          } else {
+            nextDrops[i] = Math.random() * Math.max(1, height / FONT_SIZE);
+          }
+        }
+
+        state.drops = nextDrops;
+        state.columns = nextColumns;
+      } else if (state.drops.length === 0) {
+        state.drops = new Array(nextColumns).fill(1);
+        state.columns = nextColumns;
+      }
+
+      state.width = width;
+      state.height = height;
+      state.dpr = dpr;
+      state.profile = profile;
+    };
+
     ctx.font = BASE_FONT;
     ctx.textBaseline = 'alphabetic';
 
     setupCanvas();
 
     const draw = () => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-
-      const ctx = ctxRef.current;
-      if (!ctx) return;
-
       const { width, height, columns, drops, columnX, columnStyles, profile } = stateRef.current;
 
       if (!width || !height || !columns || !drops.length) return;
@@ -252,6 +214,16 @@ const BinaryBackgroundComponent: React.FC = () => {
 
     startAnimation();
 
+    const handleResize = () => {
+      if (resizeTimerRef.current) {
+        clearTimeout(resizeTimerRef.current);
+      }
+
+      resizeTimerRef.current = setTimeout(() => {
+        setupCanvas();
+      }, 200);
+    };
+
     window.addEventListener('resize', handleResize, { passive: true });
 
     const handleVisibilityChange = () => {
@@ -263,7 +235,8 @@ const BinaryBackgroundComponent: React.FC = () => {
         }
       } else {
         stateRef.current.isVisible = true;
-        setupCanvas(false);
+        // خط زیر حذف شد تا رد پاها پاک نشوند
+        // setupCanvas(false); 
         startAnimation();
       }
     };
@@ -284,7 +257,7 @@ const BinaryBackgroundComponent: React.FC = () => {
       window.removeEventListener('resize', handleResize);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [handleResize, setupCanvas]);
+  }, []);
 
   return (
     <canvas

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, Component, ReactNode } from 'react';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { Footer } from './components/Footer';
@@ -45,15 +45,33 @@ const scrollToWhenReady = (id: string, attempts = 20) => {
   }
 };
 
+class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error("خطای کلی برنامه:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', color: 'white', background: '#000' }}>خطایی رخ داد. لطفاً صفحه را رفرش کنید.</div>;
+    }
+    return this.props.children;
+  }
+}
+
 export default function App() {
   const handleScrollToSection = (sectionId: string) => {
     const cleanId = sectionId.replace('#', '').replace('/', '');
     if (cleanId === 'terms' || cleanId === 'privacy') {
-      window.dispatchEvent(
-        new CustomEvent('sq-scroll-to-tab', {
-          detail: { tab: cleanId },
-        })
-      );
+      window.dispatchEvent(new CustomEvent('sq-scroll-to-tab', { detail: { tab: cleanId } }));
     }
     scrollToWhenReady(cleanId);
     window.history.replaceState(null, '', `#${cleanId}`);
@@ -65,23 +83,17 @@ export default function App() {
     const target = hash || pathname;
     if (target) {
       if (target === 'terms' || target === 'privacy') {
-        window.dispatchEvent(
-          new CustomEvent('sq-scroll-to-tab', {
-            detail: { tab: target },
-          })
-        );
+        window.dispatchEvent(new CustomEvent('sq-scroll-to-tab', { detail: { tab: target } }));
       }
       scrollToWhenReady(target);
     }
   }, []);
 
   return (
-    <>
+    <ErrorBoundary>
       <BinaryBackground />
       <AmbientGlowLayer />
       <Navbar onScrollToSection={handleScrollToSection} />
-      
-      {/* فقط این خط اضافه شده */}
       <main id="main-content">
         <HeroSection onScrollToSection={handleScrollToSection} />
         <ProtocolDeepDive onScrollToSection={handleScrollToSection} />
@@ -94,8 +106,7 @@ export default function App() {
         <FaqSection onScrollToSection={handleScrollToSection} />
         <PrivacyAndTermsSection onScrollToSection={handleScrollToSection} />
       </main>
-      
       <Footer onScrollToSection={handleScrollToSection} />
-    </>
+    </ErrorBoundary>
   );
 }

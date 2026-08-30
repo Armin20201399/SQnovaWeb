@@ -1,16 +1,16 @@
-import tailwindcss from '@tailwindcss/vite';
-import react from '@vitejs/plugin-react';
-import path from 'path';
 import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
+import path from 'path';
 
 export default defineConfig({
   plugins: [
     react(),
-    tailwindcss(),
+    tailwindcss(), // این خط حیاتی است!
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, '.'),
+      '@': path.resolve(import.meta.dirname, '.'),
     },
   },
   server: {
@@ -59,5 +59,4 @@ export default defineConfig({
     assetsInlineLimit: 4096,
     emptyOutDir: true,
   },
-  // optimizeDeps حذف شد (طبق گایدلاین بخش ۳)
 });

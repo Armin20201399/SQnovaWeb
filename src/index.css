@@ -105,11 +105,7 @@
 
 .glass-card-hover:hover {
   transform: translateY(-2px);
-  /* 🔥 جایگزینی transition: all با properties مشخص */
-  transition:
-    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ===== Reveal Animations ===== */
@@ -135,7 +131,7 @@
   }
 }
 
-/* ===== سایر کلاس‌ها ===== */
+/* ===== سایر کلاسها ===== */
 .bg-cyber-grid {
   background-image:
     linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
