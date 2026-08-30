@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+:root {
+  --color-primary: #a855f7;
+  --color-bg: #020617;
+  --radius-md: 1rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 /* ===== فونت‌های Self-Hosted ===== */
 @font-face {
   font-family: 'Vazirmatn';
@@ -156,7 +167,7 @@
   transform: rotate(20deg) translateX(320%);
 }
 
-/* ===== انیمیشن‌های خاص لوگو (اضافه شده برای نسخه قبلی) ===== */
+/* ===== انیمیشن‌های خاص لوگو (اضافه شده برای جلوگیری از خطا) ===== */
 .flame-binary-frame-a {
   animation: flame-binary-frame-a 0.5s linear infinite;
 }
