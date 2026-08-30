@@ -1,5 +1,5 @@
 import { useState, useEffect, memo } from 'react';
-import { Lock, FileText, CheckCircle2, Send, RotateCcw, Smartphone, Share2, Clock } from 'lucide-react';
+import { Lock, FileText, Database, EyeOff, Trash2, RotateCcw, Smartphone, Share2, Clock } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 import { SectionShell } from './ui/SectionShell';
 
@@ -14,138 +14,123 @@ const PrivacyAndTermsSectionComponent = () => {
     return () => window.removeEventListener('sq-scroll-to-tab', handleTabChange as EventListener);
   }, []);
 
+  const privacyFeatures = [
+    {
+      icon: EyeOff,
+      color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+      title: 'عدم ذخیره هیچ لاگی',
+      desc: 'هیچ لاگی از ترافیک، سایت‌های بازدیدشده یا فعالیت آنلاینت ذخیره نمی‌کنیم. نه موقت، نه دائم!'
+    },
+    {
+      icon: Database,
+      color: 'text-sky-400 bg-sky-500/10 border-sky-500/20',
+      title: 'دیتابیس اختصاصی',
+      desc: 'اطلاعات حساب کاربری (شماره تماس، یوزرنیم تلگرام) فقط برای صدور اشتراک استفاده می‌شه و کاملاً امنه.'
+    },
+    {
+      icon: Lock,
+      color: 'text-purple-400 bg-purple-500/10 border-purple-500/20',
+      title: 'حریم مطلق بدون استثنا',
+      desc: 'اطلاعات شما هرگز به شخص یا سازمان سومی فروخته یا اجاره داده نمی‌شه. نقطه!'
+    },
+    {
+      icon: Trash2,
+      color: 'text-rose-400 bg-rose-500/10 border-rose-500/20',
+      title: 'حق فراموشی',
+      desc: 'هر وقت خواستی، می‌تونی از پشتیبانی بخوای اطلاعاتت رو کامل و فوری حذف کنیم.'
+    }
+  ];
+
+  const termsFeatures = [
+    {
+      icon: RotateCcw,
+      color: 'text-pink-400 bg-pink-500/10 border-pink-500/20',
+      title: 'بازگشت وجه',
+      desc: 'اگه مشکل از سمت ما باشه (نقص فنی)، کل مبلغ بدون کم‌وکاست برمی‌گرده.'
+    },
+    {
+      icon: Smartphone,
+      color: 'text-sky-400 bg-sky-500/10 border-sky-500/20',
+      title: 'محدودیت دیوایس',
+      desc: 'هر پلن سقف تعداد دیوایس همزمان خاص خودش رو داره. برای افزایش سقف با پشتیبانی در میون بذار.'
+    },
+    {
+      icon: Share2,
+      color: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
+      title: 'اشتراک‌گذاری لینک',
+      desc: 'لینک اختصاصیت رو توی فضاهای عمومی به اشتراک نذار! اگه تعداد کاربران از سقف بیشتر بشه، مسئولیتش با خودته.'
+    },
+    {
+      icon: Clock,
+      color: 'text-purple-400 bg-purple-500/10 border-purple-500/20',
+      title: 'جبران قطعی سرویس',
+      desc: 'اگه سرویس قطع بشه، مدت‌زمان اشتراکت به همون میزان تمدید می‌شه. حتی به عنوان اعتمادسازی، زمان اضافه هم می‌گیرید!'
+    }
+  ];
+
+  const activeFeatures = activeTab === 'privacy' ? privacyFeatures : termsFeatures;
+
   return (
     <SectionShell id="privacy-terms">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex items-center justify-center gap-2 mb-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        <div className="flex items-center justify-center gap-3 mb-10">
           <button
             onClick={() => setActiveTab('privacy')}
-            className={`px-5 py-2 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-1.5 ${
+            className={`px-6 py-3 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-300 flex items-center gap-2 ${
               activeTab === 'privacy'
-                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-[0_0_20px_rgba(52,211,153,0.3)]'
+                ? 'bg-gradient-to-r from-emerald-600 to-teal-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.3)]'
                 : 'bg-slate-900/80 hover:bg-slate-800/80 text-slate-400 border border-white/10'
             }`}
           >
-            <Lock className="w-3.5 h-3.5" /> حریم خصوصی
+            <Lock className="w-4 h-4" /> حریم خصوصی
           </button>
           <button
             onClick={() => setActiveTab('terms')}
-            className={`px-5 py-2 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-1.5 ${
+            className={`px-6 py-3 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-300 flex items-center gap-2 ${
               activeTab === 'terms'
-                ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-[0_0_20px_rgba(168,85,247,0.3)]'
+                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]'
                 : 'bg-slate-900/80 hover:bg-slate-800/80 text-slate-400 border border-white/10'
             }`}
           >
-            <FileText className="w-3.5 h-3.5" /> قوانین و شرایط
+            <FileText className="w-4 h-4" /> قوانین و شرایط
           </button>
         </div>
 
-        <div
-          className=""
-        >
-          {activeTab === 'privacy' ? (
-            <div id="privacy" className="mb-20 scroll-mt-28">
-              <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center">
-                  <BinaryText binaryClassName="text-emerald-500/30" leftBinary="0101" rightBinary="1010">حریم خصوصیت، خط قرمز ماست 🔒</BinaryText>
-                </h2>
-                <p className="text-slate-300 text-base sm:text-lg font-medium leading-relaxed text-center">نه لاگ نگه می‌داریم، نه سرک می‌کشیم توی ترافیکت</p>
-                <p className="text-slate-400 text-sm sm:text-base leading-relaxed text-center max-w-2xl mx-auto">ما توی SQ nova به امنیت دیتای شما به‌عنوان یه اصل غیرقابل‌مذاکره نگاه می‌کنیم، نه یه شعار تبلیغاتی. برای همین:</p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto mb-10 text-right">
-                {[
-                  { title: 'عدم ذخیره هرگونه لاگ ارتباطی', desc: 'هیچ لاگی از ترافیک، سایت‌های بازدیدشده، مقصد اتصال یا فعالیت آنلاینت ذخیره نمی‌کنیم — نه موقت، نه دائم.' },
-                  { title: 'دیتابیس اختصاصی و رمزنگاری‌شده', desc: 'اطلاعات حساب کاربری (مثل شماره تماس یا یوزرنیم تلگرام) توی یه دیتابیس اختصاصی و ایمن نگهداری می‌شه و فقط برای صدور اشتراک و پشتیبانی ازش استفاده می‌شه.' },
-                  { title: 'حریم مطلق بدون اشتراک‌گذاری شخص ثالث', desc: 'هیچ اطلاعاتی از شما به شخص یا سازمان سومی فروخته، اجاره داده یا به اشتراک گذاشته نمی‌شه. نقطه.' },
-                  { title: 'حق فراموشی و حذف فوری اطلاعات', desc: 'هر وقت خواستی می‌تونی از طریق پشتیبانی درخواست حذف کامل اطلاعاتت رو بدی و ما در سریع‌ترین زمان انجامش می‌دیم.' },
-                ].map((item, idx) => (
-                  <div key={idx} className="p-6 sm:p-7 rounded-3xl bg-slate-900/80 border border-white/10 transition-all duration-300 hover:border-emerald-500/40 hover:shadow-[0_10px_35px_rgba(16,185,129,0.12)] shine-effect flex gap-4 items-start">
-                    <div className="p-2 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex-shrink-0 mt-0.5"><CheckCircle2 className="w-5 h-5" /></div>
-                    <div className="space-y-1">
-                      <h3 className="font-bold text-white text-base">{item.title}</h3>
-                      <p className="text-sm text-slate-300 leading-relaxed">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="max-w-3xl mx-auto p-5 rounded-3xl bg-slate-900/80 border border-emerald-500/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-right">
-                <div className="text-xs sm:text-sm text-slate-300">اگه سوال یا نگرانی خاصی درباره حریم خصوصیت داری، همیشه می‌تونی از طریق پشتیبانی تلگرام مستقیم باهامون در میون بذاری.</div>
-                <a href="https://t.me/ArminSQ" target="_blank" rel="noreferrer" className="px-5 py-2.5 rounded-full bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-bold transition flex items-center justify-center gap-2 flex-shrink-0">
-                  <Send className="w-3.5 h-3.5 text-emerald-300" /><span>گفتگو با پشتیبانی</span>
-                </a>
-              </div>
-            </div>
-          ) : (
-            <div id="terms" className="scroll-mt-28">
-              <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center">
-                  <BinaryText binaryClassName="text-purple-500/30" leftBinary="1010" rightBinary="0101">قانون بازی رو بلدیم، رعایتش می‌کنیم 📜</BinaryText>
-                </h2>
-                <p className="text-slate-400 text-sm sm:text-base leading-relaxed text-center max-w-2xl mx-auto">شرایط شفاف بازگشت وجه، محدودیت دیوایس‌ها، امنیت لینک اختصاصی و تضمین جبران قطعی</p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto text-right">
-                {/* کارت ۱: بازگشت وجه و انصراف */}
-                <div className="p-6 sm:p-7 rounded-3xl bg-slate-900/80 border border-white/10 transition-all duration-300 hover:border-pink-500/40 hover:shadow-[0_10px_35px_rgba(236,72,153,0.12)] shine-effect flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-2.5 rounded-2xl bg-pink-500/10 text-pink-400 border border-pink-500/20"><RotateCcw className="w-5 h-5" /></div>
-                      <h3 className="text-lg font-bold text-white">بازگشت وجه و انصراف</h3>
-                    </div>
-                    <div className="space-y-3 text-sm text-slate-300 leading-relaxed">
-                      <div className="flex items-start gap-2.5"><CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-1" /><p>اگه مشکل از سمت ما باشه (اختلال یا نقص فنی در سرویس)، کل مبلغ پرداختی بدون کم‌وکاست بهت برمی‌گرده.</p></div>
-                      <div className="flex items-start gap-2.5"><CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-1" /><p>اگه بخوای بدون دلیل فنی انصراف بدی، امکان بازگشت وجه هست، ولی با کسر ۳۰٪ از مبلغ اولیه به‌علاوه هزینه‌ی حجم/زمان مصرفی محاسبه می‌شه.</p></div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* کارت ۲: محدودیت دیوایس و کاربران */}
-                <div className="p-6 sm:p-7 rounded-3xl bg-slate-900/80 border border-white/10 transition-all duration-300 hover:border-sky-500/40 hover:shadow-[0_10px_35px_rgba(56,189,248,0.12)] shine-effect flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-2.5 rounded-2xl bg-sky-500/10 text-sky-400 border border-sky-500/20"><Smartphone className="w-5 h-5" /></div>
-                      <h3 className="text-lg font-bold text-white">محدودیت دیوایس و کاربران</h3>
-                    </div>
-                    <div className="space-y-3 text-sm text-slate-300 leading-relaxed">
-                      <div className="flex items-start gap-2.5"><CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-1" /><p>هر پلن بسته به نوعش سقف تعداد کاربر/دیوایس همزمان متفاوتی داره. اگه نیاز به افزایش این سقف داری، کافیه از طریق پشتیبانی درخواست بدی.</p></div>
-                    </div>
-                  </div>
-                  <div className="mt-4 pt-3 border-t border-white/5 text-xs text-sky-300 font-mono">Multi-device concurrency control</div>
-                </div>
-
-                {/* کارت ۳: اشتراک‌گذاری لینک */}
-                <div className="p-6 sm:p-7 rounded-3xl bg-slate-900/80 border border-white/10 transition-all duration-300 hover:border-amber-500/40 hover:shadow-[0_10px_35px_rgba(251,191,36,0.12)] shine-effect flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-2.5 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20"><Share2 className="w-5 h-5" /></div>
-                      <h3 className="text-lg font-bold text-white">اشتراک‌گذاری لینک</h3>
-                    </div>
-                    <div className="space-y-3 text-sm text-slate-300 leading-relaxed">
-                      <div className="flex items-start gap-2.5"><CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-1" /><p>اشتراک‌گذاری لینک اختصاصی‌ات در فضاهای عمومی یا مجازی (گروه‌ها، کانال‌ها و...) ممنوعه.</p></div>
-                      <div className="flex items-start gap-2.5"><CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-1" /><p>اگه تعداد کاربران فعال روی لینکت از سقف مجاز پلن بیشتر بشه، هرگونه کندی یا اختلال ناشی از اون، مسئولیتش با خود کاربره.</p></div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* کارت ۴: سیاست جبران قطعی سرویس */}
-                <div className="p-6 sm:p-7 rounded-3xl bg-slate-900/80 border border-white/10 transition-all duration-300 hover:border-purple-500/40 hover:shadow-[0_10px_35px_rgba(168,85,247,0.12)] shine-effect flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-2.5 rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20"><Clock className="w-5 h-5" /></div>
-                      <h3 className="text-lg font-bold text-white">سیاست جبران قطعی سرویس</h3>
-                    </div>
-                    <div className="space-y-3 text-sm text-slate-300 leading-relaxed">
-                      <div className="flex items-start gap-2.5"><CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-1" /><p>در صورت بروز اختلال فنی از سمت ما، مدت‌زمان اشتراکت به همون میزان تمدید می‌شه.</p></div>
-                      <div className="flex items-start gap-2.5"><CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-1" /><p>در مواردی به‌عنوان جبران و اعتمادسازی، حتی زمان اضافه تری هم به حساب کاربر اضافه می‌کنیم.</p></div>
-                    </div>
-                  </div>
-                  <div className="mt-4 pt-3 border-t border-white/5 text-xs text-purple-300 flex items-center gap-1.5">
-                    <span>✨ تضمین پایبندی به کیفیت خدمات</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+        <div className="text-center mb-12 space-y-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center">
+            <BinaryText binaryClassName="text-emerald-500/30" leftBinary="0101" rightBinary="1010">
+              {activeTab === 'privacy' ? 'حریم خصوصیت، خط قرمز ماست 🔒' : 'قانون بازی رو بلدیم و رعایتش می‌کنیم 📜'}
+            </BinaryText>
+          </h2>
+          <p className="text-slate-400 text-sm sm:text-base leading-relaxed text-center max-w-2xl mx-auto">
+            {activeTab === 'privacy'
+              ? 'خیال راحت باش، ما با امنیتت شوخی نداریم!'
+              : 'شرایط شفاف، بدون هیچ متن پیچیده‌ای.'}
+          </p>
         </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+          {activeFeatures.map((feature, idx) => (
+            <div 
+              key={idx} 
+              className="group p-6 rounded-3xl bg-slate-900/80 border border-white/10 transition-all duration-300 hover:-translate-y-1 hover:border-pink-500/40 hover:shadow-[0_10px_35px_rgba(236,72,153,0.12)] flex gap-4 items-start shine-effect"
+            >
+              <div className={`p-3.5 rounded-2xl border ${feature.color}`}>
+                <feature.icon className="w-6 h-6" />
+              </div>
+              <div className="space-y-1 text-right">
+                <h3 className="font-bold text-white text-lg group-hover:text-slate-100 transition">
+                  {feature.title}
+                </h3>
+                <p className="text-sm text-slate-400 leading-relaxed">
+                  {feature.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
       </div>
     </SectionShell>
   );

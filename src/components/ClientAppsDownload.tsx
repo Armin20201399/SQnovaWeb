@@ -1,12 +1,11 @@
 import { useState, memo } from 'react';
 import { CLIENT_APPS } from '../data/vpnData';
-import { Download, Smartphone, Monitor, ExternalLink, Star } from 'lucide-react';
+import { Download, Smartphone, Monitor, ExternalLink, Star, ChevronDown, ChevronUp } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 import { SectionShell } from './ui/SectionShell';
 
 type ClientApp = typeof CLIENT_APPS[number];
 
-// پارامتر index حذف شد
 const AppCard = ({ app }: { app: ClientApp }) => {
   return (
     <div
@@ -62,6 +61,8 @@ const AppCard = ({ app }: { app: ClientApp }) => {
 
 const ClientAppsDownloadComponent = () => {
   const [activeCategory, setActiveCategory] = useState<'mobile' | 'pc'>('mobile');
+  const [showDownloadBox, setShowDownloadBox] = useState(false);
+
   const filteredApps = CLIENT_APPS.filter((app) => {
     if (activeCategory === 'mobile') return app.platform === 'android' || app.platform === 'ios';
     return app.platform === 'windows';
@@ -70,46 +71,64 @@ const ClientAppsDownloadComponent = () => {
   return (
     <SectionShell id="apps">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-14 space-y-4">
-          <h2
-            className={`text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center`}
-          >
+        
+        {/* عنوان اصلی */}
+        <div className="text-center max-w-3xl mx-auto mb-8 space-y-4">
+          <h2 className={`text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center`}>
             <BinaryText binaryClassName="text-purple-500/30" leftBinary="101" rightBinary="010">
               دانلود نرم‌افزارهای کلاینت 📲
             </BinaryText>
           </h2>
         </div>
 
-        <div className="flex justify-center gap-3 mb-10">
+        {/* دکمه کشویی نمایش باکس دانلود */}
+        <div className="flex justify-center mb-8">
           <button
-            onClick={() => setActiveCategory('mobile')}
-            className={`px-6 py-3 rounded-2xl text-xs sm:text-sm font-bold transition duration-200 border flex items-center justify-center gap-2 ${
-              activeCategory === 'mobile'
-                ? 'bg-gradient-to-r from-purple-600 to-pink-600 border-pink-400/80 text-white shadow-[0_0_20px_rgba(236,72,153,0.35)] scale-105'
-                : 'bg-slate-900/80 hover:bg-slate-800/80 border-white/10 text-slate-400 hover:text-slate-200'
-            }`}
+            onClick={() => setShowDownloadBox(!showDownloadBox)}
+            className="group flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-base shadow-[0_10px_25px_rgba(236,72,153,0.35)] transition-all duration-300 hover:scale-105"
           >
-            <Smartphone className="w-4 h-4" />
-            <span>نرم‌افزارهای موبایل (v2box و v2rayNG)</span>
-          </button>
-          <button
-            onClick={() => setActiveCategory('pc')}
-            className={`px-6 py-3 rounded-2xl text-xs sm:text-sm font-bold transition duration-200 border flex items-center justify-center gap-2 ${
-              activeCategory === 'pc'
-                ? 'bg-gradient-to-r from-purple-600 to-pink-600 border-pink-400/80 text-white shadow-[0_0_20px_rgba(236,72,153,0.35)] scale-105'
-                : 'bg-slate-900/80 hover:bg-slate-800/80 border-white/10 text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            <Monitor className="w-4 h-4" />
-            <span>نرم‌افزار کامپیوتر و ویندوز (v2rayN)</span>
+            <Download className="w-5 h-5" />
+            <span>{showDownloadBox ? 'بستن باکس دانلود' : 'نمایش باکس دانلود'}</span>
+            {showDownloadBox ? <ChevronUp className="w-5 h-5 transition-transform" /> : <ChevronDown className="w-5 h-5 transition-transform" />}
           </button>
         </div>
 
-        <div className={`grid grid-cols-1 ${activeCategory === 'mobile' ? 'md:grid-cols-2' : 'max-w-2xl mx-auto'} gap-6 mb-12 text-center`}>
-          {filteredApps.map((app) => (
-            <AppCard key={app.id} app={app} />
-          ))}
-        </div>
+        {/* محتوای شرطی (وقتی کلیک شد لود و باز می‌شود) */}
+        {showDownloadBox && (
+          <>
+            <div className="flex justify-center gap-3 mb-10">
+              <button
+                onClick={() => setActiveCategory('mobile')}
+                className={`px-6 py-3 rounded-2xl text-xs sm:text-sm font-bold transition duration-200 border flex items-center justify-center gap-2 ${
+                  activeCategory === 'mobile'
+                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 border-pink-400/80 text-white shadow-[0_0_20px_rgba(236,72,153,0.35)] scale-105'
+                    : 'bg-slate-900/80 hover:bg-slate-800/80 border-white/10 text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <Smartphone className="w-4 h-4" />
+                <span>نرم‌افزارهای موبایل (v2box و v2rayNG)</span>
+              </button>
+              <button
+                onClick={() => setActiveCategory('pc')}
+                className={`px-6 py-3 rounded-2xl text-xs sm:text-sm font-bold transition duration-200 border flex items-center justify-center gap-2 ${
+                  activeCategory === 'pc'
+                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 border-pink-400/80 text-white shadow-[0_0_20px_rgba(236,72,153,0.35)] scale-105'
+                    : 'bg-slate-900/80 hover:bg-slate-800/80 border-white/10 text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <Monitor className="w-4 h-4" />
+                <span>نرم‌افزار کامپیوتر و ویندوز (v2rayN)</span>
+              </button>
+            </div>
+
+            <div className={`grid grid-cols-1 ${activeCategory === 'mobile' ? 'md:grid-cols-2' : 'max-w-2xl mx-auto'} gap-6 mb-12 text-center`}>
+              {filteredApps.map((app) => (
+                <AppCard key={app.id} app={app} />
+              ))}
+            </div>
+          </>
+        )}
+        
       </div>
     </SectionShell>
   );

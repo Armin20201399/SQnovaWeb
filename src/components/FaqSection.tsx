@@ -1,5 +1,5 @@
 import { useState, memo } from 'react';
-import { HelpCircle, ChevronDown, Send, ShieldCheck, Sparkles, Smartphone, RefreshCw, ExternalLink, Lock } from 'lucide-react';
+import { ChevronDown, Send, ShieldCheck, Smartphone, RefreshCw, Lock, Zap, Wallet } from 'lucide-react';
 import { BinaryText } from './BinaryText';
 import { SectionShell } from './ui/SectionShell';
 
@@ -14,7 +14,6 @@ interface FaqItem {
   icon: React.ElementType;
 }
 
-// پارامتر index حذف شد
 const FaqItemComponent = ({
   faq,
   isOpen,
@@ -28,10 +27,10 @@ const FaqItemComponent = ({
 
   return (
     <div
-      className={`rounded-3xl border transition-all duration-300 overflow-hidden ${
+      className={`group rounded-3xl border transition-all duration-300 overflow-hidden ${
         isOpen
           ? 'bg-slate-900/80 border-pink-500/40 shadow-[0_10px_35px_rgba(236,72,153,0.12)]'
-          : 'bg-slate-900/80 border-white/10 hover:border-white/20'
+          : 'bg-slate-900/80 border-white/10 hover:border-pink-500/30'
       }`}
     >
       <button
@@ -39,19 +38,25 @@ const FaqItemComponent = ({
         className="w-full p-5 sm:p-6 flex items-center justify-between gap-4 text-right focus:outline-none"
         aria-expanded={isOpen}
       >
-        <div className="flex items-center gap-3.5">
-          <div className={`p-2 rounded-2xl border transition-colors ${isOpen ? 'bg-pink-500/20 text-pink-300 border-pink-500/30' : 'bg-slate-900/80 text-slate-400 border-white/5'}`}>
-            <Icon className="w-4 h-4" />
+        <div className="flex items-center gap-4">
+          <div className={`p-3 rounded-2xl border transition-colors ${
+            isOpen 
+              ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-pink-300 border-pink-500/30' 
+              : 'bg-slate-900/80 text-slate-400 border-white/10 group-hover:text-pink-300'
+          }`}>
+            <Icon className="w-5 h-5" />
           </div>
-          <span className="text-base sm:text-lg font-bold text-white leading-snug">{faq.question}</span>
+          <span className="text-base sm:text-lg font-bold text-white group-hover:text-slate-100 transition leading-snug">
+            {faq.question}
+          </span>
         </div>
         <div className={`p-1.5 rounded-full bg-slate-900/80 text-slate-400 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180 text-pink-400 bg-pink-500/10' : ''}`}>
-          <ChevronDown className="w-4 h-4" />
+          <ChevronDown className="w-5 h-5" />
         </div>
       </button>
 
       <div
-        className={`grid transition-[grid-template-rows,opacity] duration-250 ease-in-out ${
+        className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${
           isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
         }`}
         aria-hidden={!isOpen}
@@ -86,47 +91,46 @@ const FaqSectionComponent = ({ onScrollToSection }: FaqSectionProps) => {
   const FAQS: FaqItem[] = [
     {
       id: 'faq-1',
-      icon: Sparkles,
-      question: 'چرا SQ nova بهتر از بقیه‌ست؟',
+      icon: Zap,
+      question: 'خب، چرا انقدر خاص و بهتر از بقیه‌اید؟',
       answer: (
         <div className="space-y-2">
-          <p>ما از پروتکل‌های پیشرفته نسل جدید مانند Hysteria 2 Turbo بر پایه الگوریتم Brisk و TCP Raw Reality به همراه روتینگ سخت‌افزاری میکروتیک در دیتاسنترهای داخلی و سرورهای اختصاصی 10G هتزنر و APEX اروپا استفاده می‌کنیم.</p>
-          <p className="text-emerald-300 text-xs font-semibold">نتیجه: پکت‌لاس نزدیک به صفر، پینگ پایدار برای بازی‌های آنلاین و استریم روان ویدیوهای 4K بدون قطعی حتی در ساعات اوج مصرف.</p>
+          <p>ما از جدیدترین و قوی‌ترین پروتکل‌های دنیا (مثل Hysteria 2 Turbo و TCP Reality) استفاده می‌کنیم و اون‌ها رو روی سرورهای اختصاصی 10G با روتینگ سخت‌افزاری اجرا کردیم.</p>
+          <p className="text-emerald-300 text-xs font-bold">نتیجه‌ش؟ پینگ فوق‌العاده پایین، پکت‌لاس نزدیک به صفر و اینترنتی که واقعاً حس می‌کنی!</p>
         </div>
       )
     },
     {
       id: 'faq-2',
       icon: Smartphone,
-      question: 'رو گوشیم هم کار می‌کنه یا فقط کامپیوتر؟',
+      question: 'روی گوشی هم جواب می‌ده یا فقط کامپیوتر؟',
       answer: (
         <div className="space-y-2">
-          <p>ساب هوشمند SQ nova کاملاً مالتی‌پلتفرم است و روی تمامی سیستم‌عامل‌ها شامل آیفون (iOS)، اندروید، ویندوز، مک‌بوک و لینوکس با بهترین اپلیکیشن‌های پیشنهادی مثل v2box، v2rayNG و v2rayN با یک کلیک اجرا می‌شود.</p>
+          <p>همه‌جا! گوشی (اندروید و آیفون)، کامپیوتر و مک. فقط کافیه اپ پیشنهادی ما (مثل v2box یا v2rayN) رو نصب کنی و لینک ساب هوشمند رو داخلش بزنی. همه‌چیز با یک کلیک وصل می‌شه!</p>
         </div>
       )
     },
     {
       id: 'faq-3',
       icon: RefreshCw,
-      question: 'اگه قطع بشه چیکار کنم؟',
+      question: 'اگه یهو قطع بشه چیکار کنم؟',
       answer: (
         <div className="space-y-2">
-          <p>به لطف سیستم سوییچ خودکار مسیر و وجود چندین نود فعال در آلمان، هلند، سوئد و ترکیه، در صورت بروز اختلال در یک مسیر کافیست در برنامه دکمه Update Subscription را بزنید تا بلافاصله به نود پایدار دیگر متصل شوید. همچنین پشتیبانی ۲۴ ساعته تلگرام همواره در دسترس است.</p>
+          <p>نگران نباش! سیستم هوشمند ما به صورت خودکار تو کمتر از نیم ثانیه مسیرت رو عوض می‌کنه و می‌بره روی بهترین نود. کافیه فقط دکمه‌ی "Update Subscription" رو بزنی تا دوباره وصل شی.</p>
         </div>
       )
     },
     {
       id: 'faq-4',
       icon: Lock,
-      question: 'آیا لاگ نگه می‌دارید؟',
+      question: 'برامون لاگ می‌گیرید؟',
       answer: (
         <div className="space-y-3">
-          <p>خیر! امنیت و حریم شخصی کاربران خط قرمز ماست. ما هیچ‌گونه لاگی از ترافیک، سایت‌های بازدید شده یا فعالیت آنلاین شما ذخیره نمی‌کنیم.</p>
+          <p>نه! اصلاً نمی‌دونیم شما کجا می‌ری و چی کار می‌کنی. حریم خصوصی شما برامون مقدسه و هیچ اطلاعاتی رو ذخیره نمی‌کنیم. خیالت راحت باشه!</p>
           <div>
-            <button onClick={handleGoToPrivacy} className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition shadow-[0_0_12px_rgba(52,211,153,0.15)]">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>مشاهده تعهدنامه کامل حریم خصوصی 🔒</span>
-              <ExternalLink className="w-3 h-3 ml-1" />
+            <button onClick={handleGoToPrivacy} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition">
+              <ShieldCheck className="w-4 h-4" />
+              <span>تعهدنامه حریم خصوصی رو ببین 🔒</span>
             </button>
           </div>
         </div>
@@ -134,11 +138,11 @@ const FaqSectionComponent = ({ onScrollToSection }: FaqSectionProps) => {
     },
     {
       id: 'faq-5',
-      icon: HelpCircle,
-      question: 'چطوری تمدید کنم؟',
+      icon: Wallet,
+      question: 'تمدیدش چقدر راحته؟',
       answer: (
         <div className="space-y-2">
-          <p>پیش از اتمام حجم یا زمان اشتراک، پیام یادآوری دریافت خواهید کرد و می‌توانید به راحتی با ارسال پیام به پشتیبانی تلگرام، اشتراک خود را بر روی همان لینک قبلی بدون نیاز به تنظیمات مجدد تمدید فرمایید.</p>
+          <p>خیلی خیلی راحت! قبل از اتمام زمانت بهت پیام می‌دیم. کافیه یه پیام به پشتیبانی بدی و بقیه زمانت رو اضافه کنن. تمام تنظیمات و کانفیگات هم دست‌نخورده باقی می‌مونه و فقط باید دکمه رفرش رو بزنی.</p>
         </div>
       )
     }
@@ -148,12 +152,14 @@ const FaqSectionComponent = ({ onScrollToSection }: FaqSectionProps) => {
     <SectionShell id="faq" className="pt-20 pb-16 scroll-mt-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-          <h2
-            className={`text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center`}
-          >
-            <BinaryText binaryClassName="text-pink-500/30" leftBinary="1010" rightBinary="0101">سوالاتی که همه می‌پرسن ❓</BinaryText>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight text-center">
+            <BinaryText binaryClassName="text-pink-500/30" leftBinary="1010" rightBinary="0101">
+              سوالاتی که خیلی‌ها می‌پرسن ❓
+            </BinaryText>
           </h2>
-          <p className="text-slate-400 text-sm sm:text-base leading-relaxed text-center">پاسخ سریع به متداول‌ترین سوالات درباره عملکرد، سازگاری و امنیت سرویس‌های SQ nova</p>
+          <p className="text-slate-400 text-sm sm:text-base leading-relaxed text-center">
+            جواب سوالات پرتکرارت اینجاست، راحت باش!
+          </p>
         </div>
 
         <div className="space-y-4 mb-10 text-right">
@@ -167,15 +173,15 @@ const FaqSectionComponent = ({ onScrollToSection }: FaqSectionProps) => {
           ))}
         </div>
 
-        <div className="p-6 rounded-3xl bg-slate-900/80 border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-right shine-effect">
+        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-purple-950/50 via-slate-900/80 to-pink-950/50 border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-5 text-center sm:text-right shine-effect">
           <div className="space-y-1 text-center sm:text-right">
-            <h3 className="font-bold text-white text-sm sm:text-base">
-              <BinaryText binaryClassName="text-white/20" leftBinary="01" rightBinary="10">درباره خدمات و شرایط سوالی دارید ؟</BinaryText>
+            <h3 className="font-bold text-white text-base sm:text-lg">
+              <BinaryText binaryClassName="text-white/20" leftBinary="01" rightBinary="10">هنوز سوالی داری؟ 🤔</BinaryText>
             </h3>
-            <p className="text-xs text-slate-400">پشتیبانی تلگرام به صورت ۲۴ ساعته آماده پاسخگویی به تمامی سوالات فنی شماست.</p>
+            <p className="text-xs text-slate-400">تیم پشتیبانی ما ۲۴ ساعته بیداره تا جواب سوالت رو بده!</p>
           </div>
-          <a id="faq-ask-telegram-btn" href="https://t.me/ArminSQ" target="_blank" rel="noreferrer" className="px-6 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/10 hover:border-pink-400 transition flex items-center justify-center gap-2 flex-shrink-0 hover:scale-105">
-            <Send className="w-4 h-4 text-sky-200" />
+          <a href="https://t.me/ArminSQ" target="_blank" rel="noreferrer" className="whitespace-nowrap px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-sm shadow-[0_10px_25px_rgba(236,72,153,0.4)] hover:scale-105 transition duration-300 flex items-center justify-center gap-2 group">
+            <Send className="w-4 h-4 text-sky-200 group-hover:translate-x-1 transition-transform" />
             <span>ارتباط با پشتیبانی و خرید اشتراک</span>
           </a>
         </div>

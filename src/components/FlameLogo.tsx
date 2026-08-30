@@ -24,31 +24,42 @@ const FlameLogoComponent = ({ size = 'md', showText = true, className = '', subt
   const currentSize = SIZE_MAP[size];
 
   return (
-    <div className={`flex items-center gap-2.5 select-none ${className}`}>
+    <div className={`flex items-center gap-3 select-none ${className}`}>
       <div
         className="relative group flex-shrink-0 flex items-center justify-center cursor-pointer"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         aria-hidden="true"
       >
-        <div className={`absolute inset-0 rounded-xl blur-lg transition-all duration-300 pointer-events-none ${isHovered ? 'opacity-100 scale-125 bg-emerald-400/40' : 'opacity-60 bg-emerald-500/25'}`} />
-        <div className={`${currentSize.icon} relative rounded-xl bg-black/90 border border-emerald-500/50 flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(16,185,129,0.25)] transition-all duration-300 ${isHovered ? 'scale-110 border-emerald-400 shadow-[0_0_30px_rgba(16,185,129,0.7)]' : ''}`}>
-          <div className={`absolute inset-0 opacity-75 font-mono text-[10px] leading-[11px] font-bold text-emerald-400 select-none overflow-hidden flex flex-col justify-center items-center pointer-events-none drop-shadow-[0_0_4px_rgba(16,185,129,0.8)] ${isHovered ? 'flame-binary-active' : ''}`}>
-            {BASE_MATRIX.map((row, i) => (
-              <div key={i} className="tracking-widest flame-binary-line">{row}</div>
-            ))}
+        {/* هاله‌ی نوری (Glow) - نرم‌تر و درخشان‌تر */}
+        <div className={`absolute inset-0 rounded-2xl blur-xl transition-all duration-300 ease-out pointer-events-none ${isHovered ? 'opacity-100 scale-125 bg-emerald-400/50' : 'opacity-50 bg-emerald-500/20'}`} />
+        
+        {/* باکس اصلی */}
+        <div className={`${currentSize.icon} relative rounded-2xl bg-slate-950/80 backdrop-blur-md border border-emerald-500/40 flex items-center justify-center overflow-hidden shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all duration-300 ease-out ${isHovered ? 'scale-110 border-emerald-300 shadow-[0_0_40px_rgba(16,185,129,0.6)]' : ''}`}>
+          
+          {/* پس‌زمینه باینری - با محو شدن نرم */}
+          <div className={`absolute inset-0 font-mono text-[10px] leading-[11px] font-bold text-emerald-400 select-none overflow-hidden flex flex-col justify-center items-center pointer-events-none drop-shadow-[0_0_6px_rgba(16,185,129,0.9)] ${isHovered ? 'opacity-100' : 'opacity-70'}`}>
+            <div className={`flex flex-col items-center tracking-widest transition-all duration-300 ${isHovered ? 'scale-110 opacity-0' : 'opacity-100'}`}>
+              {BASE_MATRIX.map((row, i) => (
+                <div key={i} className="flame-binary-line">{row}</div>
+              ))}
+            </div>
             {isHovered && (
-              <div className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none">
-                {HOVER_MATRIX_A.map((row, i) => (
-                  <div key={`a-${i}`} className="absolute tracking-widest opacity-0 flame-binary-frame-a">{row}</div>
-                ))}
-                {HOVER_MATRIX_B.map((row, i) => (
-                  <div key={`b-${i}`} className="absolute tracking-widest opacity-0 flame-binary-frame-b">{row}</div>
-                ))}
+              <div className="absolute inset-0 flex flex-col justify-center items-center tracking-widest transition-opacity duration-300">
+                <div className="absolute flex flex-col justify-center items-center gap-0.5">
+                  {HOVER_MATRIX_A.map((row, i) => (
+                    <div key={`a-${i}`} className="absolute flame-binary-frame-a">{row}</div>
+                  ))}
+                  {HOVER_MATRIX_B.map((row, i) => (
+                    <div key={`b-${i}`} className="absolute flame-binary-frame-b">{row}</div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
-          <svg viewBox="0 0 100 100" className={`w-8 h-8 z-10 transition-all duration-300 ${isHovered ? 'scale-125 drop-shadow-[0_0_15px_rgba(52,211,153,1)]' : 'drop-shadow-[0_0_10px_rgba(16,185,129,0.8)]'}`} fill="none" xmlns="http://www.w3.org/2000/svg">
+          
+          {/* ستاره سبز - با چرخش و درخشش بیشتر */}
+          <svg viewBox="0 0 100 100" className={`w-9 h-9 z-10 transition-all duration-500 ease-out ${isHovered ? 'scale-125 rotate-12 drop-shadow-[0_0_20px_rgba(52,211,153,1)]' : 'drop-shadow-[0_0_10px_rgba(16,185,129,0.8)]'}`} fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#d1fae5" />
@@ -60,11 +71,13 @@ const FlameLogoComponent = ({ size = 'md', showText = true, className = '', subt
           </svg>
         </div>
       </div>
+      
+      {/* متن‌ها */}
       {showText && (
         <div className="flex flex-col text-right">
           <div dir="ltr" className="flex items-baseline gap-1.5 font-['Rajdhani',sans-serif] tracking-tight">
-            <span className={`${currentSize.sq} font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500 drop-shadow-[0_0_15px_rgba(255,140,0,0.6)]`}>SQ</span>
-            <span className={`${currentSize.nova} font-bold text-pink-400 drop-shadow-[0_0_10px_rgba(236,72,153,0.4)]`}>nova</span>
+            <span className={`${currentSize.sq} font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500 drop-shadow-[0_0_18px_rgba(255,140,0,0.7)]`}>SQ</span>
+            <span className={`${currentSize.nova} font-bold text-pink-400 drop-shadow-[0_0_12px_rgba(236,72,153,0.5)]`}>nova</span>
           </div>
           {subtitle && <span className="text-[10px] font-['Vazirmatn'] text-slate-400 font-medium tracking-wide -mt-0.5">{subtitle}</span>}
         </div>

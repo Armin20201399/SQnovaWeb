@@ -4,35 +4,17 @@ import { HeroSection } from './components/HeroSection';
 import { Footer } from './components/Footer';
 import BinaryBackground from './components/BinaryBackground';
 import { AmbientGlowLayer } from './components/AmbientGlowLayer';
-import { createLazySection } from './components/LazySection';
 
-const ProtocolDeepDive = createLazySection<{ onScrollToSection: (id: string) => void }>(() =>
-  import('./components/ProtocolDeepDive')
-);
-const LiveGamingPingSimulator = createLazySection<{ onScrollToSection: (id: string) => void }>(() =>
-  import('./components/LiveGamingPingSimulator')
-);
-const ServerStatusSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() =>
-  import('./components/ServerStatusSection')
-);
-const GameNetPartnershipSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() =>
-  import('./components/GameNetPartnershipSection')
-);
-const FreeTrialDedicatedSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() =>
-  import('./components/FreeTrialDedicatedSection')
-);
-const ServicePackagesSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() =>
-  import('./components/ServicePackagesSection')
-);
-const ClientAppsDownload = createLazySection<{ onScrollToSection: (id: string) => void }>(() =>
-  import('./components/ClientAppsDownload')
-);
-const FaqSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() =>
-  import('./components/FaqSection')
-);
-const PrivacyAndTermsSection = createLazySection<{ onScrollToSection: (id: string) => void }>(() =>
-  import('./components/PrivacyAndTermsSection')
-);
+// همه‌ی کامپوننت‌ها استاتیک ایمپورت شدند (بدون Lazy و بدون هیچ پرشی)
+import ProtocolDeepDive from './components/ProtocolDeepDive';
+import LiveGamingPingSimulator from './components/LiveGamingPingSimulator';
+import ComparisonSection from './components/ComparisonSection';
+import PrivacyAndTermsSection from './components/PrivacyAndTermsSection';
+import FreeTrialBannerSection from './components/FreeTrialBannerSection';
+import InteractivePackagesSection from './components/InteractivePackagesSection';
+import ClientAppsDownload from './components/ClientAppsDownload';
+import GameNetPartnershipSection from './components/GameNetPartnershipSection';
+import FaqSection from './components/FaqSection';
 
 const scrollToWhenReady = (id: string, attempts = 20) => {
   const el = document.getElementById(id);
@@ -97,14 +79,14 @@ export default function App() {
       <main id="main-content">
         <HeroSection onScrollToSection={handleScrollToSection} />
         <ProtocolDeepDive onScrollToSection={handleScrollToSection} />
-        <LiveGamingPingSimulator onScrollToSection={handleScrollToSection} />
-        <ServerStatusSection onScrollToSection={handleScrollToSection} />
-        <GameNetPartnershipSection onScrollToSection={handleScrollToSection} />
-        <FreeTrialDedicatedSection onScrollToSection={handleScrollToSection} />
-        <ServicePackagesSection onScrollToSection={handleScrollToSection} />
-        <ClientAppsDownload onScrollToSection={handleScrollToSection} />
+        <LiveGamingPingSimulator /> {/* پراپ حذف شد */}
+        <ComparisonSection />
+        <PrivacyAndTermsSection /> {/* پراپ حذف شد */}
+        <FreeTrialBannerSection onScrollToSection={handleScrollToSection} />
+        <InteractivePackagesSection />
+        <ClientAppsDownload /> {/* پراپ حذف شد */}
+        <GameNetPartnershipSection />
         <FaqSection onScrollToSection={handleScrollToSection} />
-        <PrivacyAndTermsSection onScrollToSection={handleScrollToSection} />
       </main>
       <Footer onScrollToSection={handleScrollToSection} />
     </ErrorBoundary>
