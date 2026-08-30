@@ -21,11 +21,13 @@ const InteractivePackagesSectionComponent = () => {
     { id: 'hysteria2', label: 'Hysteria 2 Turbo' },
     { id: 'xhttp-vip', label: 'xHTTP VIP' }
   ];
+
   const normalProtocols = [
     { id: 'tcp-reality', label: 'TCP Raw Reality' },
     { id: 'xhttp', label: 'xHTTP Engine' },
     { id: 'mkcp', label: 'mKCP Turbo' }
   ];
+
   const allProtocols = [...specialProtocols, ...normalProtocols];
 
   const handleOrderClick = () => {
@@ -107,36 +109,25 @@ const InteractivePackagesSectionComponent = () => {
             </div>
           </div>
 
-          {/* بخش قیمت */}
           <div className="bg-slate-900/95 border border-white/10 rounded-3xl p-8 flex flex-col items-center justify-center text-center relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-purple-950/50 via-transparent to-pink-950/50 pointer-events-none" />
-            
             <div className="relative z-10 w-full max-w-[320px] mx-auto">
               <span className="text-sm font-bold text-slate-400">قیمت نهایی سرویس شما</span>
               
-              {/* کانتینر اصلی که ارتفاع ثابت دارد */}
               <div className="relative mt-4 mb-4 h-[180px] flex flex-col items-center justify-center">
-                
-                {/* بلوک قیمت (وقتی پروتکل انتخاب شده) */}
                 <div className={`flex items-center justify-center h-[80px] ${protocols.length === 0 ? 'invisible' : ''}`}>
                   <span dir="ltr" className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 whitespace-nowrap">{formattedPrice}</span>
                   <span className="text-xl font-bold text-white mr-1">تومان</span>
                 </div>
 
-                {/* بلوک اطلاعات (وقتی پروتکل انتخاب شده) */}
                 <div className={`space-y-2 text-xs text-slate-300 h-[100px] flex flex-col justify-center ${protocols.length === 0 ? 'invisible' : ''}`}>
                   <p>حجم: {gig.toLocaleString('fa-IR')} گیگابایت</p>
                   <p>مدت زمان: {months.toLocaleString('fa-IR')} ماه</p>
                   <div className="flex justify-center gap-2 mt-3">
-                    {protocols.length > 0 ? (
-                      protocols.map(p => <span key={p} className="px-2 py-1 rounded bg-white/10 text-[10px]">{allProtocols.find(o => o.id === p)?.label}</span>)
-                    ) : (
-                      <span className="px-2 py-1 rounded bg-white/10 text-[10px]">بدون انتخاب</span>
-                    )}
+                    {protocols.length > 0 ? protocols.map(p => <span key={p} className="px-2 py-1 rounded bg-white/10 text-[10px]">{allProtocols.find(o => o.id === p)?.label}</span>) : <span className="px-2 py-1 rounded bg-white/10 text-[10px]">بدون انتخاب</span>}
                   </div>
                 </div>
 
-                {/* پیام وسط‌چین (فقط وقتی پروتکل‌ها خالی هستند نمایش داده می‌شود) */}
                 {protocols.length === 0 && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="text-2xl font-bold text-amber-400">پروتکل مورد نظرتون رو انتخاب کنید</span>
@@ -144,13 +135,8 @@ const InteractivePackagesSectionComponent = () => {
                 )}
               </div>
 
-              {/* دکمه */}
               <div className="w-full h-[52px]">
-                <button 
-                  onClick={handleOrderClick} 
-                  disabled={protocols.length === 0} 
-                  className="w-full h-full flex items-center justify-center gap-2 px-6 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-sm shadow-[0_10px_25px_rgba(236,72,153,0.4)] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed shine-effect"
-                >
+                <button onClick={handleOrderClick} disabled={protocols.length === 0} className="w-full h-full flex items-center justify-center gap-2 px-6 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-sm shadow-[0_10px_25px_rgba(236,72,153,0.4)] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed shine-effect">
                   <Send className="w-4 h-4 text-sky-200" />
                   <span>ثبت سفارش این پلن</span>
                 </button>

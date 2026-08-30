@@ -4,7 +4,13 @@ import { BinaryText } from './BinaryText';
 import { SectionShell } from './ui/SectionShell';
 
 interface FaqSectionProps { onScrollToSection?: (sectionId: string) => void; }
-interface FaqItem { id: string; question: string; answer: React.ReactNode; icon: React.ElementType; }
+
+interface FaqItem {
+  id: string;
+  question: string;
+  answer: React.ReactNode;
+  icon: React.ElementType;
+}
 
 const FaqItemComponent = ({ faq, isOpen, onToggle }: { faq: FaqItem; isOpen: boolean; onToggle: (id: string) => void; }) => {
   const Icon = faq.icon;
@@ -38,13 +44,7 @@ const FaqSectionComponent = ({ onScrollToSection }: FaqSectionProps) => {
     { id: 'faq-1', icon: Zap, question: 'خب، چرا انقدر خاص و بهتر از بقیه‌اید؟', answer: <div className="space-y-2"><p>ما از جدیدترین و قوی‌ترین پروتکل‌های دنیا استفاده می‌کنیم و روی سرورهای اختصاصی 10G با روتینگ سخت‌افزاری اجرا کردیم. نتیجه‌ش پینگ پایین و پکت‌لاس نزدیک به صفر است!</p></div> },
     { id: 'faq-2', icon: Smartphone, question: 'روی گوشی هم جواب می‌ده؟', answer: <div className="space-y-2"><p>همه‌جا! گوشی، کامپیوتر و مک. فقط کافیه اپ پیشنهادی ما رو نصب کنی و لینک ساب هوشمند رو داخلش بزنی.</p></div> },
     { id: 'faq-3', icon: RefreshCw, question: 'اگه یهو قطع بشه چیکار کنم؟', answer: <div className="space-y-2"><p>سیستم هوشمند ما خودکار مسیرت رو عوض می‌کنه. فقط کافیه دکمه Update Subscription رو بزنی.</p></div> },
-    { 
-      id: 'faq-4', 
-      icon: Lock, 
-      question: 'برامون لاگ می‌گیرید؟', 
-      // اصلاح باگ ۲: تغییر آدرس از 'privacy' به 'privacy-terms'
-      answer: <div className="space-y-3"><p>نه! حریم خصوصی شما برامون مقدسه.</p><button onClick={() => onScrollToSection && onScrollToSection('privacy-terms')} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition"><ShieldCheck className="w-4 h-4" /> تعهدنامه حریم خصوصی</button></div> 
-    },
+    { id: 'faq-4', icon: Lock, question: 'برامون لاگ می‌گیرید؟', answer: <div className="space-y-3"><p>نه! حریم خصوصی شما برامون مقدسه.</p><button onClick={() => onScrollToSection && onScrollToSection('privacy-terms')} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition"><ShieldCheck className="w-4 h-4" /> تعهدنامه حریم خصوصی</button></div> },
     { id: 'faq-5', icon: Wallet, question: 'تمدیدش چقدر راحته؟', answer: <div className="space-y-2"><p>خیلی راحت! کافیه یه پیام به پشتیبانی بدی و بقیه زمانت رو اضافه کنن.</p></div> }
   ];
 
