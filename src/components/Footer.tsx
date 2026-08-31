@@ -1,13 +1,13 @@
-import { useCallback, memo } from 'react';
+import { useCallback } from 'react';
 import FlameLogo from './FlameLogo';
 import { BinaryText } from './BinaryText';
-import { Send, Sparkles, Heart, ChevronLeft, ShieldCheck } from 'lucide-react';
+import { Send, Sparkles, Heart, ChevronLeft } from 'lucide-react';
 
 interface FooterProps {
   onScrollToSection?: (sectionId: string) => void;
 }
 
-const FooterComponent = ({ onScrollToSection }: FooterProps) => {
+export default function Footer({ onScrollToSection }: FooterProps) {
   const handleNav = useCallback(
     (sectionId: string) => {
       if (onScrollToSection) {
@@ -32,7 +32,7 @@ const FooterComponent = ({ onScrollToSection }: FooterProps) => {
   return (
     <footer
       id="site-footer"
-      className="relative z-10 border-t border-white/10 pt-16 pb-12 text-slate-300 bg-slate-950/85 backdrop-blur-2xl overflow-hidden text-center sm:text-right"
+      className="relative z-10 border-t border-white/10 pt-16 pb-12 text-slate-300 bg-slate-950/95 overflow-hidden text-center sm:text-right"
     >
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-48 bg-purple-900/10 rounded-full blur-[140px] pointer-events-none" />
       
@@ -49,12 +49,6 @@ const FooterComponent = ({ onScrollToSection }: FooterProps) => {
             <p className="text-xs text-slate-500 leading-relaxed max-w-md">
               با پکت‌لاس نزدیک به صفر و روتینگ سخت‌افزاری، تجربه‌ی یه اینترنت واقعاً روان و بدون استرس رو بهت هدیه می‌دیم.
             </p>
-            <div className="flex items-center gap-2 pt-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <p className="text-[11px] text-slate-500 font-medium">
-                محصول اختصاصی تیم ArminSQ هست 💜 — از صفر تا صد ساختیمش!
-              </p>
-            </div>
           </div>
 
           <div className="md:col-span-4 space-y-4 flex flex-col items-center md:items-start text-center md:text-right">
@@ -63,8 +57,8 @@ const FooterComponent = ({ onScrollToSection }: FooterProps) => {
               <span>دسترسی سریع</span>
             </h3>
             <ul className="grid grid-cols-2 gap-y-3 gap-x-4 w-full max-w-xs text-xs">
-              {quickLinks.map((link, idx) => (
-                <li key={idx}>
+              {quickLinks.map((link) => (
+                <li key={link.target}>
                   <button
                     onClick={() => handleNav(link.target)}
                     className="text-slate-400 hover:text-pink-300 transition-colors duration-200 flex items-center gap-1.5 focus:outline-none group text-right"
@@ -125,6 +119,4 @@ const FooterComponent = ({ onScrollToSection }: FooterProps) => {
       </div>
     </footer>
   );
-};
-
-export const Footer = memo(FooterComponent);
+}

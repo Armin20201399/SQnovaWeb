@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
 import { useSectionNavigation } from './hooks/useSectionNavigation';
+import { useIsMobile } from './hooks/useIsMobile';
 import { ErrorBoundary } from './app/ErrorBoundary';
-import { Navbar } from './components/Navbar';
+import Navbar from './components/Navbar'; // تغییر به ایمپورت پیش‌فرض
 import { HeroSection } from './components/HeroSection';
-import { Footer } from './components/Footer';
+import Footer from './components/Footer'; // تغییر به ایمپورت پیش‌فرض
 import BinaryBackground from './components/BinaryBackground';
 import { AmbientGlowLayer } from './components/AmbientGlowLayer';
 
-// Static Rendering (طبق گایدلاین Dead Preload Infrastructure حذف شد)
+// Static Rendering
 import ProtocolDeepDive from './components/ProtocolDeepDive';
 import LiveGamingPingSimulator from './components/LiveGamingPingSimulator';
 import ComparisonSection from './components/ComparisonSection';
@@ -20,6 +21,7 @@ import FaqSection from './components/FaqSection';
 
 export default function App() {
   const { navigate } = useSectionNavigation();
+  const isMobile = useIsMobile(); // تشخیص موبایل
 
   useEffect(() => {
     const hash = window.location.hash.replace('#', '');
@@ -28,8 +30,10 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <BinaryBackground />
-      <AmbientGlowLayer />
+      {/* فقط در دسکتاپ رندر می‌شوند و در موبایل کلاً غیرفعال هستند */}
+      {!isMobile && <BinaryBackground />}
+      {!isMobile && <AmbientGlowLayer />}
+      
       <Navbar onScrollToSection={navigate} />
       <main id="main-content">
         <HeroSection onScrollToSection={navigate} />
