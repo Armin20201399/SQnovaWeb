@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useSectionNavigation } from './hooks/useSectionNavigation';
 import { useIsMobile } from './hooks/useIsMobile';
 import { ErrorBoundary } from './app/ErrorBoundary';
-import Navbar from './components/Navbar'; // تغییر به ایمپورت پیش‌فرض
+import Navbar from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
-import Footer from './components/Footer'; // تغییر به ایمپورت پیش‌فرض
+import Footer from './components/Footer';
 import BinaryBackground from './components/BinaryBackground';
 import { AmbientGlowLayer } from './components/AmbientGlowLayer';
 
@@ -21,7 +21,7 @@ import FaqSection from './components/FaqSection';
 
 export default function App() {
   const { navigate } = useSectionNavigation();
-  const isMobile = useIsMobile(); // تشخیص موبایل
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const hash = window.location.hash.replace('#', '');
@@ -30,12 +30,14 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      {/* فقط در دسکتاپ رندر می‌شوند و در موبایل کلاً غیرفعال هستند */}
+      {/* لایه‌های ثابت پس‌زمینه که به کل صفحه می‌چسبند */}
       {!isMobile && <BinaryBackground />}
       {!isMobile && <AmbientGlowLayer />}
       
       <Navbar onScrollToSection={navigate} />
-      <main id="main-content">
+      
+      {/* تغییر z-index از 20 به 10 تا لایه‌های پس‌زمینه z-index 1 دیده شوند */}
+      <main id="main-content" className="relative z-10">
         <HeroSection onScrollToSection={navigate} />
         <ProtocolDeepDive onScrollToSection={navigate} />
         <LiveGamingPingSimulator />
@@ -47,6 +49,7 @@ export default function App() {
         <GameNetPartnershipSection />
         <FaqSection onScrollToSection={navigate} />
       </main>
+      
       <Footer onScrollToSection={navigate} />
     </ErrorBoundary>
   );
