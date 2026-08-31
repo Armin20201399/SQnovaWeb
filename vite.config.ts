@@ -2,20 +2,19 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [
-    react(),
-    tailwindcss(), // این خط حیاتی است!
+    react(), 
+    tailwindcss()
   ],
   resolve: {
     alias: {
-      '@': path.resolve(import.meta.dirname, '.'),
+      '@': path.resolve(__dirname, '.'),
     },
-  },
-  server: {
-    hmr: process.env.DISABLE_HMR !== 'true',
-    watch: process.env.DISABLE_HMR === 'true' ? null : {},
   },
   build: {
     target: 'es2020',
@@ -40,12 +39,14 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (
-            id.includes('/node_modules/react/') ||
-            id.includes('/node_modules/react-dom/') ||
-            id.includes('/node_modules/scheduler/')
-          ) {
-            return 'react-vendor';
+          if (id.includes('node_modules')) {
+            if (id.includes('react-dom')) {
+              return 'react-dom-vendor';
+            }
+            if (id.includes('react') || id.includes('scheduler')) {
+              return 'react-vendor';
+            }
+            return 'vendor';
           }
         },
         entryFileNames: 'assets/[name]-[hash].js',
@@ -54,7 +55,7 @@ export default defineConfig({
       },
     },
     sourcemap: false,
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 400,
     cssCodeSplit: true,
     assetsInlineLimit: 4096,
     emptyOutDir: true,

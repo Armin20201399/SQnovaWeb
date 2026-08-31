@@ -46,7 +46,7 @@ export default function Footer({ onScrollToSection }: FooterProps) {
             <p className="text-slate-400 text-sm leading-relaxed max-w-md">
               به جای گشت‌وگذار توی اینترنت پر از قطعی، فقط وصل باش و حال کن! 🚀
             </p>
-            <p className="text-xs text-slate-500 leading-relaxed max-w-md">
+            <p className="text-xs text-slate-400 leading-relaxed max-w-md">
               با پکت‌لاس نزدیک به صفر و روتینگ سخت‌افزاری، تجربه‌ی یه اینترنت واقعاً روان و بدون استرس رو بهت هدیه می‌دیم.
             </p>
           </div>
@@ -88,7 +88,7 @@ export default function Footer({ onScrollToSection }: FooterProps) {
                 </div>
                 <div className="text-right">
                   <div className="font-bold text-sm">پشتیبانی تلگرام</div>
-                  <div className="text-[10px] text-slate-500">۲۴ ساعته، ۷ روز هفته</div>
+                  <div className="text-[10px] text-slate-400">۲۴ ساعته، ۷ روز هفته</div>
                 </div>
               </a>
               <a
@@ -104,9 +104,10 @@ export default function Footer({ onScrollToSection }: FooterProps) {
           </div>
         </div>
 
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 text-center">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 text-center">
           <div className="font-mono text-center sm:text-right">
-            <BinaryText binaryClassName="text-slate-600" leftBinary="01" rightBinary="10">
+            {/* تغییر text-slate-600 به text-slate-300 برای خوانایی بهتر */}
+            <BinaryText binaryClassName="text-slate-300" leftBinary="01" rightBinary="10">
               © 2026 SQ nova • All Rights Reserved.
             </BinaryText>
           </div>

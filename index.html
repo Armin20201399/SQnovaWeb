@@ -58,8 +58,11 @@
     }
   </script>
 
-  <!-- ========== پیش‌بارگذاری تصویر (تگ‌های preload فونت حذف شدند) ========== -->
-  <link rel="preload" as="image" href="/assets/glow-mask.webp" crossorigin="anonymous" />
+  <!-- ========== پیش‌بارگذاری فونت‌ها (برای بهبود LCP) ========== -->
+  <link rel="preload" href="/fonts/vazirmatn-v16-arabic-regular.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/vazirmatn-v16-arabic-bold.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/rajdhani-v17-latin-bold.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/plus-jakarta-sans-v12-latin-regular.woff2" as="font" type="font/woff2" crossorigin />
 
   <!-- ========== آیکون ========== -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />

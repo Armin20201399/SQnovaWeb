@@ -14,7 +14,6 @@ const FreeTrialBannerSectionComponent = ({ onScrollToSection }: FreeTrialBannerS
           <div className="absolute inset-0 bg-cyber-grid opacity-20" />
           <div className="relative z-10 flex flex-col items-center justify-center gap-6 text-center">
             
-            {/* بخش اصلی متن و دکمه‌ها */}
             <div className="space-y-3 flex flex-col items-center">
               <div className="inline-flex items-center gap-2 text-pink-300 text-xs font-bold bg-pink-500/20 border border-pink-500/30 px-3 py-1 rounded-full">
                 <Gift className="w-4 h-4" />
@@ -30,7 +29,6 @@ const FreeTrialBannerSectionComponent = ({ onScrollToSection }: FreeTrialBannerS
               </p>
             </div>
 
-            {/* دکمه‌ها (وسط چین) */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
               <a href="https://t.me/ArminSQ" target="_blank" rel="noreferrer" className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-sm shadow-[0_10px_25px_rgba(236,72,153,0.4)] hover:scale-105 transition duration-300 flex items-center justify-center gap-2">
                 <Send className="w-4 h-4 text-sky-200" />
@@ -42,11 +40,11 @@ const FreeTrialBannerSectionComponent = ({ onScrollToSection }: FreeTrialBannerS
               </button>
             </div>
 
-            {/* باکس بدون نیاز به کارت بانکی (وسط چین) */}
+            {/* تبدیل h4 به p برای رفع خطای Heading Order */}
             <div className="p-4 rounded-2xl bg-slate-900/80 border border-white/10 flex items-center gap-3 w-full sm:w-auto justify-center">
               <ShieldCheck className="w-8 h-8 text-emerald-400 flex-shrink-0" />
               <div className="text-right">
-                <h4 className="text-white font-bold text-sm">بدون نیاز به کارت بانکی</h4>
+                <p className="text-white font-bold text-sm">بدون نیاز به کارت بانکی</p>
                 <p className="text-xs text-slate-400">فقط چند کلیک ساده</p>
               </div>
             </div>
