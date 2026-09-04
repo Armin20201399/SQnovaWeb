@@ -1,6 +1,0 @@
-{
-  "name": "SQ Nova 404 Page",
-  "description": "صفحه خطای ۴۰۴ مدرن و تک‌فایلی با تم دارک، فونت وزیرمتن و گرادیان اختصاصی SQ Nova",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
